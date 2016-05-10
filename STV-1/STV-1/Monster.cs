@@ -4,15 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Dungeon
+class Monster : Creature
 {
-    List<Node> allNodes;
-    Node startNode;
-    Node endNode;
-
-    public Dungeon() {
-        
-    }
-
 
 }
