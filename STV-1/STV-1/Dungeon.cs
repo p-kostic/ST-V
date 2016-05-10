@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Dungeon
+public class Dungeon
 {
-    Dungeon() {
-        
+    private Node startNode;
+    private List<Node> nodes;
+    private Node exitNode;
+
+    public Dungeon(int level)
+    {
+           
     }
 }

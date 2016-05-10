@@ -6,5 +6,26 @@ using System.Threading.Tasks;
 
 class Node
 {
-    public List<Node> connections;
+    private const int maxconnections = 4;
+    private List<Node> Connections;
+    private int level;
+    private int maxmonsters;
+       
+    /// <summary>
+    /// Creates a new node that can be occupied by a player, monster packs or both.
+    /// There's a limit of how many monsters each node u can accomodate
+    /// </summary>
+    /// <param name="level">Node u's level</param>
+    /// <param name="M">constant which is the same over the whole dungeon</param>
+    public Node(int level, int M)
+    {
+        this.level = level;
+        this.maxmonsters = M*(level + 1);
+        Connections = new List<Node>();
+
+        // if occupied by both monsters and player, the node is contested
+        // bool contested = true;
+        // bool combat = true;
+        // InitiateRound();
+    }
 }

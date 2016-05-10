@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Game
+public class Game
 {
-    Game() {
-        Dungeon curDungeon = new Dungeon();
+    public Dungeon Dungeon;
+
+    public Game() {
+ 
     }
 
     void Save() {
