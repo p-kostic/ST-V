@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 class Node
 {
     private const int maxconnections = 4;
-    private List<Node> Connections;
+    public List<Node> connections;
     private int level;
     private int maxmonsters;
     public string type;
@@ -24,7 +24,7 @@ class Node
         this.type = type;
         this.level = level;
         this.maxmonsters = M*(level + 1);
-        Connections = new List<Node>();
+        connections = new List<Node>();
 
         // if occupied by both monsters and player, the node is contested
         // bool contested = true;

@@ -9,7 +9,7 @@ public class Game
     public Dungeon Dungeon;
 
     public Game() {
- 
+        Dungeon d = new Dungeon(2);
     }
 
     void Save() {

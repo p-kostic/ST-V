@@ -10,9 +10,7 @@ class Pack
     Node curPos;
 
     Pack(int number) {
-        for (int i = 0; i < number; i++) {
-            monsters.Add(new Creature());
-        }
+        
     }
 
     void Move() {
