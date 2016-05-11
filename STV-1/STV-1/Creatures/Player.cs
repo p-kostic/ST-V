@@ -61,4 +61,9 @@ class Player : Creature
                 base.HP = value;
         }
     }
+
+    public void GetCommand()
+    {
+        // TODO
+    }
 }
