@@ -12,14 +12,14 @@ public class Dungeon
     private Node exitNode;
     Random rand = new Random();
     
-
     public Dungeon(int level)
     {
         nodes = new List<Node>();
         GenerateDungeon(level);
     }
 
-    void GenerateDungeon(int level) {
+    void GenerateDungeon(int level)
+    {
         startNode = new Node(0, M, "start");
         nodes.Add(startNode);
 
@@ -30,7 +30,8 @@ public class Dungeon
         Console.WriteLine("test");
     }
 
-    List<Node> GenerateZone(Node firstNode) {
+    List<Node> GenerateZone(Node firstNode)
+    {
         int zoneNodeNr = rand.Next(0, 6);
         int j = 0;
         List<Node> curZone = new List<Node>();
@@ -56,6 +57,7 @@ public class Dungeon
                 
             }
         }
+
         Node curGate = new Node(j, M, "gate");
         int connectionNr = rand.Next(1, 4);
         for (int k = 0; k < connectionNr; k++)
@@ -73,9 +75,9 @@ public class Dungeon
             }
             
         }
+
         curZone.Add(curGate);
         curZone.RemoveAt(0);
         return curZone;
-    }
-    
+    } 
 }
