@@ -12,6 +12,7 @@ class Node
     private int maxmonsters;
     public string type;
     public List<Item> loot;
+    public int id;
 
     /// <summary>
     /// Creates a new node that can be occupied by a player, monster packs or both.
