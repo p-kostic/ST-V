@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 class HealingPotion : Item
 {
-    int healValue = 0;
-    bool used;
-    
+    int healValue;
 
     public HealingPotion()
     {
@@ -16,15 +14,12 @@ class HealingPotion : Item
         healValue = random.Next(1, 20);
     }
 
-    public void destroy()
+    public override void UseItem(Player player)
     {
-        if (used)
-        {
-            // Destroy potion
-        }
+        // If used, heal the player.
     }
 
-    // Getters and setters for the variables.
-    public int HealValue { get { return healValue; } }
-    public bool Used { set { used = value; } }
+    public void destroy()
+    {
+    }
 }

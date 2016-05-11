@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 abstract class Item
 {
-    
+    public abstract void UseItem(Player player);
 }
