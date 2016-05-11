@@ -25,14 +25,15 @@ public class Dungeon
         startNode = new Node(0, M, "start");
         nodes.Add(startNode);
 
-        for (int i = 0; i < level; i++) { // Generates the chosen amount of zones with gates inbetween them
-            nodes.AddRange(GenerateZone(nodes[nodes.Count()-1], i)); 
+        for (int i = 0; i < level; i++) { // Generates the chosen amount of zones with bridges inbetween them
+            nodes.AddRange(GenerateZone(nodes[nodes.Count()-1], i));
         }
+        nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
 
-        for (int i = 0; i < nodes.Count() - 1; i++ )
+        for (int i = 0; i < nodes.Count() ; i++ )
         {
             Console.WriteLine(nodes[i].type + " " + nodes[i].id);
-            for (int j = 0; j < nodes[i].connections.Count() - 1; j++ )
+            for (int j = 0; j < nodes[i].connections.Count(); j++ )
             {
                 Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
             }
@@ -43,7 +44,7 @@ public class Dungeon
 
     List<Node> GenerateZone(Node firstNode, int zoneLvl)
     {
-        int zoneNodeNr = rand.Next(0, 6);
+        int zoneNodeNr = rand.Next(1, 6);
         List<Node> curZone = new List<Node>();
         curZone.Add(firstNode);
 
@@ -62,7 +63,6 @@ public class Dungeon
                     {
                         curNode.connections.Add(curZone[randNodeIndex]); // Adds the chosen node to the connection list of the current node
                         curZone[randNodeIndex].connections.Add(curNode); // Adds the current node to the connection list of the chosen node
-                        Console.WriteLine("- connecting " + curNode.id + "and " + curZone[randNodeIndex].id); // Debug print
                     }
                 }
                 else { // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
@@ -70,7 +70,6 @@ public class Dungeon
                     {
                         curNode.connections.Add(curZone[0]);
                         curZone[0].connections.Add(curNode);
-                        Console.WriteLine("-- connecting " + curNode.id + "and " + curZone[0].id); // Debug print
                     }
                     
                 }
@@ -79,8 +78,8 @@ public class Dungeon
             curZone.Add(curNode); // Adds the created node to the zone list
         }
 
-        Node curGate = new Node(zoneLvl, M, "gate");
-        curGate.id = nodeNr;
+        Node curbridge = new Node(zoneLvl, M, "bridge");
+        curbridge.id = nodeNr;
         nodeNr++;
         int connectionNr = rand.Next(1, 4);
         for (int k = 0; k < connectionNr; k++)
@@ -88,23 +87,90 @@ public class Dungeon
             if (curZone.Count() > 1)
             {
                 int randNodeIndex = rand.Next(0, curZone.Count() - 1);
-                if (!curGate.connections.Contains(curZone[randNodeIndex]))
+                if (!curbridge.connections.Contains(curZone[randNodeIndex]) && curZone[randNodeIndex].connections.Count() < 5)
                 {
-                    curGate.connections.Add(curZone[randNodeIndex]);
-                    curZone[randNodeIndex].connections.Add(curGate);
-                    Console.WriteLine("--- connecting " + curGate.id + "and " + curZone[0].id); // Debug print
+                    curbridge.connections.Add(curZone[randNodeIndex]);
+                    curZone[randNodeIndex].connections.Add(curbridge);
                 }
             }
             else {
-                curGate.connections.Add(curZone[0]);
-                curZone[0].connections.Add(curGate);
-                Console.WriteLine("---- connecting " + curGate.id + "and " + curZone[0].id); // Debug print
+                if (!curbridge.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 5)
+                {
+                    curbridge.connections.Add(curZone[0]);
+                    curZone[0].connections.Add(curbridge);
+                }
+                
             }
             
         }
 
-        curZone.Add(curGate);
+        curZone.Add(curbridge);
         curZone.RemoveAt(0);
         return curZone;
-    } 
+    }
+
+    List<Node> FindShortestPath(Node start, Node end) {
+        bool found = false;
+        List<Node> shortestPath = new List<Node>();
+        Queue<Node> queue = new Queue<Node>();
+        List<Node> closed = new List<Node>();
+        Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
+        queue.Enqueue(start);
+        closed.Add(start);
+        if (end == start)
+        {
+            shortestPath.Add(start);
+            found = true;
+        }
+
+        while (!found && queue.Count > 0)
+        {
+            Node curNode = queue.Dequeue();
+            
+            for(int i = 0; i < curNode.connections.Count(); i++){
+                if(!closed.Contains(curNode)){
+                    queue.Enqueue(curNode);
+                    previous.Add(curNode.connections[i], curNode);
+                    closed.Add(curNode);
+                }
+                if(end == curNode){
+                    Node temp = curNode;
+                    while(temp != start){
+                        shortestPath.Add(temp);
+                        previous.TryGetValue(temp, out temp);
+                    }
+                    found = true;
+                    shortestPath.Add(temp);
+                    break;
+                }
+            }
+            
+            
+            /*foreach (Node q in curNode.connections)
+            {
+                if (!seen.Contains(q))
+                {
+                    seen.Add(q);
+                    queue.Enqueue(q);
+                    preceding.Add(q, p);
+                }
+                if (q == v)
+                {
+                    Node x = q;
+                    while (x != u)
+                    {
+                        path.Add(x);
+                        preceding.TryGetValue(x, out x);
+                    }
+                    path.Add(x);
+                    found = true;
+                    break;
+                }
+
+            }
+        }*/
+
+        
+    }
+    return shortestPath;
 }
