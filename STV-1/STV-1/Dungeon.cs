@@ -109,7 +109,8 @@ public class Dungeon
         return curZone;
     }
 
-    List<Node> FindShortestPath(Node start, Node end) {
+    List<Node> FindShortestPath(Node start, Node end)
+    {
         bool found = false;
         List<Node> shortestPath = new List<Node>();
         Queue<Node> queue = new Queue<Node>();
@@ -126,16 +127,20 @@ public class Dungeon
         while (!found && queue.Count > 0)
         {
             Node curNode = queue.Dequeue();
-            
-            for(int i = 0; i < curNode.connections.Count(); i++){
-                if(!closed.Contains(curNode)){
+
+            for (int i = 0; i < curNode.connections.Count(); i++)
+            {
+                if (!closed.Contains(curNode))
+                {
                     queue.Enqueue(curNode);
                     previous.Add(curNode.connections[i], curNode);
                     closed.Add(curNode);
                 }
-                if(end == curNode){
+                if (end == curNode)
+                {
                     Node temp = curNode;
-                    while(temp != start){
+                    while (temp != start)
+                    {
                         shortestPath.Add(temp);
                         previous.TryGetValue(temp, out temp);
                     }
@@ -144,33 +149,9 @@ public class Dungeon
                     break;
                 }
             }
-            
-            
-            /*foreach (Node q in curNode.connections)
-            {
-                if (!seen.Contains(q))
-                {
-                    seen.Add(q);
-                    queue.Enqueue(q);
-                    preceding.Add(q, p);
-                }
-                if (q == v)
-                {
-                    Node x = q;
-                    while (x != u)
-                    {
-                        path.Add(x);
-                        preceding.TryGetValue(x, out x);
-                    }
-                    path.Add(x);
-                    found = true;
-                    break;
-                }
 
-            }
-        }*/
 
-        
+            return shortestPath;
+        }
     }
-    return shortestPath;
 }
