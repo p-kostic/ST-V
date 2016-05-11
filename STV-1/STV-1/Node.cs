@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STV_1
+namespace STV1
 {
     class Node
     {
@@ -35,26 +35,32 @@ namespace STV_1
             nodePacks = new List<Pack>();
         }
 
+        // Adds a pack to the node.
         public void AddPack(Pack pack)
         {
-            nodePacks.Add(pack);
+            if (PackFitsInNode(pack))
+                nodePacks.Add(pack);
         }
 
+        // Removes a certain pack from the node.
         public void RemovePack(Pack pack)
         {
             nodePacks.Remove(pack);
         }
 
+        // Add the player to the node.
         public void AddPlayer(Player player)
         {
             nodePlayer = player;
         }
 
+        // Remove the player from the node.
         public void RemovePlayer()
         {
             nodePlayer = null;
         }
 
+        // Lets the player use an item.
         public void UseItem(Item i)
         {
             i.UseItem(nodePlayer);
@@ -62,20 +68,45 @@ namespace STV_1
 
         public void DoCombatRound(Pack pack)
         {
-            /*
-             * 1: Speler kan item gebruiken
-             * 2: Speler valt aan
-             * 3: Pack valt aan
-             * 4: 1 vd twee dood, dan einde combat
-             * 5: anders kans om te vluchten
-             * 6: repeat
+            /* TODO: 
+             * Speler kan item gebruiken
+             * Speler kan vluchten
              */
+
+            // If there is a player in the node and there's at least one pack in the node,
+            // We will walk through the loop. Also, if the combat has been ended we will stop
+            // as well.
+            if (true) // CHANGE TO WHEN TIMECRYSTAL ACTIVE
+            {
+                for (int i = 0; i < pack.PackSize; i++)
+                    nodePlayer.Attack(pack.Monsters[i]);
+            }
+            else
+                nodePlayer.Attack(pack.Monsters[0]);
+
+            pack.PackAttack(nodePlayer);
+
+            /*IMPLEMENT RETREAT PLAYER HERE*/
+            if (pack.PackHP < nodePlayer.HP && pack.PackHP > 0)
+            {
+                // @Bor, hoe werkt die node identifier? de pack moet naar een willekeurige
+                // aangrenzende node worden gestuurd.
+                //pack.MovePack();
+            }
         }
 
         public void DoCombat(Pack pack)
         {
+            bool endCombat = false;
+            if ((nodePlayer != null && nodePacks.Count > 0) || !endCombat)
+                DoCombatRound(pack);
+
+            if (nodePlayer.IsDead || pack.PackDied)
+                endCombat = true;
         }
 
+        // This method checks if a given pack can fit in the node, based on the formula
+        // and the amount of monsters already in the node.
         public bool PackFitsInNode(Pack pack)
         {
             int amountOfMonsters = 0;
@@ -84,9 +115,16 @@ namespace STV_1
             return maxmonsters - (amountOfMonsters + pack.PackSize) >= 0;
         }
 
+        // Check if the player is in a certain node.
         public bool PlayerInNode()
         {
             return nodePlayer != null;
+        }
+
+        // Check if there is at least one pack in a certain node
+        public bool PackInNode()
+        {
+            return (nodePacks.Count > 0);
         }
     }
 }

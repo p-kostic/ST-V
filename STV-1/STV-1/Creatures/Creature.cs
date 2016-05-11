@@ -5,7 +5,7 @@
  * like dying for example.
  */
 
-namespace STV_1
+namespace STV1
 {
     abstract class Creature
     {

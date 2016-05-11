@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STV_1
+namespace STV1
 {
     /* 
      * This class will handle all the player specific actions.

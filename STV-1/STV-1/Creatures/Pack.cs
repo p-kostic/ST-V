@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STV_1
+namespace STV1
 {
     /*
      * In this class we will define the packs. Monsters will be grouped
@@ -50,6 +50,17 @@ namespace STV_1
         // and a more complex getter (a boolean) to find out if a pack has died or not.
         public int PackSize { get { return monsters.Count; } }
         public Node PackLocation { get { return monsters[0].Location; } }
+        public List<Monster> Monsters { get { return monsters; } }
+        public int PackHP
+        {
+            get
+            {
+                int totalHP = 0;
+                foreach (Monster monster in monsters)
+                    totalHP += monster.HP;
+                return totalHP;
+            }
+        }
         public bool PackDied
         {
             get
