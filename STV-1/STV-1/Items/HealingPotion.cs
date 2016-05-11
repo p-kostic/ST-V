@@ -10,7 +10,7 @@ namespace STV1
      * This class will take care of the healingpotion item.
      * It will inherit from the item class.
      */
-    class HealingPotion : Item
+    public class HealingPotion : Item
     {
         int healValue;
 

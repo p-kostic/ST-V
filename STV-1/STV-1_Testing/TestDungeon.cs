@@ -8,8 +8,11 @@ namespace STV_1_Testing
     public class TestDungeon
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestDungeonConstructor()
         {
+            Dungeon d = new Dungeon(2);
+
+            Assert.IsTrue(d.FindShortestPath(d.nodes[0], d.nodes[d.nodes.Count -1]) != null);
         }
     }
 }

@@ -7,7 +7,7 @@
 
 namespace STV1
 {
-    abstract class Creature
+    public abstract class Creature
     {
         int hp;
         int atk;

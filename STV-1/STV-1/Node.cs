@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace STV1
 {
-    class Node
+    public class Node
     {
         public List<Node> connections;
         private const int maxconnections = 4;

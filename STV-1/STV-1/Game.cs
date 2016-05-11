@@ -12,7 +12,7 @@ namespace STV1
 
         public Game()
         {
-            Dungeon d = new Dungeon(2);
+            Dungeon d = new Dungeon(5);
         }
 
         void Save()

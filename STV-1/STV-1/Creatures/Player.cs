@@ -11,7 +11,7 @@ namespace STV1
      * Since the player is a creature, it will inherit from the
      * abstract creature class.
      */
-    class Player : Creature
+    public class Player : Creature
     {
         int maxHP;
         int atk;

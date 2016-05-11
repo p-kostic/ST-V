@@ -10,7 +10,7 @@ namespace STV1
     {
         const int M = 3;
         private Node startNode;
-        private List<Node> nodes;
+        public List<Node> nodes;
         private Node exitNode;
         private int nodeNr;
         Random rand = new Random();
@@ -20,6 +20,14 @@ namespace STV1
             nodeNr = 1;
             nodes = new List<Node>();
             GenerateDungeon(level);
+
+            List<Node> kut = FindShortestPath(nodes[0], nodes[nodes.Count()-1]);
+
+            foreach(Node n in kut){
+                Console.WriteLine(n.id);
+            }
+
+            while (true) { }
         }
 
         void GenerateDungeon(int level)
@@ -27,8 +35,8 @@ namespace STV1
             startNode = new Node(0, M, "start");
             nodes.Add(startNode);
 
-            for (int i = 0; i < level; i++)
-            { // Generates the chosen amount of zones with bridges inbetween them
+            for (int i = 0; i < level; i++) // Generates the chosen amount of zones with bridges inbetween them
+            { 
                 nodes.AddRange(GenerateZone(nodes[nodes.Count() - 1], i));
             }
             nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
@@ -42,7 +50,7 @@ namespace STV1
                 }
             }
 
-            while (true) { }
+            
         }
 
         List<Node> GenerateZone(Node firstNode, int zoneLvl)
@@ -114,7 +122,7 @@ namespace STV1
             return curZone;
         }
 
-        List<Node> FindShortestPath(Node start, Node end)
+        public List<Node> FindShortestPath(Node start, Node end)
         {
             bool found = false;
             List<Node> shortestPath = new List<Node>();
@@ -135,11 +143,11 @@ namespace STV1
 
                 for (int i = 0; i < curNode.connections.Count(); i++)
                 {
-                    if (!closed.Contains(curNode))
+                    if (!closed.Contains(curNode.connections[i]))
                     {
-                        queue.Enqueue(curNode);
+                        queue.Enqueue(curNode.connections[i]);
                         previous.Add(curNode.connections[i], curNode);
-                        closed.Add(curNode);
+                        closed.Add(curNode.connections[i]);
                     }
                     if (end == curNode)
                     {
@@ -155,7 +163,26 @@ namespace STV1
                     }
                 }
             }
+
+            if (!found)
+                return null;
+
+            shortestPath.Reverse();
             return shortestPath;
         }
+
+        void Destroy(Node b) {
+            if (b.type != "bridge")
+                return;
+
+            int index = nodes.IndexOf(b);
+            for (int i = 0; i < index; i++ )
+            {
+                nodes.RemoveAt(0);
+                index--;
+            }
+        }
+
+
     }
 }

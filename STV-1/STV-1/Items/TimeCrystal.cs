@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace STV1
 {
-    class TimeCrystal : Item
+    public class TimeCrystal : Item
     {
         public override void UseItem(Player player)
         {

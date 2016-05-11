@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace STV1
 {
-    abstract class Item
+    public abstract class Item
     {
         public abstract void UseItem(Player player);
     }

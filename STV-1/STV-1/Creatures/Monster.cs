@@ -11,7 +11,7 @@ namespace STV1
      * Since the monster is a creature, it will inherit from
      * the abstract creature class.
      */
-    class Monster : Creature
+    public class Monster : Creature
     {
         int hp;
         int atk;

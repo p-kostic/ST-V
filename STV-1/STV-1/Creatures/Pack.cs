@@ -11,7 +11,7 @@ namespace STV1
      * In packs, and in this class we will handle a few methods like
      * movement, attacking and creating the actual pack.
      */
-    class Pack
+    public class Pack
     {
         List<Monster> monsters; // A list to hold all the monsters.
 
