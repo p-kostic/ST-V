@@ -109,49 +109,48 @@ public class Dungeon
         return curZone;
     }
 
-    List<Node> FindShortestPath(Node start, Node end)
-    {
-        bool found = false;
-        List<Node> shortestPath = new List<Node>();
-        Queue<Node> queue = new Queue<Node>();
-        List<Node> closed = new List<Node>();
-        Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
-        queue.Enqueue(start);
-        closed.Add(start);
-        if (end == start)
-        {
-            shortestPath.Add(start);
-            found = true;
-        }
+    //List<Node> FindShortestPath(Node start, Node end)
+    //{
+    //    bool found = false;
+    //    List<Node> shortestPath = new List<Node>();
+    //    Queue<Node> queue = new Queue<Node>();
+    //    List<Node> closed = new List<Node>();
+    //    Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
+    //    queue.Enqueue(start);
+    //    closed.Add(start);
+    //    if (end == start)
+    //    {
+    //        shortestPath.Add(start);
+    //        found = true;
+    //    }
 
-        while (!found && queue.Count > 0)
-        {
-            Node curNode = queue.Dequeue();
+    //    while (!found && queue.Count > 0)
+    //    {
+    //        Node curNode = queue.Dequeue();
 
-            for (int i = 0; i < curNode.connections.Count(); i++)
-            {
-                if (!closed.Contains(curNode))
-                {
-                    queue.Enqueue(curNode);
-                    previous.Add(curNode.connections[i], curNode);
-                    closed.Add(curNode);
-                }
-                if (end == curNode)
-                {
-                    Node temp = curNode;
-                    while (temp != start)
-                    {
-                        shortestPath.Add(temp);
-                        previous.TryGetValue(temp, out temp);
-                    }
-                    found = true;
-                    shortestPath.Add(temp);
-                    break;
-                }
-            }
+    //        for (int i = 0; i < curNode.connections.Count(); i++)
+    //        {
+    //            if (!closed.Contains(curNode))
+    //            {
+    //                queue.Enqueue(curNode);
+    //                previous.Add(curNode.connections[i], curNode);
+    //                closed.Add(curNode);
+    //            }
+    //            if (end == curNode)
+    //            {
+    //                Node temp = curNode;
+    //                while (temp != start)
+    //                {
+    //                    shortestPath.Add(temp);
+    //                    previous.TryGetValue(temp, out temp);
+    //                }
+    //                found = true;
+    //                shortestPath.Add(temp);
+    //                break;
+    //            }
+    //        }
 
-
-            return shortestPath;
-        }
-    }
+    //        return shortestPath;
+    //    }
+    //}
 }
