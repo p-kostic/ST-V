@@ -57,11 +57,12 @@ public class Dungeon
             {
                 if (curZone.Count() > 1) 
                 {
-                    int randNodeIndex = rand.Next(0, curZone.Count() - 1); //picks a random node in the zone
+                    int randNodeIndex = rand.Next(0, curZone.Count() - 1); // Picks a random node in the zone
                     if (!curNode.connections.Contains(curZone[randNodeIndex]) && curZone[randNodeIndex].connections.Count() < 5) // Checks if current node isn't already connected to that node and if the node has 4 or less connections
                     {
                         curNode.connections.Add(curZone[randNodeIndex]); // Adds the chosen node to the connection list of the current node
                         curZone[randNodeIndex].connections.Add(curNode); // Adds the current node to the connection list of the chosen node
+                        Console.WriteLine("- connecting " + curNode.id + "and " + curZone[randNodeIndex].id); // Debug print
                     }
                 }
                 else { // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
@@ -69,7 +70,7 @@ public class Dungeon
                     {
                         curNode.connections.Add(curZone[0]);
                         curZone[0].connections.Add(curNode);
-                        Console.WriteLine("--- connecting " + curNode.id + "and " + curZone[0].id); // Debug print
+                        Console.WriteLine("-- connecting " + curNode.id + "and " + curZone[0].id); // Debug print
                     }
                     
                 }
@@ -91,11 +92,13 @@ public class Dungeon
                 {
                     curGate.connections.Add(curZone[randNodeIndex]);
                     curZone[randNodeIndex].connections.Add(curGate);
+                    Console.WriteLine("--- connecting " + curGate.id + "and " + curZone[0].id); // Debug print
                 }
             }
             else {
                 curGate.connections.Add(curZone[0]);
                 curZone[0].connections.Add(curGate);
+                Console.WriteLine("---- connecting " + curGate.id + "and " + curZone[0].id); // Debug print
             }
             
         }
