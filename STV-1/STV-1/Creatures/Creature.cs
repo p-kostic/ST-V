@@ -4,45 +4,49 @@
  * the creatures to function properly. It also handles a few test cases,
  * like dying for example.
  */
-abstract class Creature
+
+namespace STV_1
 {
-    int hp;
-    int atk;
-    bool isDead = false;
-    Node location;
-
-    // The constructor. This will be overridden by the inheriting class.
-    public Creature(int hitPoints, int attack, Node loc)
+    abstract class Creature
     {
-        hp = hitPoints;
-        atk = attack;
-        location = loc;
-    }
+        int hp;
+        int atk;
+        bool isDead = false;
+        Node location;
 
-    // Some abstract methods are defined here to make sure that we add them to the 
-    // sub classes that will inherit this class.
-    public abstract void Move(Node destination);
-    public abstract void Attack(Creature creature);
-    public abstract void Die();
-
-    // A few getters/setters that will make sure we can get to our variables. In the
-    // hp getter/setter we will also define when a creature has died.
-    public virtual int HP
-    {
-        get { return hp; }
-        set
+        // The constructor. This will be overridden by the inheriting class.
+        public Creature(int hitPoints, int attack, Node loc)
         {
-            hp = value;
-            if (hp <= 0)
-                isDead = true;
+            hp = hitPoints;
+            atk = attack;
+            location = loc;
         }
-    }
 
-    public Node Location
-    {
-        get { return location; }
-        set { location = value; }
-    }
+        // Some abstract methods are defined here to make sure that we add them to the 
+        // sub classes that will inherit this class.
+        public abstract void Move(Node destination);
+        public abstract void Attack(Creature creature);
+        public abstract void Die();
 
-    public bool IsDead { get { return isDead; } }
+        // A few getters/setters that will make sure we can get to our variables. In the
+        // hp getter/setter we will also define when a creature has died.
+        public virtual int HP
+        {
+            get { return hp; }
+            set
+            {
+                hp = value;
+                if (hp <= 0)
+                    isDead = true;
+            }
+        }
+
+        public Node Location
+        {
+            get { return location; }
+            set { location = value; }
+        }
+
+        public bool IsDead { get { return isDead; } }
+    }
 }

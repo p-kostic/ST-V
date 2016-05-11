@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using STV_1;
 
 namespace STV_1_Testing
 {
     [TestClass]
-    public class UnitTest1
+    public class BotPlayer
     {
         [TestMethod]
         public void TestMethod1()

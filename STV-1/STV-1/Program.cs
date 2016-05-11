@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Program
+namespace STV_1
 {
-    static void Main(string[] args)
+    class Program
     {
-        Game game = new Game();
+        static void Main(string[] args)
+        {
+            Game game = new Game();
+        }
     }
 }

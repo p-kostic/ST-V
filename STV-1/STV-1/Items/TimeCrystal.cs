@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class TimeCrystal : Item
+namespace STV_1
 {
-    public override void UseItem(Player player)
+    class TimeCrystal : Item
     {
-        throw new NotImplementedException();
+        public override void UseItem(Player player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

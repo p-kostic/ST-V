@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-abstract class Item
+namespace STV_1
 {
-    public abstract void UseItem(Player player);
+    abstract class Item
+    {
+        public abstract void UseItem(Player player);
+    }
 }
