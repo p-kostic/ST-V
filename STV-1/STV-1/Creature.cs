@@ -8,8 +8,4 @@ abstract class Creature
 {
     public int HP;
     public int ATK;
-
-    public abstract void Attack(Creature creature);
-    public abstract void Move();
-    public abstract void Die();
 }
