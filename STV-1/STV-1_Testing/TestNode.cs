@@ -11,7 +11,7 @@ namespace STV_1_Testing
         public void TestNodeAddPlayer()
         {
             Node a = new Node(1,1);
-            Player player = new Player(10,10,a);
+            Player player = new Player(10,10,a, null);
             a.AddPlayer(player);
             Assert.AreEqual(a, player.Location);
         }
