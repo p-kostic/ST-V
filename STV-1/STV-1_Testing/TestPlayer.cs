@@ -21,7 +21,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestDead()
+        public void TestDead1()
         {
             Player player = new Player(0, 0, new Node(1, 1), null);
             player.HP = 0;

@@ -10,7 +10,7 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestDungeonConstructor()
         {
-            Dungeon d = new Dungeon(2);
+            Dungeon d = new Dungeon(1);
 
 
             // Test if start != exit node

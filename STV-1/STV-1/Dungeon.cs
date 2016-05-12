@@ -23,9 +23,9 @@ namespace STV1
             nodes = new List<Node>();
             GenerateDungeon(level);
 
-            List<Node> kut = FindShortestPath(nodes[0], nodes[nodes.Count() - 1]);
+            List<Node> test = FindShortestPath(nodes[0], nodes[nodes.Count() - 1]);
 
-            foreach (Node n in kut)
+            foreach (Node n in test)
             {
                 Console.WriteLine(n.id);
             }

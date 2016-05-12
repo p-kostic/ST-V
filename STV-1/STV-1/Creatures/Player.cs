@@ -68,6 +68,8 @@ namespace STV1
             }
         }
 
+        public int MaxHP { get { return maxHP; } }
+
         public void GetCommand()
         {
             // TODO

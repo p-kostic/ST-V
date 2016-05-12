@@ -21,7 +21,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestDead()
+        public void TestDead2()
         {
             Monster monster = new Monster(0, 0, new Node(1, 1), null);
             monster.HP = 0;

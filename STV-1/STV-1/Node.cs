@@ -99,9 +99,7 @@ namespace STV1
             /*IMPLEMENT RETREAT PLAYER HERE*/
             if (pack.PackHP < nodePlayer.HP && pack.PackHP > 0)
             {
-                // @Bor, hoe werkt die node identifier? de pack moet naar een willekeurige
-                // aangrenzende node worden gestuurd.
-                //pack.MovePack();
+                pack.MovePack(this.connections[0]);
             }
         }
 
