@@ -29,23 +29,25 @@ namespace STV1
             {
                 Console.WriteLine(n.id);
             }
-            Console.WriteLine("-----------------------");
-            foreach (Node curNode in nodes)
-            {
-                if (curNode.type == "bridge")
-                {
-                    Destroy(curNode);
-                    for (int i = 0; i < nodes.Count(); i++)
-                    {
-                        Console.WriteLine(nodes[i].type + " " + nodes[i].id);
-                        for (int j = 0; j < nodes[i].connections.Count(); j++)
-                        {
-                            Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
-                        }
-                    }
-                    break;
-                }
-            }
+
+
+            //Console.WriteLine("-----------------------");
+            //foreach (Node curNode in nodes)
+            //{
+            //    if (curNode.type == "bridge")
+            //    {
+            //        Destroy(curNode);
+            //        for (int i = 0; i < nodes.Count(); i++)
+            //        {
+            //            Console.WriteLine(nodes[i].type + " " + nodes[i].id);
+            //            for (int j = 0; j < nodes[i].connections.Count(); j++)
+            //            {
+            //                Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
+            //            }
+            //        }
+            //        break;
+            //    }
+            //}
 
             Console.ReadLine();
         }

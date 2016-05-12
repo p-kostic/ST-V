@@ -34,7 +34,7 @@ namespace STV_1_Testing
                 totalConnections += curNode.connections.Count;
                
             }
-            float avarageConnections = (totalConnections/2)/d.nodes.Count;
+            float avarageConnections = totalConnections/2/d.nodes.Count;
 
             Assert.IsTrue(avarageConnections < 3.0f);
             // Als we zouden willen testen op reachability, kan je gwn kijken of er een path is met shortest path
@@ -43,19 +43,19 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestDungeonDestroy()
         {
+            // DEEP COPY NODIG VOOR DE TEST 
             Dungeon d = new Dungeon(2);
-            Dungeon d2 = d;
-            Node firstBridge;
+            int size = d.nodes.Count;
+
             foreach (Node curNode in d.nodes)
             {
-                if (curNode.type == "gate")
+                if (curNode.type == "bridge")
                 {
-                    firstBridge = curNode;
                     d.Destroy(curNode);
-                    return;
+                    break;
                 }
             }
-           Assert.AreNotEqual(d, d2);
+            Assert.AreNotEqual(size, d.nodes.Count);
         }
     }
 }
