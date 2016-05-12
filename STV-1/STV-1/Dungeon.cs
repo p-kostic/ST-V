@@ -93,7 +93,7 @@ namespace STV1
                     {
                         int randNodeIndex = rand.Next(0, curZone.Count() - 1); // Picks a random node in the zone
                         if (!curNode.connections.Contains(curZone[randNodeIndex]) &&
-                            curZone[randNodeIndex].connections.Count() < 5)
+                            curZone[randNodeIndex].connections.Count() < 4)
                         // Checks if current node isn't already connected to that node and if the node has 4 or less connections
                         {
                             curNode.connections.Add(curZone[randNodeIndex]);
@@ -105,7 +105,7 @@ namespace STV1
                     else
                     {
                         // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
-                        if (!curNode.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 5)
+                        if (!curNode.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 4)
                         {
                             curNode.connections.Add(curZone[0]);
                             curZone[0].connections.Add(curNode);
@@ -116,34 +116,40 @@ namespace STV1
                 }
                 curZone.Add(curNode); // Adds the created node to the zone list
             }
-
+            bool placed = false;
             Node curbridge = new Node(zoneLvl, M, "bridge");
             curbridge.id = nodeNr;
             nodeNr++;
             int connectionNr = rand.Next(1, 4);
-            for (int k = 0; k < connectionNr; k++)
-            {
-                if (curZone.Count() > 1)
+            while (!placed) {
+                
+                for (int k = 0; k < connectionNr; k++)
                 {
-                    int randNodeIndex = rand.Next(0, curZone.Count() - 1);
-                    if (!curbridge.connections.Contains(curZone[randNodeIndex]) &&
-                        curZone[randNodeIndex].connections.Count() < 5)
+                    if (curZone.Count() > 1)
                     {
-                        curbridge.connections.Add(curZone[randNodeIndex]);
-                        curZone[randNodeIndex].connections.Add(curbridge);
+                        int randNodeIndex = rand.Next(0, curZone.Count() - 1);
+                        if (!curbridge.connections.Contains(curZone[randNodeIndex]) &&
+                            curZone[randNodeIndex].connections.Count() < 4)
+                        {
+                            curbridge.connections.Add(curZone[randNodeIndex]);
+                            curZone[randNodeIndex].connections.Add(curbridge);
+                            placed = true;
+                        }
                     }
-                }
-                else
-                {
-                    if (!curbridge.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 5)
+                    else
                     {
-                        curbridge.connections.Add(curZone[0]);
-                        curZone[0].connections.Add(curbridge);
+                        if (!curbridge.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 5)
+                        {
+                            curbridge.connections.Add(curZone[0]);
+                            curZone[0].connections.Add(curbridge);
+                            placed = true;
+                        }
+
                     }
 
                 }
-
             }
+            
 
             curZone.Add(curbridge);
             curZone.RemoveAt(0);
