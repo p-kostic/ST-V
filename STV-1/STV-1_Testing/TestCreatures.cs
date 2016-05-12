@@ -5,11 +5,14 @@ using STV1;
 namespace STV_1_Testing
 {
     [TestClass]
-    public class TestCreatures
+    public class TestCreature
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestCreatureConstructor()
         {
+            Dungeon d = new Dungeon(2);
+
+            Assert.IsTrue(d.FindShortestPath(d.nodes[0], d.nodes[d.nodes.Count - 1]) != null);
         }
     }
 }

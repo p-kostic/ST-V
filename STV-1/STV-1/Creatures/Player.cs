@@ -13,16 +13,19 @@ namespace STV1
      */
     public class Player : Creature
     {
-        int maxHP;
-        int atk;
-        List<Item> inventory; // To keep track of the items in the player's inventory.
+        private int maxHP;
+        private int atk;
+        public List<Item> inventory; // To keep track of the items in the player's inventory.
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
         public Player(int hp, int atk, Node loc)
             : base(hp, atk, loc)
         {
-            maxHP = hp;
+            this.maxHP = hp;
+            this.atk = atk;
+            this.Location = loc;
+            loc.AddPlayer(this);
         }
 
         // We will move the player to the given destination.
@@ -34,7 +37,7 @@ namespace STV1
         // The attacked creature is dealt damage equal to the player's attack power.
         public override void Attack(Creature creature)
         {
-            creature.HP -= atk;
+            creature.HP -= this.atk;
         }
 
         // If the health is below zero, the player will die.

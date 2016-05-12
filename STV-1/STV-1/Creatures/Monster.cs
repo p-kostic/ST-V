@@ -13,12 +13,17 @@ namespace STV1
      */
     public class Monster : Creature
     {
-        int hp;
-        int atk;
+        private int hp;
+        private int atk;
 
         // We just call the base method in the abstract creature class.
         public Monster(int hp, int atk, Node loc)
-            : base(hp, atk, loc) { }
+            : base(hp, atk, loc)
+        {
+            this.atk = atk;
+            this.hp = hp;
+            this.Location = loc;
+        }
 
         // Move the monster to the given destination
         public override void Move(Node destination)
@@ -29,7 +34,7 @@ namespace STV1
         // The attacked creature is dealt damage equal to the monster's attack power.
         public override void Attack(Creature creature)
         {
-            creature.HP -= atk;
+            creature.HP -= this.atk;
         }
 
         // If the health is below zero, the monster will die.
@@ -38,5 +43,7 @@ namespace STV1
             if (this.IsDead)
                 throw new NotImplementedException();
         }
+
+
     }
 }

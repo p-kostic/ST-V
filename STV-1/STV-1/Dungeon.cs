@@ -13,21 +13,41 @@ namespace STV1
         public List<Node> nodes;
         private Node exitNode;
         private int nodeNr;
+        public int level;
         Random rand = new Random();
 
         public Dungeon(int level)
         {
+            this.level = level;
             nodeNr = 1;
             nodes = new List<Node>();
             GenerateDungeon(level);
 
-            List<Node> kut = FindShortestPath(nodes[0], nodes[nodes.Count()-1]);
+            List<Node> kut = FindShortestPath(nodes[0], nodes[nodes.Count() - 1]);
 
-            foreach(Node n in kut){
+            foreach (Node n in kut)
+            {
                 Console.WriteLine(n.id);
             }
+            Console.WriteLine("-----------------------");
+            foreach (Node curNode in nodes)
+            {
+                if (curNode.type == "bridge")
+                {
+                    Destroy(curNode);
+                    for (int i = 0; i < nodes.Count(); i++)
+                    {
+                        Console.WriteLine(nodes[i].type + " " + nodes[i].id);
+                        for (int j = 0; j < nodes[i].connections.Count(); j++)
+                        {
+                            Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
+                        }
+                    }
+                    break;
+                }
+            }
 
-            while (true) { }
+            Console.ReadLine();
         }
 
         void GenerateDungeon(int level)
@@ -36,7 +56,7 @@ namespace STV1
             nodes.Add(startNode);
 
             for (int i = 0; i < level; i++) // Generates the chosen amount of zones with bridges inbetween them
-            { 
+            {
                 nodes.AddRange(GenerateZone(nodes[nodes.Count() - 1], i));
             }
             nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
@@ -50,7 +70,7 @@ namespace STV1
                 }
             }
 
-            
+
         }
 
         List<Node> GenerateZone(Node firstNode, int zoneLvl)
@@ -70,14 +90,19 @@ namespace STV1
                     if (curZone.Count() > 1)
                     {
                         int randNodeIndex = rand.Next(0, curZone.Count() - 1); // Picks a random node in the zone
-                        if (!curNode.connections.Contains(curZone[randNodeIndex]) && curZone[randNodeIndex].connections.Count() < 5) // Checks if current node isn't already connected to that node and if the node has 4 or less connections
+                        if (!curNode.connections.Contains(curZone[randNodeIndex]) &&
+                            curZone[randNodeIndex].connections.Count() < 5)
+                        // Checks if current node isn't already connected to that node and if the node has 4 or less connections
                         {
-                            curNode.connections.Add(curZone[randNodeIndex]); // Adds the chosen node to the connection list of the current node
-                            curZone[randNodeIndex].connections.Add(curNode); // Adds the current node to the connection list of the chosen node
+                            curNode.connections.Add(curZone[randNodeIndex]);
+                            // Adds the chosen node to the connection list of the current node
+                            curZone[randNodeIndex].connections.Add(curNode);
+                            // Adds the current node to the connection list of the chosen node
                         }
                     }
                     else
-                    { // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
+                    {
+                        // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
                         if (!curNode.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 5)
                         {
                             curNode.connections.Add(curZone[0]);
@@ -99,7 +124,8 @@ namespace STV1
                 if (curZone.Count() > 1)
                 {
                     int randNodeIndex = rand.Next(0, curZone.Count() - 1);
-                    if (!curbridge.connections.Contains(curZone[randNodeIndex]) && curZone[randNodeIndex].connections.Count() < 5)
+                    if (!curbridge.connections.Contains(curZone[randNodeIndex]) &&
+                        curZone[randNodeIndex].connections.Count() < 5)
                     {
                         curbridge.connections.Add(curZone[randNodeIndex]);
                         curZone[randNodeIndex].connections.Add(curbridge);
@@ -171,18 +197,38 @@ namespace STV1
             return shortestPath;
         }
 
-        void Destroy(Node b) {
+        public void Destroy(Node b)
+        {
             if (b.type != "bridge")
                 return;
-
-            int index = nodes.IndexOf(b);
-            for (int i = 0; i < index; i++ )
+            List<Node> toRemove = new List<Node>();
+            foreach (Node curNode in nodes)
             {
-                nodes.RemoveAt(0);
-                index--;
+                if (curNode.id <= b.id)
+                {
+                    Console.WriteLine("removing... " + curNode.id);
+                    toRemove.Add(curNode);
+                }
+            }
+
+            foreach (Node curNode in toRemove)
+            {
+                if (nodes.Contains(curNode))
+                {
+                    nodes.Remove(curNode);
+                }
+            }
+
+            foreach (Node curNode in nodes)
+            {
+                for (int i = 0; i < curNode.connections.Count; i++)
+                {
+                    if (curNode.connections[i].id <= b.id)
+                    {
+                        curNode.connections.RemoveAt(i);
+                    }  
+                }
             }
         }
-
-
     }
-}
+}   

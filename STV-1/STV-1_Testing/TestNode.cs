@@ -8,8 +8,12 @@ namespace STV_1_Testing
     public class TestNode
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestNodeAddPlayer()
         {
+            Node a = new Node(1,1);
+            Player player = new Player(10,10,a);
+            a.AddPlayer(player);
+            Assert.AreEqual(a, player.Location);
         }
     }
 }

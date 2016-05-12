@@ -48,5 +48,11 @@ namespace STV1
         }
 
         public bool IsDead { get { return isDead; } }
+
+        public virtual int ATK
+        {
+            get { return atk; }
+            set { atk = value; }
+        }
     }
 }

@@ -12,22 +12,15 @@ namespace STV1
 
         public Game()
         {
-            Dungeon d = new Dungeon(5);
+            Dungeon d = new Dungeon(2);
         }
 
-        void Save()
-        {
-            // TODO
-        }
+        // geen save en load meer
 
-        void Load()
+        void NextDungeon(Dungeon curDungeon)
         {
-            // TODO
-        }
-
-        void NextDungeon()
-        {
-            // TODO
+            // Change 1 for level increase
+            Dungeon d = new Dungeon(curDungeon.level += 1);
         }
     }
 }
