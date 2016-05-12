@@ -16,6 +16,7 @@ namespace STV1
         private int level;
         public string type;
         public int id;
+        static int idCounter = 0; // To give an id to a certain node.
 
         List<Pack> nodePacks;
         Player nodePlayer;
@@ -33,6 +34,8 @@ namespace STV1
             this.maxmonsters = M * (level + 1);
             connections = new List<Node>();
             nodePacks = new List<Pack>();
+            id = idCounter;
+            idCounter++;
         }
 
         // Adds a pack to the node.
@@ -64,6 +67,13 @@ namespace STV1
         public void UseItem(Item i)
         {
             i.UseItem(nodePlayer);
+        }
+
+        // Check for a combat situation in the node.
+        public void CheckInCombat()
+        {
+            if (nodePacks.Count > 1 || (nodePacks.Count > 0 && nodePlayer != null))
+                DoCombat(nodePacks[0]);
         }
 
         public void DoCombatRound(Pack pack)
@@ -126,5 +136,7 @@ namespace STV1
         {
             return (nodePacks.Count > 0);
         }
+
+        public int MaxMonsters { get { return maxmonsters; } }
     }
 }

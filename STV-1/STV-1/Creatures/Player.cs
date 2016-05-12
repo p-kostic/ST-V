@@ -19,8 +19,8 @@ namespace STV1
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
-        public Player(int hp, int atk, Node loc)
-            : base(hp, atk, loc)
+        public Player(int hp, int atk, Node loc, Dungeon dungeon)
+            : base(hp, atk, loc, dungeon)
         {
             this.maxHP = hp;
             this.atk = atk;
@@ -32,6 +32,7 @@ namespace STV1
         public override void Move(Node destination)
         {
             this.Location = destination;
+            destination.CheckInCombat();
         }
 
         // The attacked creature is dealt damage equal to the player's attack power.

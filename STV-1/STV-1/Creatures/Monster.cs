@@ -17,8 +17,8 @@ namespace STV1
         private int atk;
 
         // We just call the base method in the abstract creature class.
-        public Monster(int hp, int atk, Node loc)
-            : base(hp, atk, loc)
+        public Monster(int hp, int atk, Node loc, Dungeon dungeon)
+            : base(hp, atk, loc, dungeon)
         {
             this.atk = atk;
             this.hp = hp;
@@ -29,6 +29,7 @@ namespace STV1
         public override void Move(Node destination)
         {
             this.Location = destination;
+            destination.CheckInCombat();
         }
 
         // The attacked creature is dealt damage equal to the monster's attack power.

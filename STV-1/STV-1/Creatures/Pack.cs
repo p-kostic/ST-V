@@ -23,7 +23,7 @@ namespace STV1
             monsters = new List<Monster>();
             for (int i = 0; i < packSize; i++)
             {
-                Monster monster = new Monster(10, 2, packStartLocation);
+                Monster monster = new Monster(10, 2, packStartLocation, null);
                 monsters.Add(monster);
             }
         }

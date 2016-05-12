@@ -199,6 +199,11 @@ namespace STV1
             return shortestPath;
         }
 
+        public bool GetSpecificPath (Node node1, Node node2)
+        {
+            return FindShortestPath(node1, node2) != null;
+        }
+
         public void Destroy(Node b)
         {
             if (b.type != "bridge")
@@ -232,5 +237,22 @@ namespace STV1
                 }
             }
         }
+
+        public int GetLevel(Node node)
+        {
+            int level = node.MaxMonsters / M - 1;
+            if (level >= 0)
+                return level;
+            else
+                return 0;
+        }
+
+        public bool CheckGate(Node node)
+        {
+            return GetLevel(node) >= 1;
+        }
+
+        public Node GetStart { get { return startNode; } }
+        public Node GetExit { get { return exitNode; } }
     }
 }   
