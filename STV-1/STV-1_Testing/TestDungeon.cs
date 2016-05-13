@@ -57,5 +57,12 @@ namespace STV_1_Testing
             }
             Assert.AreNotEqual(size, d.nodes.Count);
         }
+
+        [TestMethod]
+        public void TestShortestPath()
+        {
+            Dungeon d = new Dungeon(2);
+            Assert.IsTrue(d.FindShortestPath(d.nodes[0], d.nodes[d.nodes.Count - 1]) != null);
+        }
     }
 }

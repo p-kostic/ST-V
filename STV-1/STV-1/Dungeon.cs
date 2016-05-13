@@ -86,34 +86,41 @@ namespace STV1
                 Node curNode = new Node(zoneLvl, M);
                 curNode.id = nodeNr;
                 nodeNr++;
+                bool hasConnection = false;
                 int cNr = rand.Next(1, 4); // Determines how many connections the current node will attempt to have
-                for (int k = 0; k < cNr; k++) // Loop that fills these connections if possible
+                while (!hasConnection)
                 {
-                    if (curZone.Count() > 1)
+                    for (int k = 0; k < cNr; k++) // Loop that fills these connections if possible
                     {
-                        int randNodeIndex = rand.Next(0, curZone.Count() - 1); // Picks a random node in the zone
-                        if (!curNode.connections.Contains(curZone[randNodeIndex]) &&
-                            curZone[randNodeIndex].connections.Count() < 4)
-                        // Checks if current node isn't already connected to that node and if the node has 4 or less connections
+                        if (curZone.Count() > 1)
                         {
-                            curNode.connections.Add(curZone[randNodeIndex]);
-                            // Adds the chosen node to the connection list of the current node
-                            curZone[randNodeIndex].connections.Add(curNode);
-                            // Adds the current node to the connection list of the chosen node
+                            int randNodeIndex = rand.Next(0, curZone.Count() - 1); // Picks a random node in the zone
+                            if (!curNode.connections.Contains(curZone[randNodeIndex]) &&
+                                curZone[randNodeIndex].connections.Count() < 4)
+                            // Checks if current node isn't already connected to that node and if the node has 4 or less connections
+                            {
+                                curNode.connections.Add(curZone[randNodeIndex]);
+                                // Adds the chosen node to the connection list of the current node
+                                curZone[randNodeIndex].connections.Add(curNode);
+                                // Adds the current node to the connection list of the chosen node
+                                hasConnection = true;
+                            }
                         }
-                    }
-                    else
-                    {
-                        // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
-                        if (!curNode.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 4)
+                        else
                         {
-                            curNode.connections.Add(curZone[0]);
-                            curZone[0].connections.Add(curNode);
+                            // Does the same as above but in case there is only one node. Apparently a random between 1 and 1 can't be chosen.
+                            if (!curNode.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 4)
+                            {
+                                curNode.connections.Add(curZone[0]);
+                                curZone[0].connections.Add(curNode);
+                                hasConnection = true;
+                            }
+
                         }
 
                     }
-
                 }
+
                 curZone.Add(curNode); // Adds the created node to the zone list
             }
             bool placed = false;
@@ -121,8 +128,9 @@ namespace STV1
             curbridge.id = nodeNr;
             nodeNr++;
             int connectionNr = rand.Next(1, 4);
-            while (!placed) {
-                
+            while (!placed)
+            {
+
                 for (int k = 0; k < connectionNr; k++)
                 {
                     if (curZone.Count() > 1)
@@ -149,7 +157,7 @@ namespace STV1
 
                 }
             }
-            
+
 
             curZone.Add(curbridge);
             curZone.RemoveAt(0);
@@ -205,7 +213,7 @@ namespace STV1
             return shortestPath;
         }
 
-        public bool GetSpecificPath (Node node1, Node node2)
+        public bool GetSpecificPath(Node node1, Node node2)
         {
             return FindShortestPath(node1, node2) != null;
         }
@@ -239,7 +247,7 @@ namespace STV1
                     if (curNode.connections[i].id <= b.id)
                     {
                         curNode.connections.RemoveAt(i);
-                    }  
+                    }
                 }
             }
         }
@@ -260,5 +268,6 @@ namespace STV1
 
         public Node GetStart { get { return startNode; } }
         public Node GetExit { get { return exitNode; } }
+        public int Size { get { return this.nodes.Count; } }
     }
-}   
+}
