@@ -16,10 +16,15 @@ namespace STV1
         public int level;
         Random rand = new Random();
 
+        int monsterNr;
+        int packNr;
+
         public Dungeon(int level)
         {
             this.level = level;
             nodeNr = 1;
+            monsterNr = 15 * level;
+            packNr = 5 * level;
             nodes = new List<Node>();
             GenerateDungeon(level);
 
@@ -57,7 +62,7 @@ namespace STV1
             startNode = new Node(0, M, "start");
             nodes.Add(startNode);
 
-            for (int i = 0; i < level; i++) // Generates the chosen amount of zones with bridges inbetween them
+            for (int i = 0; i <= level; i++) // Generates the chosen amount of zones with bridges inbetween them
             {
                 nodes.AddRange(GenerateZone(nodes[nodes.Count() - 1], i));
             }
@@ -65,7 +70,7 @@ namespace STV1
 
             for (int i = 0; i < nodes.Count(); i++)
             {
-                Console.WriteLine(nodes[i].type + " " + nodes[i].id);
+                Console.WriteLine(nodes[i].type + " " + nodes[i].id + " lvl: " + nodes[i].level);
                 for (int j = 0; j < nodes[i].connections.Count(); j++)
                 {
                     Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
@@ -81,9 +86,14 @@ namespace STV1
             List<Node> curZone = new List<Node>();
             curZone.Add(firstNode);
 
+            // Determines how many monsters and packs should be in the current zone
+            int zoneMonsterNr = (2 * (zoneLvl + 1) * monsterNr) / ((level + 2) * (level + 1));
+            Console.WriteLine("zonemonsternr: " + zoneMonsterNr);
+            int zonePackNr = (int)Math.Floor((double)packNr / (double)(level + 1));
+
             for (int i = 0; i < zoneNodeNr; i++) // Loop that fills the zone with a random amount of nodes
             {
-                Node curNode = new Node(zoneLvl, M);
+                Node curNode = new Node(zoneLvl + 1, M);
                 curNode.id = nodeNr;
                 nodeNr++;
                 bool hasConnection = false;
@@ -121,10 +131,20 @@ namespace STV1
                     }
                 }
 
+                int drop = rand.Next(1, 100); // Determines the drop chance for items in a node
+                if (drop < 5)
+                {
+                    curNode.items.Add(new TimeCrystal());
+                }
+                if (drop < 15)
+                {
+                    curNode.items.Add(new HealingPotion());
+                }
+
                 curZone.Add(curNode); // Adds the created node to the zone list
             }
             bool placed = false;
-            Node curbridge = new Node(zoneLvl, M, "bridge");
+            Node curbridge = new Node(zoneLvl + 1, M, "bridge");
             curbridge.id = nodeNr;
             nodeNr++;
             int connectionNr = rand.Next(1, 4);
@@ -157,23 +177,32 @@ namespace STV1
 
                 }
             }
-
-
             curZone.Add(curbridge);
             curZone.RemoveAt(0);
+
+            // Add packs of monsters to the generated dungeon
+            int remainingMonsters = zoneMonsterNr;
+            for (int i = 0; i < zonePackNr && remainingMonsters > 0; i++)
+            {
+                int packLocation = rand.Next(0, curZone.Count() - 1);
+                Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
+                remainingMonsters -= zoneMonsterNr / zonePackNr;
+                Console.WriteLine("Added pack to node " + curZone[packLocation].id + ", remaining monsters: " + remainingMonsters);
+            }
+
             return curZone;
         }
 
         public List<Node> FindShortestPath(Node start, Node end)
         {
             bool found = false;
-            List<Node> shortestPath = new List<Node>();
-            Queue<Node> queue = new Queue<Node>();
-            List<Node> closed = new List<Node>();
-            Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
+            List<Node> shortestPath = new List<Node>(); // The final list that gets returned
+            Queue<Node> queue = new Queue<Node>(); // Keeps track of which nodes to look at next
+            List<Node> closed = new List<Node>(); // Keeps track of which nodes have already been visited
+            Dictionary<Node, Node> previous = new Dictionary<Node, Node>(); // Used for the final backtrace
             queue.Enqueue(start);
             closed.Add(start);
-            if (end == start)
+            if (end == start) // Checks for a trivial path
             {
                 shortestPath.Add(start);
                 found = true;
@@ -268,6 +297,11 @@ namespace STV1
 
         public Node GetStart { get { return startNode; } }
         public Node GetExit { get { return exitNode; } }
-        public int Size { get { return this.nodes.Count; } }
+
+        public int getLevel(Node u)
+        {
+            return u.level;
+        }
     }
+
 }

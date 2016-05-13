@@ -13,12 +13,13 @@ namespace STV1
 
         private int maxmonsters;
 
-        private int level;
+        public int level;
         public string type;
         public int id;
         static int idCounter = 0; // To give an id to a certain node.
 
         public List<Pack> nodePacks;
+        public List<Item> items;
         Player nodePlayer;
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace STV1
             nodePacks = new List<Pack>();
             id = idCounter;
             idCounter++;
+            items = new List<Item>();
         }
 
         /// <summary>

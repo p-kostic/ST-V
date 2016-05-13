@@ -8,7 +8,7 @@ namespace STV_1_Testing
     public class TestHealingPotion
     {
         [TestMethod]
-        public void TestHealingPotion()
+        public void TestHealingPotionConstructor()
         {
         }
     }
