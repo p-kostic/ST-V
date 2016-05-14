@@ -32,7 +32,7 @@ namespace STV1
 
                 for (int i = 0; i < packSize; i++)
                 {
-                    Monster monster = new Monster(10, 2, packStartLocation, null);
+                    Monster monster = new Monster(10, 2, packStartLocation);
                     monsters.Add(monster);
                 }
 

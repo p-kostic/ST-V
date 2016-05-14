@@ -15,16 +15,19 @@ namespace STV1
     {
         private int maxHP;
         private int atk;
+        private Dungeon dungeon;
+        private Game game;
         public List<Item> inventory; // To keep track of the items in the player's inventory.
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
-        public Player(int hp, int atk, Node loc, Dungeon dungeon)
-            : base(hp, atk, loc, dungeon)
+        public Player(int hp, int atk, Node loc, Dungeon dungeon, Game game)
+            : base(hp, atk, loc)
         {
             this.maxHP = hp;
             this.atk = atk;
-            this.Location = loc;
+            this.dungeon = dungeon;
+            this.game = game;
             loc.AddPlayer(this);
         }
 
@@ -69,6 +72,8 @@ namespace STV1
         }
 
         public int MaxHP { get { return maxHP; } }
+
+        public Dungeon Dungeon { get { return dungeon; } }
 
         public void GetCommand()
         {

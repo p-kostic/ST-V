@@ -13,15 +13,13 @@ namespace STV1
         int atk;
         bool isDead = false;
         Node location;
-        protected Dungeon dungeon;
 
         // The constructor. This will be overridden by the inheriting class.
-        public Creature(int hitPoints, int attack, Node loc, Dungeon dungeon)
+        public Creature(int hitPoints, int attack, Node loc)
         {
             hp = hitPoints;
             atk = attack;
             location = loc;
-            this.dungeon = dungeon;
         }
 
         // Some abstract methods are defined here to make sure that we add them to the 
@@ -56,7 +54,5 @@ namespace STV1
             get { return atk; }
             set { atk = value; }
         }
-
-        public Dungeon Dungeon { get { return dungeon; } }
     }
 }

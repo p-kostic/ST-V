@@ -17,8 +17,8 @@ namespace STV1
         private int atk;
 
         // We just call the base method in the abstract creature class.
-        public Monster(int hp, int atk, Node loc, Dungeon dungeon)
-            : base(hp, atk, loc, dungeon)
+        public Monster(int hp, int atk, Node loc)
+            : base(hp, atk, loc)
         {
             this.atk = atk;
             this.hp = hp;

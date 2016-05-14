@@ -298,7 +298,7 @@ namespace STV1
         public Node GetStart { get { return startNode; } }
         public Node GetExit { get { return exitNode; } }
 
-        public int getLevel(Node u)
+        public int GetDungeonLevel(Node u)
         {
             return u.level;
         }
