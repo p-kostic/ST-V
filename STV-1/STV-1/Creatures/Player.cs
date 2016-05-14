@@ -15,9 +15,10 @@ namespace STV1
     {
         private int maxHP;
         private int atk;
+        private int kp;
         private Dungeon dungeon;
         private Game game;
-        public List<Item> inventory; // To keep track of the items in the player's inventory.
+        public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
@@ -34,7 +35,9 @@ namespace STV1
         // We will move the player to the given destination.
         public override void Move(Node destination)
         {
-            this.Location = destination;
+            Location.RemovePlayer();
+            Location = destination;
+            Location.AddPlayer(this);
             destination.CheckInCombat();
         }
 
@@ -42,6 +45,8 @@ namespace STV1
         public override void Attack(Creature creature)
         {
             creature.HP -= this.atk;
+            if (creature.IsDead)
+                kp++;
         }
 
         // If the health is below zero, the player will die.

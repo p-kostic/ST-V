@@ -44,7 +44,5 @@ namespace STV1
             if (this.IsDead)
                 throw new NotImplementedException();
         }
-
-
     }
 }
