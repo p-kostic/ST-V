@@ -19,6 +19,7 @@ namespace STV1
         private Dungeon dungeon;
         private Game game;
         public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
+        
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.

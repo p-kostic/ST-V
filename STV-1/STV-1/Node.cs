@@ -113,33 +113,6 @@ namespace STV1
 
         public void DoCombatRound(Pack pack)
         {
-            /* TODO: 
-             * Speler kan item gebruiken
-             * Speler kan vluchten
-             */
-
-            // If there is a player in the node and there's at least one pack in the node,
-            // We will walk through the loop. Also, if the combat has been ended we will stop
-            // as well.
-            if (true) // CHANGE TO WHEN TIMECRYSTAL ACTIVE
-            {
-                for (int i = 0; i < pack.PackSize; i++)
-                    nodePlayer.Attack(pack.Monsters[i]);
-            }
-            else
-                nodePlayer.Attack(pack.Monsters[0]);
-
-            pack.PackAttack(nodePlayer);
-
-            /*IMPLEMENT RETREAT PLAYER HERE*/
-            if (pack.PackHP < nodePlayer.HP && pack.PackHP > 0)
-            {
-                // @Bor, hoe werkt die node identifier? de pack moet naar een willekeurige
-                // aangrenzende node worden gestuurd.
-
-                // Antwoord: Gebruik van de huidige node, node.connections, dit is een lijst met alle nodes die geconnect zijn aan de huidige node (aka de neighbours)
-                //pack.MovePack();
-            }
         }
 
         /// <summary>
