@@ -11,7 +11,7 @@ namespace STV1
             Dungeon dungeon = player.Dungeon;
             
             // Check if the crystal is used on a gate.
-            bool UsedOnGate = dungeon.CheckGate(gate);
+            bool UsedOnGate = player.Location.type == "bridge";
 
             // If used on a gate, We first find all the possible nodes the player can flee to,
             // and then we destroy the gate. After that we move the player to one of the fleeing nodes.
@@ -25,7 +25,7 @@ namespace STV1
 
                 foreach (Node node in fleeingNodes)
                 {
-                    if (dungeon.GetSpecificPath(node, dungeon.GetExit))
+                    if (dungeon.FindShortestPath(node, dungeon.GetExit) != null)
                     {
                         player.Location = node;
                         break;

@@ -11,7 +11,6 @@ namespace STV1
         const int M = 3;
         private Node startNode;
         public List<Node> nodes;
-        private Node exitNode;
         private int nodeNr;
         public int level;
         Random rand = new Random();
@@ -26,38 +25,9 @@ namespace STV1
             monsterNr = 15 * level;
             packNr = 5 * level;
             nodes = new List<Node>();
-            GenerateDungeon(level);
-
-            List<Node> test = FindShortestPath(nodes[0], nodes[nodes.Count() - 1]);
-
-            foreach (Node n in test)
-            {
-                Console.WriteLine(n.id);
-            }
-
-
-            //Console.WriteLine("-----------------------");
-            //foreach (Node curNode in nodes)
-            //{
-            //    if (curNode.type == "bridge")
-            //    {
-            //        Destroy(curNode);
-            //        for (int i = 0; i < nodes.Count(); i++)
-            //        {
-            //            Console.WriteLine(nodes[i].type + " " + nodes[i].id);
-            //            for (int j = 0; j < nodes[i].connections.Count(); j++)
-            //            {
-            //                Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
-            //            }
-            //        }
-            //        break;
-            //    }
-            //}
-
-            Console.ReadLine();
         }
 
-        void GenerateDungeon(int level)
+        public void GenerateDungeon(int level)
         {
             startNode = new Node(0, M, "start");
             nodes.Add(startNode);
@@ -132,7 +102,7 @@ namespace STV1
                 }
 
                 int drop = rand.Next(1, 100); // Determines the drop chance for items in a node
-                if (drop < 5)
+                if (drop < 15)
                 {
                     curNode.items.Add(new TimeCrystal());
                 }
@@ -164,17 +134,6 @@ namespace STV1
                             placed = true;
                         }
                     }
-                    else
-                    {
-                        if (!curbridge.connections.Contains(curZone[0]) && curZone[0].connections.Count() < 5)
-                        {
-                            curbridge.connections.Add(curZone[0]);
-                            curZone[0].connections.Add(curbridge);
-                            placed = true;
-                        }
-
-                    }
-
                 }
             }
             curZone.Add(curbridge);
@@ -242,11 +201,6 @@ namespace STV1
             return shortestPath;
         }
 
-        public bool GetSpecificPath(Node node1, Node node2)
-        {
-            return FindShortestPath(node1, node2) != null;
-        }
-
         public void Destroy(Node b)
         {
             if (b.type != "bridge")
@@ -281,21 +235,7 @@ namespace STV1
             }
         }
 
-        public int GetLevel(Node node)
-        {
-            int level = node.MaxMonsters / M - 1;
-            if (level >= 0)
-                return level;
-            else
-                return 0;
-        }
-
-        public bool CheckGate(Node node)
-        {
-            return GetLevel(node) >= 1;
-        }
-
         public Node GetStart { get { return startNode; } }
-        public Node GetExit { get { return exitNode; } }
+        public Node GetExit { get { return this.nodes[this.nodes.Count - 1]; } }
     }
 }

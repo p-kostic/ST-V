@@ -26,7 +26,6 @@ namespace STV1
         // sub classes that will inherit this class.
         public abstract void Move(Node destination);
         public abstract void Attack(Creature creature);
-        public abstract void Die();
 
         // A few getters/setters that will make sure we can get to our variables. In the
         // hp getter/setter we will also define when a creature has died.

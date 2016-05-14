@@ -71,6 +71,14 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
+        public void TestPlayerSetAttack()
+        {
+            Player player = new Player(10, 2, new Node(1,1),new Dungeon(1));
+            player.ATK = 5;
+            Assert.AreNotEqual(2, player.ATK);
+        }
+
+        [TestMethod]
         public void TestGrabItem()
         {
             // TODO MEME

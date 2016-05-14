@@ -48,13 +48,6 @@ namespace STV1
                 kp++;
         }
 
-        // If the health is below zero, the player will die.
-        public override void Die()
-        {
-            if (this.IsDead)
-                throw new NotImplementedException();
-        }
-
         // This will add items to the player's inventory.
         public void GrabItems(Item item)
         {
