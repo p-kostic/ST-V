@@ -99,20 +99,75 @@ namespace STV1
         public void CheckInCombat()
         {
             while (nodePacks.Count > 0 && nodePlayer != null && !nodePlayer.IsDead)
-                DoCombat(nodePlayer);
+                DoCombat();
         }
 
         // This method will play out a combat situation as long as the player is in combat.
-        public void DoCombat(Player player)
+        public void DoCombat()
         {
             repeatCombat = true;
             while (repeatCombat)
                 DoCombatRound(nodePacks[0]);
-            repeatCombat = true;
         }
 
+        // This method will do a round of combat. We will explain how it works as we go through it.
         public void DoCombatRound(Pack pack)
         {
+            // We get the next command from the botplayer, and set the timecrystal use to false.
+            BotPlayer command = nodePlayer.GetCommand();
+            bool activeTimeCrystal = false;
+
+            // As long as there is a command, we pass.
+            if (command != null)
+            {
+                // If the command is to use an item, we will check which item has been used and act
+                // accordingly.
+                if (command.itemUsed)
+                {
+                    if (command.usedHP)
+                        nodePlayer.UsePotion();
+                    else if (command.usedTC)
+                        activeTimeCrystal = nodePlayer.UseCrystal();
+                }
+
+                // If a timecrystal has been used, we let the player attack each monster in the group.
+                // Else the player will only attack the first monster in the group.
+                if (activeTimeCrystal)
+                    foreach (Monster monster in pack.Monsters)
+                        nodePlayer.Attack(monster);
+                else
+                    nodePlayer.Attack(pack.Monsters[0]);
+            }
+            // If there is no command, we will just do the basic combat, in which the player attacks, and
+            // then the pack will attack.
+            else
+                nodePlayer.Attack(pack.Monsters[0]);
+            pack.PackAttack(nodePlayer);
+
+            // We update the pack to see if it died and whatnot.
+            pack.UpdatePack();
+
+            // If the pack or the player died, we will end combat the next turn.
+            if (pack.PackHP <= 0 || nodePlayer.IsDead)
+                repeatCombat = false;
+
+            // Else we will check for retreats. if the command is the retreat command, move to the
+            // adjoining node, else if the accumulative HP of the pack is lower then the HP of the player,
+            // move to the pack to the adjoining node and end the combat in both cases.
+            if (repeatCombat)
+            {
+                BotPlayer nextCommand = nodePlayer.GetCommand();
+                if (nextCommand.retreated)
+                {
+                    nodePlayer.Move(connections[0]);
+                    repeatCombat = false;
+                }
+                if (pack.PackHP < nodePlayer.HP)
+                {
+                    pack.MovePack(connections[0]);
+                    repeatCombat = false;
+                }
+            }
         }
 
         /// <summary>

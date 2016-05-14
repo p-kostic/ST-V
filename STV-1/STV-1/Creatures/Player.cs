@@ -49,9 +49,14 @@ namespace STV1
         }
 
         // This will add items to the player's inventory.
-        public void GrabItems(Item item)
+        public void GrabItems()
         {
-            inventory.Add(item);
+            if (Location.items.Count > 0)
+                foreach (Item i in Location.items)
+                {
+                    inventory.Add(i);
+                    Location.items = new List<Item>();
+                }
         }
 
         public bool UsePotion()
