@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="STV_1_Testing.TestDungeon.TestDungeonDestroy" /><Add Test="STV_1_Testing.TestDungeon.TestShortestPath" /><Add Test="STV_1_Testing.TestDungeon.TestDungeonConstructor" /></Playlist>

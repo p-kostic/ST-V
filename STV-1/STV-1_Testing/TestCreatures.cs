@@ -10,9 +10,7 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestCreatureConstructor()
         {
-            Dungeon d = new Dungeon(2);
-
-            Assert.IsTrue(d.FindShortestPath(d.nodes[0], d.nodes[d.nodes.Count - 1]) != null);
+            
         }
     }
 }
