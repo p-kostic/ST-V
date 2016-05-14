@@ -4,6 +4,7 @@ namespace STV1
 {
     public class TimeCrystal : Item
     {
+        private string type = "TimeCrystal";
         public override void UseItem(Player player)
         {
             // Get the gate and de specific dungeon.
@@ -34,6 +35,11 @@ namespace STV1
 
                 return;
             }
+        }
+
+        public override string ItemType()
+        {
+            return this.type;
         }
     }
 }
