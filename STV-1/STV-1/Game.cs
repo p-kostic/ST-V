@@ -8,18 +8,32 @@ namespace STV1
 {
     public class Game
     {
-        public Dungeon Dungeon;
+        public Dungeon d;
+        Player player;
+        int level;
 
         public Game()
         {
-            Dungeon d = new Dungeon(2);
+            NextDungeon();
         }
 
         // geen save en load meer
 
-        public void NextDungeon()
+        public Dungeon NextDungeon()
         {
-            // First we check if a dungeon exists. If not, we make a new one with difficulty 1.
+            if (d == null)
+            {
+                d = new Dungeon(1);
+                level = 1;
+                player = new Player(50, 5, d.nodes[0], d);
+            }
+            else
+            {
+                level++;
+                d = new Dungeon(level);
+                player.Location = d.nodes[0];
+            }
+            return d;
         }
     }
 }

@@ -95,9 +95,7 @@ namespace STV1
                                 curZone[0].connections.Add(curNode);
                                 hasConnection = true;
                             }
-
                         }
-
                     }
                 }
 
@@ -140,14 +138,7 @@ namespace STV1
             curZone.RemoveAt(0);
 
             // Add packs of monsters to the generated dungeon
-            int remainingMonsters = zoneMonsterNr;
-            for (int i = 0; i < zonePackNr && remainingMonsters > 0; i++)
-            {
-                int packLocation = rand.Next(0, curZone.Count() - 1);
-                Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
-                remainingMonsters -= zoneMonsterNr / zonePackNr;
-                Console.WriteLine("Added pack to node " + curZone[packLocation].id + ", remaining monsters: " + remainingMonsters);
-            }
+            addMonsters(zoneMonsterNr, zonePackNr, curZone);
 
             return curZone;
         }
@@ -199,6 +190,18 @@ namespace STV1
 
             shortestPath.Reverse();
             return shortestPath;
+        }
+
+        private void addMonsters(int zoneMonsterNr, int zonePackNr, List<Node> curZone)
+        {
+            int remainingMonsters = zoneMonsterNr;
+            for (int i = 0; i < zonePackNr && remainingMonsters > 0; i++)
+            {
+                int packLocation = rand.Next(0, curZone.Count() - 1);
+                Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
+                remainingMonsters -= zoneMonsterNr / zonePackNr;
+                Console.WriteLine("Added pack to node " + curZone[packLocation].id + ", remaining monsters: " + remainingMonsters);
+            }
         }
 
         public void Destroy(Node b)
