@@ -12,10 +12,11 @@ namespace STV1
         public List<Node> connections;
 
         private int maxmonsters;
+        private bool repeatCombat;
 
         public int level;
         public string type;
-        public int id;
+        private int id;
         static int idCounter = 0; // To give an id to a certain node.
 
         public List<Pack> nodePacks;
@@ -35,9 +36,9 @@ namespace STV1
             this.maxmonsters = M * (level + 1);
             connections = new List<Node>();
             nodePacks = new List<Pack>();
+            items = new List<Item>();
             id = idCounter;
             idCounter++;
-            items = new List<Item>();
         }
 
         /// <summary>
@@ -94,11 +95,20 @@ namespace STV1
             i.UseItem(nodePlayer);
         }
 
-        // Check for a combat situation in the node.
+        // This method checks if the player should be in combat, by checking health, position and pack count.
         public void CheckInCombat()
         {
-            if (nodePacks.Count > 1 || (nodePacks.Count > 0 && nodePlayer != null))
-                DoCombat(nodePacks[0]);
+            while (nodePacks.Count > 0 && nodePlayer != null && !nodePlayer.IsDead)
+                DoCombat(nodePlayer);
+        }
+
+        // This method will play out a combat situation as long as the player is in combat.
+        public void DoCombat(Player player)
+        {
+            repeatCombat = true;
+            while (repeatCombat)
+                DoCombatRound(nodePacks[0]);
+            repeatCombat = true;
         }
 
         public void DoCombatRound(Pack pack)
@@ -130,16 +140,6 @@ namespace STV1
                 // Antwoord: Gebruik van de huidige node, node.connections, dit is een lijst met alle nodes die geconnect zijn aan de huidige node (aka de neighbours)
                 //pack.MovePack();
             }
-        }
-
-        public void DoCombat(Pack pack)
-        {
-            bool endCombat = false;
-            if ((nodePlayer != null && nodePacks.Count > 0) || !endCombat)
-                DoCombatRound(pack);
-
-            if (nodePlayer.IsDead || pack.PackDied)
-                endCombat = true;
         }
 
         /// <summary>
