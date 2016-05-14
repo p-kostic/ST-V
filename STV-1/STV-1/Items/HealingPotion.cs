@@ -27,12 +27,6 @@ namespace STV1
         public override void UseItem(Player player)
         {
             player.HP += healValue;
-            destroy();
-        }
-
-        public void destroy()
-        {
-            // TODO: verwijderen uit de lijst in de inventory na gebruik.
         }
     }
 }

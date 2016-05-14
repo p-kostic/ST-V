@@ -106,7 +106,7 @@ namespace STV_1_Testing
             // Test if it's possible to attack a monster (instead of a player)
             Node location3 = new Node(4,5);
             Pack pack3 = new Pack(5,location3);
-            Monster monster = new Monster(20,2,location3,new Dungeon(1));
+            Monster monster = new Monster(20,2,location3);
             pack3.PackAttack(monster);
             Assert.AreEqual(monster.HP, 10);
         }

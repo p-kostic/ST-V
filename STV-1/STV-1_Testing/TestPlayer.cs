@@ -47,7 +47,7 @@ namespace STV_1_Testing
         {
             // Test if a player receives dmg from a monster
             Node a = new Node(1, 1);
-            Monster monster = new Monster(10, 5, a, null);
+            Monster monster = new Monster(10, 5, a);
             Player player = new Player(10, 2, a, null);
 
             int starthp = player.HP;
@@ -59,7 +59,7 @@ namespace STV_1_Testing
 
             // Test if a monster can receive dmg from a player.
             Node a2 = new Node(1, 1);
-            Monster monster2 = new Monster(10, 5, a2, null);
+            Monster monster2 = new Monster(10, 5, a2);
             Player player2 = new Player(10, 2, a2, null);
 
             int starthp2 = monster2.HP;

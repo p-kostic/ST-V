@@ -17,10 +17,9 @@ namespace STV1
 
         // geen save en load meer
 
-        public void NextDungeon(Dungeon curDungeon)
+        public void NextDungeon()
         {
-            // Change 1 for level increase
-            Dungeon d = new Dungeon(curDungeon.level += 1);
+            // First we check if a dungeon exists. If not, we make a new one with difficulty 1.
         }
     }
 }

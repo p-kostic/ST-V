@@ -13,7 +13,7 @@ namespace STV_1_Testing
             int hp = 10;
             int atk = 5;
             Node a = new Node(1, 1);
-            Monster monster = new Monster(hp, atk, a, null);
+            Monster monster = new Monster(hp, atk, a);
 
             Assert.AreEqual(a, monster.Location);
             Assert.AreEqual(monster.HP, hp);
@@ -23,9 +23,9 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestDead2()
         {
-            Monster monster = new Monster(0, 0, new Node(1, 1), null);
+            Monster monster = new Monster(0, 0, new Node(1, 1));
             monster.HP = 0;
-            Monster monster2 = new Monster(1, 0, new Node(1, 1), null);
+            Monster monster2 = new Monster(1, 0, new Node(1, 1));
             monster2.HP = 3;
             Assert.IsTrue(monster.IsDead);
             Assert.IsFalse(monster2.IsDead);
@@ -36,7 +36,7 @@ namespace STV_1_Testing
         {
             Node a = new Node(1, 1);
             Node b = new Node(1, 1);
-            Monster monster = new Monster(10, 1, a, null);
+            Monster monster = new Monster(10, 1, a);
             monster.Move(b);
             Assert.AreEqual(b, monster.Location);
             Assert.AreNotEqual(a, monster.Location);
@@ -46,8 +46,8 @@ namespace STV_1_Testing
         public void TestAttack()
         {
             Node a = new Node(1, 1);
-            Monster monster = new Monster(10, 5, a, null);
-            Monster monster2 = new Monster(10, 2, a, null);
+            Monster monster = new Monster(10, 5, a);
+            Monster monster2 = new Monster(10, 2, a);
 
             int starthp = monster2.HP;
             int expectedhp = starthp - monster.ATK;

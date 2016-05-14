@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Creatures\BotPlayer.cs" />
     <Compile Include="Creatures\Creature.cs" />
     <Compile Include="Dungeon.cs" />
     <Compile Include="Game.cs" />
