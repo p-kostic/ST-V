@@ -37,12 +37,5 @@ namespace STV1
         {
             creature.HP -= this.atk;
         }
-
-        // If the health is below zero, the monster will die.
-        public override void Die()
-        {
-            if (this.IsDead)
-                throw new NotImplementedException();
-        }
     }
 }
