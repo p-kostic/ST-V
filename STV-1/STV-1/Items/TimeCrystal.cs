@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace STV1
 {
     public class TimeCrystal : Item
     {
+        string type = "TimeCrystal";
+
         public override void UseItem(Player player)
         {
             // Get the gate and de specific dungeon.
@@ -34,6 +37,11 @@ namespace STV1
 
                 return;
             }
+        }
+
+        public override string ItemType()
+        {
+            return type;
         }
     }
 }

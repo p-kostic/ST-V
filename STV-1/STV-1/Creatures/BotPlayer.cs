@@ -5,9 +5,9 @@
  * tests on combat and other things.
  */
 
-namespace STV_1.Creatures
+namespace STV1
 {
-    class BotPlayer
+    public class BotPlayer
     {
         public bool itemUsed, usedHP, usedTC;
         public bool moved, retreated;

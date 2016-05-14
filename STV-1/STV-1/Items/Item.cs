@@ -9,5 +9,6 @@ namespace STV1
     public abstract class Item
     {
         public abstract void UseItem(Player player);
+        public abstract string ItemType();
     }
 }

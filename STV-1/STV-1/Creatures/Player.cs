@@ -18,7 +18,7 @@ namespace STV1
         private int kp;
         private Dungeon dungeon;
         public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
-        
+        Queue<BotPlayer> playerCommands;
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
@@ -61,6 +61,32 @@ namespace STV1
             inventory.Add(item);
         }
 
+        public bool UsePotion()
+        {
+            foreach (Item item in inventory)
+                if (item.ItemType() == "HealingPotion")
+                {
+                    inventory.Remove(item);
+                    item.UseItem(this);
+                    return true;
+                }
+
+            return false;
+        }
+
+        public bool UseCrystal()
+        {
+            foreach (Item item in inventory)
+                if (item.ItemType() == "TimeCrystal")
+                {
+                    inventory.Remove(item);
+                    item.UseItem(this);
+                    return true;
+                }
+
+            return false;
+        }
+
         // We override the virtual method of the creature class here, and add a
         // testcase to make sure the hp value can't exceed the maximum value.
         public override int HP
@@ -79,9 +105,24 @@ namespace STV1
 
         public Dungeon Dungeon { get { return dungeon; } }
 
-        public void GetCommand()
+        // This method is used to get the next command from the queue. If there are no
+        // other commands, we will return a null value.
+        public BotPlayer GetCommand()
         {
-            // TODO
+            if (playerCommands.Count > 0)
+            {
+                BotPlayer nextCommand = playerCommands.Dequeue();
+                return nextCommand;
+            }
+
+            return null;
+        }
+
+        // With this method we can add commands to the list that the player should do.
+        // This method is mainly used in the test cases.
+        public void SetCommand(BotPlayer command)
+        {
+            playerCommands.Enqueue(command);
         }
     }
 }
