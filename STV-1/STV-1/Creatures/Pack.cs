@@ -14,13 +14,11 @@ namespace STV1
     public class Pack
     {
         List<Monster> monsters; // A list to hold all the monsters.
+        public Node packStartLocation;
 
         // The constructor will handle the creation of the pack. We will give the pack a 
         // size and a location to start in the dungeon. The monsters will have 10 hp and
         // 2 atk (although this could be easily changed).
-
-        public Node packStartLocation;
-
         public Pack(int packSize, Node packStartLocation)
         {
             monsters = new List<Monster>();
@@ -50,9 +48,8 @@ namespace STV1
             if (this.PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start")
             {
                 foreach (Monster monster in monsters)
-                {
                     monster.Location = destination;
-                }
+
                 // Update the nodePack list accordingly to the move
                 this.packStartLocation.RemovePack(this);
                 destination.AddPack(this);
@@ -63,19 +60,23 @@ namespace STV1
         public void PackAttack(Creature creature)
         {
             if (creature.Location == this.PackLocation)
-            {
                 foreach (Monster monster in monsters)
-                {
                     monster.Attack(creature);
-                }
-            }
+        }
+
+        public void UpdatePack()
+        {
+            foreach (Monster monster in monsters)
+                if (monster.IsDead)
+                    monsters.Remove(monster);
+
+            if (monsters.Count == 0)
+                this.MovePack(null);
         }
 
         // A few getters/setters to get the size and location of the pack,
         // and a more complex getter (a boolean) to find out if a pack has died or not.
         public int PackSize { get { return monsters.Count; } }
-
-        // Het is lelijk, maar het werkt...
         public Node PackLocation { get { return monsters[0].Location; } }
         public List<Monster> Monsters { get { return monsters; } }
         public int PackHP
@@ -86,16 +87,6 @@ namespace STV1
                 foreach (Monster monster in monsters)
                     totalHP += monster.HP;
                 return totalHP;
-            }
-        }
-        public bool PackDied
-        {
-            get
-            {
-                if (monsters.Count == 0)
-                    return true;
-                else
-                    return false;
             }
         }
     }
