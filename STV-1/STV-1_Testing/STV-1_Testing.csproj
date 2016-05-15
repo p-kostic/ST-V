@@ -60,6 +60,7 @@
     <Compile Include="TestPack.cs" />
     <Compile Include="TestPlayer.cs" />
     <Compile Include="TestGame.cs" />
+    <Compile Include="TestTimeCrystal.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\STV-1\STV-1.csproj">
