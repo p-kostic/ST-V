@@ -13,7 +13,7 @@ namespace STV1
     public class HealingPotion : Item
     {
         int healValue;
-        string type = "HealingPotion";
+        private string type = "HealingPotion";
 
         // To make the item a bit more interesting, we are going to randomize the
         // healing value a potion can have. The value will be between 1 and 100.
@@ -32,7 +32,7 @@ namespace STV1
 
         public override string ItemType()
         {
-            return type;
+            return this.type;
         }
     }
 }

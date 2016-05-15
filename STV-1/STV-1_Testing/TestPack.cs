@@ -23,6 +23,11 @@ namespace STV_1_Testing
             Assert.AreNotEqual(pack2.Monsters.Count, 20);
             // Check if the amount is indeed equal to the Node's max monsters
             Assert.AreEqual(pack2.Monsters.Count, b.MaxMonsters);
+
+
+            // Try to make a new pack at a wrong startlocation
+            Pack pack3 = new Pack(10, new Node(1,1, "start"));
+            Assert.IsTrue(pack3.Monsters.Count == 0); // No monsters should be added
         }
 
         [TestMethod]
@@ -131,6 +136,34 @@ namespace STV_1_Testing
 
             // Check if the packHP is still correct after the damage
             Assert.AreEqual(50, pack.PackHP);
+        }
+
+        [TestMethod]
+        public void TestPackUpdatePack()
+        {
+            // Test to see if deaths are handled correctly 
+            Pack pack = new Pack(10,new Node(4,5));
+            foreach (Monster monster in pack.Monsters)
+                monster.HP -= 5;
+            pack.UpdatePack();
+
+            bool checkdead = false;
+            foreach (Monster monster in pack.Monsters)
+                if (monster.IsDead)
+                    checkdead = true;
+
+            Assert.IsFalse(checkdead);
+            Assert.AreEqual(pack.Monsters.Count, 10);
+
+            // Now we test if it is updated accordingly to the deaths
+            Pack pack2 = new Pack(5, new Node(4,5));
+            for (int i = 0; i < pack2.Monsters.Count; i++)
+                pack2.Monsters[i].HP = 0;
+            pack2.UpdatePack();
+            Assert.AreEqual(pack2.Monsters.Count, 5); // Er moeten geen monsters meer in de lijst zitten
+
+            // TODO: Fix UpdatePack zodat hij goed checkt of het indd true
+
         }
     }
 }

@@ -39,7 +39,6 @@ namespace STV1
                 this.packStartLocation.nodePacks.Add(this);
 
             }
-            else throw new NotSupportedException("You cannot create a pack on a start or exit node");
         }
 
         // We will move the pack by moving each monster in the pack to the destination location.
@@ -66,9 +65,11 @@ namespace STV1
 
         public void UpdatePack()
         {
-            foreach (Monster monster in monsters)
-                if (monster.IsDead)
-                    monsters.Remove(monster);
+            for (int i = monsters.Count; i < monsters.Count; i++)
+                if (monsters[i].IsDead)
+                    monsters.RemoveAt(i);
+
+            // monsters.RemoveAll(elem => elem.isDead);
 
             if (monsters.Count == 0)
                 this.MovePack(null);

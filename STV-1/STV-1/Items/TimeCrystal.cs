@@ -39,7 +39,7 @@ namespace STV1
 
         public override string ItemType()
         {
-            return this.type;
+            return this.type.ToString();
         }
     }
 }

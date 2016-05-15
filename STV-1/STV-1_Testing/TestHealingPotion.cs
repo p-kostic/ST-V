@@ -33,5 +33,13 @@ namespace STV_1_Testing
             // We now test if the player has been healed.
             Assert.IsTrue(player.HP > 5);
         }
+
+        [TestMethod]
+        public void TestHealingPotionItemType()
+        {
+            HealingPotion potion = new HealingPotion();
+            var type = potion.ItemType();
+            Assert.AreEqual(type, "HealingPotion");
+        }
     }
 }
