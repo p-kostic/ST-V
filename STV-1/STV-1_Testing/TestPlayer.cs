@@ -103,34 +103,67 @@ namespace STV_1_Testing
             }
             Player player = new Player(50, 5, bridge, d);
             player.inventory.Add(new TimeCrystal());
-            player.UseCrystal();
+            
 
-            Assert.AreNotEqual(size, d.nodes.Count);
+            Assert.IsTrue(player.UseCrystal());
+
+            // Test if the crystal can't be used if it's not in the player's inventory and if the crystal has been removed
+            Assert.IsFalse(player.UseCrystal());
         }
 
         [TestMethod]
         public void TestPlayerUsePotion()
         {
             Dungeon d = new Dungeon(3);
+            Node a = new Node(1,1);
+            Player player = new Player(50,5,a,d);
+            player.inventory.Add(new HealingPotion());
+            Assert.IsTrue(player.UsePotion());
+            Assert.IsFalse(player.UsePotion()); // Checks both if the potion was removed during usage and if no potion can be used without one in the inventory
 
-        }
-
-        [TestMethod]
-        public void TestPlayerGet_MaxHP()
-        {
-            
         }
 
         [TestMethod]
         public void TestPlayerGrabItems()
         {
-            
+            Dungeon d = new Dungeon(2);
+            Node a = new Node(1,1);
+            Node a2 = new Node(1,1);
+            a.connections.Add(a2);
+            a2.connections.Add(a);
+            a2.items.Add(new HealingPotion());
+            Player player = new Player(50, 5, a, d);
+            int inventorySize = player.inventory.Count;
+            player.Move(a2);
+            Assert.AreNotEqual(inventorySize, player.inventory.Count);
+        }
+
+        [TestMethod]
+        public void TestPlayerSetCommand()
+        {
+            Dungeon d = new Dungeon(2);
+            Node a = new Node(1,1);
+            Player player = new Player(50,5,a,d);
+            int val = player.playerCommands.Count;
+            BotPlayer botPlayer = new BotPlayer(false, false, true, false);
+            player.SetCommand(botPlayer);
+            Assert.AreNotEqual(val, player.playerCommands.Count);
         }
 
         [TestMethod]
         public void TestPlayerGetCommand()
         {
+            Dungeon d = new Dungeon(2);
+            Node a = new Node(1, 1);
+            Player player = new Player(50, 5, a, d);
+            int val = player.playerCommands.Count;
+            BotPlayer botPlayer = new BotPlayer(false, false, true, false);
+            player.SetCommand(botPlayer);
 
+            BotPlayer comparison = player.GetCommand();
+            Assert.AreEqual(botPlayer, comparison);
+            comparison = player.GetCommand();
+            Assert.IsNull(comparison);
         }
     }
 }

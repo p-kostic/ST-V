@@ -15,10 +15,8 @@ namespace STV_1_Testing
             Dungeon d = new Dungeon(1);
             d.GenerateDungeon(1);
 
-
             // Test if start != exit node
             Assert.AreNotEqual(d.nodes[0], d.nodes[d.nodes.Count -1]);
-
 
             // Test if no nodes have more than 4 connections
             foreach (Node curNode in d.nodes)
@@ -36,7 +34,6 @@ namespace STV_1_Testing
 
             Assert.IsTrue(averageConnections < 3.0f);
 
-
             // Test if the amount of bridges in the dungeon is equal to the level of the dungeon
             int level = 3;
             int count = 0;
@@ -49,7 +46,6 @@ namespace STV_1_Testing
             }
             Assert.AreEqual(count, level);
 
-
             // Test if no nodes lack any connections
             Dungeon d3 = new Dungeon(2);
             d3.GenerateDungeon(2);
@@ -57,8 +53,6 @@ namespace STV_1_Testing
             {
                     Assert.AreNotEqual(d3.nodes.Count, 0);
             }
-            
-
         }
         [TestMethod]
         public void TestDungeonDestroy()
@@ -109,7 +103,6 @@ namespace STV_1_Testing
             d3.nodes.Add(end);
 
             Assert.IsTrue(d3.FindShortestPath(d3.nodes[0], d3.nodes[d3.nodes.Count - 1]) == null);
-
         }
 
         [TestMethod]
