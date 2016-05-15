@@ -29,6 +29,7 @@ namespace STV1
             this.atk = atk;
             this.dungeon = dungeon;
             loc.AddPlayer(this);
+            playerCommands = new Queue<BotPlayer>();
         }
 
         // We will move the player to the given destination.
@@ -37,6 +38,7 @@ namespace STV1
             Location.RemovePlayer();
             Location = destination;
             Location.AddPlayer(this);
+            GrabItems();
             destination.CheckInCombat();
         }
 

@@ -106,12 +106,14 @@ namespace STV1
         {
             repeatCombat = true;
             while (repeatCombat)
-                DoCombatRound(nodePacks[0]);
+                DoCombatRound(nodePacks[0], nodePlayer);
         }
 
         // This method will do a round of combat. We will explain how it works as we go through it.
-        public void DoCombatRound(Pack pack)
+        public void DoCombatRound(Pack pack, Player player)
         {
+            nodePlayer = player;
+
             // We get the next command from the botplayer, and set the timecrystal use to false.
             BotPlayer command = nodePlayer.GetCommand();
             bool activeTimeCrystal = false;
@@ -141,10 +143,12 @@ namespace STV1
             // then the pack will attack.
             else
                 nodePlayer.Attack(pack.Monsters[0]);
-            pack.PackAttack(nodePlayer);
 
             // We update the pack to see if it died and whatnot.
             pack.UpdatePack();
+
+            // Let the pack attack the player.
+            pack.PackAttack(nodePlayer);
 
             // If the pack or the player died, we will end combat the next turn.
             if (pack.PackHP <= 0 || nodePlayer.IsDead)
@@ -156,12 +160,12 @@ namespace STV1
             if (repeatCombat)
             {
                 BotPlayer nextCommand = nodePlayer.GetCommand();
-                if (nextCommand.retreated)
+                if ( nextCommand != null && nextCommand.retreated)
                 {
                     nodePlayer.Move(connections[0]);
                     repeatCombat = false;
                 }
-                if (pack.PackHP < nodePlayer.HP)
+                if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
                 {
                     pack.MovePack(connections[0]);
                     repeatCombat = false;

@@ -161,9 +161,6 @@ namespace STV_1_Testing
                 pack2.Monsters[i].HP = 0;
             pack2.UpdatePack();
             Assert.AreEqual(pack2.Monsters.Count, 1); // Er moeten geen monsters meer in de lijst zitten
-
-            // TODO: Fix UpdatePack zodat hij goed checkt of het indd true
-
         }
     }
 }

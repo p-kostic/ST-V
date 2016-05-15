@@ -69,8 +69,8 @@ namespace STV1
                 if (monsters[i].IsDead)
                     monsters.RemoveAt(i);
 
-            if (monsters.Count == 0)
-                PackLocation.RemovePack(this);
+            //if (monsters.Count == 0)
+            //    PackLocation.RemovePack(this);
         }
 
         // A few getters/setters to get the size and location of the pack,
