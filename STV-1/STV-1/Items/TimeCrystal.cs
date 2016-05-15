@@ -25,21 +25,17 @@ namespace STV1
                 dungeon.Destroy(gate);
 
                 foreach (Node node in fleeingNodes)
-                {
                     if (dungeon.FindShortestPath(node, dungeon.GetExit) != null)
                     {
                         player.Location = node;
                         break;
                     }
-                }
-
-                return;
             }
         }
 
         public override string ItemType()
         {
-            return this.type.ToString();
+            return this.type;
         }
     }
 }

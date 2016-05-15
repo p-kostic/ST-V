@@ -65,9 +65,9 @@ namespace STV1
 
         public void UpdatePack()
         {
-            for (int i = monsters.Count - 1; i >= 0; i--)
+            for (int i = monsters.Count - 1; i > -1; i--)
                 if (monsters[i].IsDead)
-                    monsters.RemoveAt(i);
+                    monsters.Remove(monsters[i]);
 
             //if (monsters.Count == 0)
             //    PackLocation.RemovePack(this);

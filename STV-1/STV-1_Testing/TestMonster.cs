@@ -8,7 +8,7 @@ namespace STV_1_Testing
     public class TestMonster
     {
         [TestMethod]
-        public void TestConstructor()
+        public void TestMonsterConstructor()
         {
             int hp = 10;
             int atk = 5;
@@ -21,7 +21,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestDead2()
+        public void TestMonsterDead2()
         {
             Monster monster = new Monster(0, 0, new Node(1, 1));
             monster.HP = 0;
@@ -32,7 +32,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestMove()
+        public void TestMonsterMove()
         {
             Node a = new Node(1, 1);
             Node b = new Node(1, 1);
@@ -43,7 +43,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestAttack()
+        public void TestMonsterAttack()
         {
             Node a = new Node(1, 1);
             Monster monster = new Monster(10, 5, a);

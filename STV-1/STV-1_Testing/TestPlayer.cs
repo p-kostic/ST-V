@@ -8,7 +8,7 @@ namespace STV_1_Testing
     public class TestPlayer
     {
         [TestMethod]
-        public void TestConstructor()
+        public void TestPlayerConstructor()
         {
             int hp = 10;
             int atk = 5;
@@ -32,7 +32,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestMove()
+        public void TestPlayerMove()
         {
             Node a = new Node(1, 1);
             Node b = new Node(1, 1);
@@ -43,7 +43,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestAttack()
+        public void TestPlayerAttack()
         {
             // Test if a player receives dmg from a monster
             Node a = new Node(1, 1);
@@ -68,6 +68,16 @@ namespace STV_1_Testing
             player2.Attack(monster2);
 
             Assert.AreEqual(expectedhp2, monster2.HP);
+
+            // Test if kp are increased if a player kills a monster
+            Node a3 = new Node(1, 1);
+            Monster monster3 = new Monster(10, 5, a3);
+            Player player3 = new Player(10, 10, a3, null);
+
+            player3.Attack(monster3);
+            Assert.IsTrue(monster3.IsDead);
+            Assert.IsTrue(player3.kp > 0);
+
         }
 
         [TestMethod]
@@ -79,9 +89,33 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestGrabItem()
+        public void TestPlayerUseCrystal()
         {
-            // TODO MEME
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerUsePotion()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerGet_MaxHP()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerGrabItems()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerGetCommand()
+        {
+
         }
     }
 }

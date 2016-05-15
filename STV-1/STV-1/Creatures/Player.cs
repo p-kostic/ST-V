@@ -15,7 +15,7 @@ namespace STV1
     {
         private int maxHP;
         private int atk;
-        private int kp;
+        public int kp = 0;
         private Dungeon dungeon;
         public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
         Queue<BotPlayer> playerCommands;
