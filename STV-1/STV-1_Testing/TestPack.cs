@@ -48,8 +48,6 @@ namespace STV_1_Testing
             // Test if it can now indeed move after they are connected
             Assert.AreEqual(pack.PackLocation, b);
 
-
-
             // Test if a pack is able to move to a start or exit node
             Node x = new Node(1, 1, "start");
             Node y = new Node(1, 1, "exit");
@@ -66,9 +64,17 @@ namespace STV_1_Testing
             pack2.MovePack(y);
             Assert.AreNotEqual(pack2.PackLocation, y);
 
+            // Test if a pack can move to a node with full capacity, this should not be possible
+            Node c = new Node(1,1);
+            Node c2 = new Node(1,1);
+            c.connections.Add(c2);
+            c2.connections.Add(c);
+            Pack pack3 = new Pack(2, c);
+            Pack pack4 = new Pack(2, c2);
+            Node var = pack3.PackLocation;
+            pack3.MovePack(c2);
+            Assert.AreEqual(var, pack3.PackLocation);
 
-
-            // TODO: Test if a pack can move to a node with full capacity, this should not be possible
         }
 
         [TestMethod]
@@ -156,11 +162,6 @@ namespace STV_1_Testing
             pack2.UpdatePack();
 
             Assert.AreEqual(pack2.Monsters.Count, 1); // Er moeten geen monsters meer in de lijst zitten
-
-    
-            Assert.AreEqual(pack2.Monsters.Count, 1); // Should be empty TODO!
-
-
         }
 
         [TestMethod]

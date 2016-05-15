@@ -44,7 +44,7 @@ namespace STV1
         // We will move the pack by moving each monster in the pack to the destination location.
         public void MovePack(Node destination)
         {
-            if (PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start")
+            if (PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start" && destination.PackFitsInNode(this))
             {
                 foreach (Monster monster in monsters)
                     monster.Location = destination;
