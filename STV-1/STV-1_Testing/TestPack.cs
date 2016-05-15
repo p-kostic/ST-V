@@ -154,15 +154,15 @@ namespace STV_1_Testing
             for (int i = 0; i < pack2.Monsters.Count - 1; i++)
                 pack2.Monsters[i].HP = -1;
             pack2.UpdatePack();
-<<<<<<< HEAD
+
             Assert.AreEqual(pack2.Monsters.Count, 1); // Er moeten geen monsters meer in de lijst zitten
-=======
+
     
             Assert.AreEqual(pack2.Monsters.Count, 1); // Should be empty TODO!
 
             // Test if a pack is correctly removed if all monsters die
 
->>>>>>> origin/master
+
         }
 
         [TestMethod]
