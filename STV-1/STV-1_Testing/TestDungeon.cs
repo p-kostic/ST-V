@@ -19,15 +19,10 @@ namespace STV_1_Testing
 
 
             // Test if no nodes have more than 4 connections
-            bool fail = false;
             foreach (Node curNode in d.nodes)
             {
-                if (curNode.connections.Count > 4)
-                    fail = true;
+                Assert.IsFalse(curNode.connections.Count > 4);
             }
-            Assert.IsFalse(fail);
-
-
             // Test if avarage connectivity is ~3
             int totalConnections = 0;
             foreach (Node curNode in d.nodes)
