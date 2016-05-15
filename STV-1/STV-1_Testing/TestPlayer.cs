@@ -68,6 +68,16 @@ namespace STV_1_Testing
             player2.Attack(monster2);
 
             Assert.AreEqual(expectedhp2, monster2.HP);
+
+            // Test if kp are increased if a player kills a monster
+            Node a3 = new Node(1, 1);
+            Monster monster3 = new Monster(10, 5, a3);
+            Player player3 = new Player(10, 10, a3, null);
+
+            player3.Attack(monster3);
+            Assert.IsTrue(monster3.IsDead);
+            Assert.IsTrue(player3.kp > 0);
+
         }
 
         [TestMethod]
@@ -76,6 +86,36 @@ namespace STV_1_Testing
             Player player = new Player(10, 2, new Node(1,1),new Dungeon(1));
             player.ATK = 5;
             Assert.AreNotEqual(2, player.ATK);
+        }
+
+        [TestMethod]
+        public void TestPlayerUseCrystal()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerUsePotion()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerGet_MaxHP()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerGrabItems()
+        {
+            
+        }
+
+        [TestMethod]
+        public void TestPlayerGetCommand()
+        {
+
         }
     }
 }

@@ -147,22 +147,17 @@ namespace STV_1_Testing
                 monster.HP -= 5;
             pack.UpdatePack();
 
-            bool checkdead = false;
-            foreach (Monster monster in pack.Monsters)
-                if (monster.IsDead)
-                    checkdead = true;
-
-            Assert.IsFalse(checkdead);
-            Assert.AreEqual(pack.Monsters.Count, 10);
+            Assert.AreEqual(pack.Monsters.Count, 10); // None should be removed
 
             // Now we test if it is updated accordingly to the deaths
-            Pack pack2 = new Pack(5, new Node(4, 5));
+            Pack pack2 = new Pack(20, new Node(4, 5));
             for (int i = 0; i < pack2.Monsters.Count - 1; i++)
-                pack2.Monsters[i].HP = 0;
+                pack2.Monsters[i].HP = -1;
             pack2.UpdatePack();
-            Assert.AreEqual(pack2.Monsters.Count, 1); // Er moeten geen monsters meer in de lijst zitten
+    
+            Assert.AreEqual(pack2.Monsters.Count, 1); // Should be empty TODO!
 
-            // TODO: Fix UpdatePack zodat hij goed checkt of het indd true
+            // Test if a pack is correctly removed if all monsters die
 
         }
 
