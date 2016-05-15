@@ -19,5 +19,13 @@ namespace STV_1_Testing
             game.NextDungeon();
             Assert.IsTrue(game.d.level == 2);
         }
+
+        [TestMethod]
+        public void TestBotPlayer()
+        {
+            BotPlayer bot = new BotPlayer(true,true,true,true);
+            Assert.IsTrue(bot.usedTC);
+            // Secret code coverage test method
+        }
     }
 }

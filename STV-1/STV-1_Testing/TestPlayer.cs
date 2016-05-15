@@ -21,7 +21,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestDead1()
+        public void TestPlayerDead()
         {
             Player player = new Player(0, 0, new Node(1, 1), null);
             player.HP = 0;
@@ -91,13 +91,28 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestPlayerUseCrystal()
         {
-            
+            // Test if the proper functionality of a time crystal on a bridge works
+            Dungeon d = new Dungeon(3);
+            Node bridge = new Node(1,1);
+            d.GenerateDungeon(3);
+            int size = d.nodes.Count;
+            foreach (Node node in d.nodes)
+            {
+                if (node.type == "bridge")
+                    bridge = node;
+            }
+            Player player = new Player(50, 5, bridge, d);
+            player.inventory.Add(new TimeCrystal());
+            player.UseCrystal();
+
+            Assert.AreNotEqual(size, d.nodes.Count);
         }
 
         [TestMethod]
         public void TestPlayerUsePotion()
         {
-            
+            Dungeon d = new Dungeon(3);
+
         }
 
         [TestMethod]

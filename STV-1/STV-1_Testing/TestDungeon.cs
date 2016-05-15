@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using STV1;
 
@@ -8,7 +10,7 @@ namespace STV_1_Testing
     public class TestDungeon
     {
         [TestMethod]
-        public void TestDungeonConstructor()
+        public void TestDungeonGenerator()
         {
             Dungeon d = new Dungeon(1);
             d.GenerateDungeon(1);
@@ -23,17 +25,39 @@ namespace STV_1_Testing
             {
                 Assert.IsFalse(curNode.connections.Count > 4);
             }
-            // Test if avarage connectivity is ~3
+            // Test if average connectivity is ~3
             int totalConnections = 0;
             foreach (Node curNode in d.nodes)
             {
                 totalConnections += curNode.connections.Count;
                
             }
-            float avarageConnections = totalConnections/2/d.nodes.Count;
+            float averageConnections = totalConnections/2/d.nodes.Count;
 
-            Assert.IsTrue(avarageConnections < 3.0f);
-            // Als we zouden willen testen op reachability, kan je gwn kijken of er een path is met shortest path
+            Assert.IsTrue(averageConnections < 3.0f);
+
+
+            // Test if the amount of bridges in the dungeon is equal to the level of the dungeon
+            int level = 3;
+            int count = 0;
+            Dungeon d2 = new Dungeon(level);
+            d2.GenerateDungeon(level);
+            foreach (Node node in d2.nodes)
+            {
+                if (node.type == "bridge")
+                    count++;
+            }
+            Assert.AreEqual(count, level);
+
+
+            // Test if no nodes lack any connections
+            Dungeon d3 = new Dungeon(2);
+            d3.GenerateDungeon(2);
+            foreach (Node n in d.nodes)
+            {
+                    Assert.AreNotEqual(d3.nodes.Count, 0);
+            }
+            
 
         }
         [TestMethod]
