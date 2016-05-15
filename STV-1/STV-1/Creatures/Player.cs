@@ -61,6 +61,15 @@ namespace STV1
                 }
         }
 
+        // For testing purposes we added a method to add an item to a inventory on the fly.
+        public void AddItem(bool healingPotion)
+        {
+            if (healingPotion)
+                inventory.Add(new HealingPotion());
+            else
+                inventory.Add(new TimeCrystal());
+        }
+
         public bool UsePotion()
         {
             foreach (Item item in inventory)
