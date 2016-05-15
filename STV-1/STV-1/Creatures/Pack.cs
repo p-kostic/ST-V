@@ -44,7 +44,7 @@ namespace STV1
         // We will move the pack by moving each monster in the pack to the destination location.
         public void MovePack(Node destination)
         {
-            if (this.PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start")
+            if (PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start")
             {
                 foreach (Monster monster in monsters)
                     monster.Location = destination;
@@ -65,20 +65,27 @@ namespace STV1
 
         public void UpdatePack()
         {
-            for (int i = monsters.Count; i < monsters.Count; i++)
+            for (int i = monsters.Count - 1; i >= 0; i--)
                 if (monsters[i].IsDead)
                     monsters.RemoveAt(i);
 
-            // monsters.RemoveAll(elem => elem.isDead);
-
             if (monsters.Count == 0)
-                this.MovePack(null);
+                PackLocation.RemovePack(this);
         }
 
         // A few getters/setters to get the size and location of the pack,
         // and a more complex getter (a boolean) to find out if a pack has died or not.
         public int PackSize { get { return monsters.Count; } }
-        public Node PackLocation { get { return monsters[0].Location; } }
+        public Node PackLocation
+        {
+            get
+            {
+                if (monsters.Count > 0)
+                    return monsters[0].Location;
+                else
+                    return null;
+            }
+        }
         public List<Monster> Monsters { get { return monsters; } }
         public int PackHP
         {
