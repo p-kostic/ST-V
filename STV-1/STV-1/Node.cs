@@ -220,5 +220,7 @@ namespace STV1
         }
 
         public int MaxMonsters { get { return maxmonsters; } }
+
+        public bool RepeatCombat { get { return repeatCombat; } }
     }
 }
