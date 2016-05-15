@@ -53,9 +53,7 @@ namespace STV1
                 {
                     nodePacks.Add(pack);
                     for (int i = 0; i < pack.Monsters.Count; i++)
-                    {
                         pack.Monsters[i].Location = this;
-                    }
                 }
         }
 
@@ -157,19 +155,15 @@ namespace STV1
             // Else we will check for retreats. if the command is the retreat command, move to the
             // adjoining node, else if the accumulative HP of the pack is lower then the HP of the player,
             // move to the pack to the adjoining node and end the combat in both cases.
-            if (repeatCombat)
+            if (command != null && command.retreated && connections.Count > 0)
             {
-                BotPlayer nextCommand = nodePlayer.GetCommand();
-                if ( nextCommand != null && nextCommand.retreated)
-                {
-                    nodePlayer.Move(connections[0]);
-                    repeatCombat = false;
-                }
-                if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
-                {
-                    pack.MovePack(connections[0]);
-                    repeatCombat = false;
-                }
+                nodePlayer.Move(connections[0]);
+                repeatCombat = false;
+            }
+            else if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
+            {
+                pack.MovePack(connections[0]);
+                repeatCombat = false;
             }
         }
 
@@ -183,7 +177,9 @@ namespace STV1
         {
             int amountOfMonsters = 0;
             foreach (Pack p in nodePacks)
+            {
                 amountOfMonsters += p.PackSize;
+            }
             return maxmonsters - (amountOfMonsters + pack.PackSize) >= 0;
         }
 

@@ -154,5 +154,122 @@ namespace STV_1_Testing
             Assert.IsTrue(player.IsDead);
             Assert.IsFalse(node.RepeatCombat);
         }
+
+        [TestMethod]
+        public void PackInNode()
+        {
+            Node node = new Node(2, 2);
+            Pack p = new Pack(5, node);
+
+            node.AddPack(p);
+
+            // Check if the pack gets placed into the node.
+            Assert.AreEqual(1, node.nodePacks.Count);
+        }
+
+        [TestMethod]
+        public void TestCommand()
+        {
+            // Make a node, a player and a pack for testing purposes.
+            Node node = new Node(2, 2);
+            Player player = new Player(10, 2, node, null);
+            Pack pack = new Pack(1, node);
+
+            // Add a command to the queue.
+            player.SetCommand(new BotPlayer(true, false, false, false));
+
+            // Remove some hp from the player an add an item to the inventory.
+            player.HP -= 5;
+            player.AddItem(true);
+
+            // Do the actual combat.
+            node.DoCombatRound(pack, player);
+
+            // Check if the code went through the code, and thus the player has healed a bit.
+            Assert.IsTrue(player.HP > 5);
+        }
+
+        [TestMethod]
+        public void TestCommand2()
+        {
+            // Make a node, a player and a pack for testing purposes.
+            Node node = new Node(2, 2);
+            Player player = new Player(10, 10, node, null);
+            Pack pack = new Pack(5, node);
+
+            // Add a command to the queue.
+            player.SetCommand(new BotPlayer(false, true, false, false));
+
+            // Add a timecrystal to the player's inventory.
+            player.AddItem(false);
+
+            // Do the actual combat.
+            node.DoCombatRound(pack, player);
+
+            // Timecrystal has been used, and since the attack is 10, all monsters should be dead.
+            Assert.IsTrue(pack.PackSize == 0);
+        }
+
+        [TestMethod]
+        public void CheckForCombatSituation()
+        {
+            // Make a node, a player, and a pack.
+            Node node = new Node(2, 2);
+            Player player = new Player(10, 10, node, null);
+            Pack pack = new Pack(4, node);
+
+            // We check the combat.
+            node.CheckInCombat();
+
+            // The player should be dead.
+            Assert.AreEqual(0, player.HP);
+            // The pack should have 20 hp left.
+            Assert.AreEqual(20, pack.PackHP);
+            // The pack should consist of 2 members.
+            Assert.AreEqual(2, pack.PackSize);
+        }
+
+        [TestMethod]
+        public void TestPlayerFleeing()
+        {
+            // Make two new nodes and connect them.
+            Node node1 = new Node(2, 2);
+            Node node2 = new Node(2, 2);
+            node1.connections.Add(node2);
+            node2.connections.Add(node1);
+
+            // Make a player and set the command to retreat.
+            Player player = new Player(100, 2, node1, null);
+            player.SetCommand(new BotPlayer(false, false, false, true));
+
+            // Make a pack.
+            Pack pack = new Pack(5, node1);
+
+            // Do the actual combat.
+            node1.DoCombatRound(pack, player);
+
+            // The player should have fled to the other node.
+            Assert.IsTrue(node2.PlayerInNode());
+        }
+
+        [TestMethod]
+        public void TestPackFleeing()
+        {
+            // Make two new nodes and connect them.
+            Node node1 = new Node(2, 2);
+            Node node2 = new Node(2, 2);
+            node1.connections.Add(node2);
+            node2.connections.Add(node1);
+
+            // Make a player and a pack.
+            Player player = new Player(100, 2, node1, null);
+            Pack pack = new Pack(5, node1);
+
+            // Do the actual combat.
+            node1.DoCombatRound(pack, player);
+
+            // The pack should have fled to the other node.
+            Assert.IsTrue(pack.PackLocation == node2);
+        }
     }
 }
