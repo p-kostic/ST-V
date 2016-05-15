@@ -157,10 +157,10 @@ namespace STV_1_Testing
 
             // Now we test if it is updated accordingly to the deaths
             Pack pack2 = new Pack(5, new Node(4,5));
-            for (int i = 0; i < pack2.Monsters.Count; i++)
+            for (int i = 0; i < pack2.Monsters.Count - 1; i++)
                 pack2.Monsters[i].HP = 0;
             pack2.UpdatePack();
-            Assert.AreEqual(pack2.Monsters.Count, 5); // Er moeten geen monsters meer in de lijst zitten
+            Assert.AreEqual(pack2.Monsters.Count, 1); // Er moeten geen monsters meer in de lijst zitten
 
             // TODO: Fix UpdatePack zodat hij goed checkt of het indd true
 
