@@ -134,12 +134,25 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestCombat()
         {
+            // Make a node, player, and packs for testing.
             Node node = new Node(10, 3);
             Player player = new Player(100, 10, node, null);
             Pack p1 = new Pack(40, node);
             Pack p2 = new Pack(3, node);
 
+            // Do the actual combat.
             node.DoCombat();
+
+            // The first pack should be damaged, the second pack not.
+            Assert.AreEqual(310, p1.PackHP);
+            Assert.AreEqual(30, p2.PackHP);
+
+            // The first pack should have lost some monsters.
+            Assert.AreEqual(31, p1.PackSize);
+
+            // The player should be dead, and the combat should be ended.
+            Assert.IsTrue(player.IsDead);
+            Assert.IsFalse(node.RepeatCombat);
         }
     }
 }
