@@ -8,7 +8,7 @@ namespace STV_1_Testing
     public class TestPlayer
     {
         [TestMethod]
-        public void TestConstructor()
+        public void TestPlayerConstructor()
         {
             int hp = 10;
             int atk = 5;
@@ -32,7 +32,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestMove()
+        public void TestPlayerMove()
         {
             Node a = new Node(1, 1);
             Node b = new Node(1, 1);
@@ -43,7 +43,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestAttack()
+        public void TestPlayerAttack()
         {
             // Test if a player receives dmg from a monster
             Node a = new Node(1, 1);
@@ -76,12 +76,6 @@ namespace STV_1_Testing
             Player player = new Player(10, 2, new Node(1,1),new Dungeon(1));
             player.ATK = 5;
             Assert.AreNotEqual(2, player.ATK);
-        }
-
-        [TestMethod]
-        public void TestGrabItem()
-        {
-            // TODO MEME
         }
     }
 }

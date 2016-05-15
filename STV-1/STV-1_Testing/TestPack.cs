@@ -10,13 +10,13 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestPackConstructor()
         {
-            Node a = new Node(2,5);
+            Node a = new Node(2, 5);
             Pack pack = new Pack(5, a);
 
             // Check if the correct amount of monsters are created in the node.
             Assert.AreEqual(pack.Monsters.Count, 5);
 
-            Node b = new Node(2,1);
+            Node b = new Node(2, 1);
             Pack pack2 = new Pack(20, b);
 
             // Check if the constraint on node capacity works
@@ -26,17 +26,17 @@ namespace STV_1_Testing
 
 
             // Try to make a new pack at a wrong startlocation
-            Pack pack3 = new Pack(10, new Node(1,1, "start"));
+            Pack pack3 = new Pack(10, new Node(1, 1, "start"));
             Assert.IsTrue(pack3.Monsters.Count == 0); // No monsters should be added
         }
 
         [TestMethod]
         public void TestMovePack()
         {
-            Node a = new Node(1,1);
-            Node b = new Node(1,1);
+            Node a = new Node(1, 1);
+            Node b = new Node(1, 1);
 
-            Pack pack = new Pack(5,a);
+            Pack pack = new Pack(5, a);
             pack.MovePack(b);
             // Test if movement doesn't work across unconnected nodes
             Assert.AreNotEqual(pack.PackLocation, b);
@@ -46,14 +46,14 @@ namespace STV_1_Testing
             pack.MovePack(b);
 
             // Test if it can now indeed move after they are connected
-            Assert.AreEqual(pack.PackLocation,b);
+            Assert.AreEqual(pack.PackLocation, b);
 
 
 
             // Test if a pack is able to move to a start or exit node
             Node x = new Node(1, 1, "start");
             Node y = new Node(1, 1, "exit");
-            Node xy = new Node(1,1);
+            Node xy = new Node(1, 1);
 
             x.connections.Add(xy);
             xy.connections.Add(x);
@@ -89,15 +89,15 @@ namespace STV_1_Testing
         public void TestPackAttack()
         {
             // Test if a pack can attack a player
-            Node location = new Node(4,5);
-            Pack pack = new Pack(5,location);
+            Node location = new Node(4, 5);
+            Pack pack = new Pack(5, location);
             Player player = new Player(20, 5, location, new Dungeon(1));
 
             pack.PackAttack(player);
             Assert.AreEqual(player.HP, 10);
 
             // Test the same if the Node level is not high enough
-            Node location2 = new Node(1,1);
+            Node location2 = new Node(1, 1);
             Pack pack2 = new Pack(5, location2);
             Player player2 = new Player(20, 5, location, new Dungeon(1));
 
@@ -109,9 +109,9 @@ namespace STV_1_Testing
             Assert.AreEqual(player.HP, 10);
 
             // Test if it's possible to attack a monster (instead of a player)
-            Node location3 = new Node(4,5);
-            Pack pack3 = new Pack(5,location3);
-            Monster monster = new Monster(20,2,location3);
+            Node location3 = new Node(4, 5);
+            Pack pack3 = new Pack(5, location3);
+            Monster monster = new Monster(20, 2, location3);
             pack3.PackAttack(monster);
             Assert.AreEqual(monster.HP, 10);
         }
@@ -119,7 +119,7 @@ namespace STV_1_Testing
         [TestMethod]
         public void CheckPackHP()
         {
-            Pack pack = new Pack(10, new Node(4,5));
+            Pack pack = new Pack(10, new Node(4, 5));
 
             // First test: Check if the total pack HP is correct (should be 100)
             Assert.AreEqual(100, pack.PackHP);
@@ -142,7 +142,7 @@ namespace STV_1_Testing
         public void TestPackUpdatePack()
         {
             // Test to see if deaths are handled correctly 
-            Pack pack = new Pack(10,new Node(4,5));
+            Pack pack = new Pack(10, new Node(4, 5));
             foreach (Monster monster in pack.Monsters)
                 monster.HP -= 5;
             pack.UpdatePack();
@@ -156,7 +156,7 @@ namespace STV_1_Testing
             Assert.AreEqual(pack.Monsters.Count, 10);
 
             // Now we test if it is updated accordingly to the deaths
-            Pack pack2 = new Pack(5, new Node(4,5));
+            Pack pack2 = new Pack(5, new Node(4, 5));
             for (int i = 0; i < pack2.Monsters.Count - 1; i++)
                 pack2.Monsters[i].HP = 0;
             pack2.UpdatePack();
@@ -164,6 +164,14 @@ namespace STV_1_Testing
 
             // TODO: Fix UpdatePack zodat hij goed checkt of het indd true
 
+        }
+
+        [TestMethod]
+        public void TestPackLocation()
+        {
+            // Test to see if an empty pack is correctly deleted
+            Pack pack = new Pack(0, new Node(1,1));
+            Assert.AreEqual(pack.PackLocation, null);
         }
     }
 }

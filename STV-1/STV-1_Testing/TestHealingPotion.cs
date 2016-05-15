@@ -8,7 +8,7 @@ namespace STV_1_Testing
     public class TestHealingPotion
     {
         [TestMethod]
-        public void TestExeedingHP()
+        public void TestHealingPotionExeedingHP()
         {
             HealingPotion healingPotion = new HealingPotion();
             Player player = new Player(10,1,new Node(1,1), new Dungeon(2));
@@ -20,7 +20,7 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestHealing()
+        public void TestHealingPotionHealing()
         {
             HealingPotion healingPotion = new HealingPotion();
             Player player = new Player(10, 2, new Node(1, 1), new Dungeon(2));
