@@ -59,6 +59,7 @@
     <Compile Include="TestNode.cs" />
     <Compile Include="TestPack.cs" />
     <Compile Include="TestPlayer.cs" />
+    <Compile Include="TestGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\STV-1\STV-1.csproj">

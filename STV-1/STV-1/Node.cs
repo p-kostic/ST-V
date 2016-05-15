@@ -65,7 +65,6 @@ namespace STV1
         /// <param name="pack">The pack that is to be removed</param>
         public void RemovePack(Pack pack)
         {
-            if (this.type == "normal" || this.type == "bridge")
                 nodePacks.Remove(pack);
         }
 

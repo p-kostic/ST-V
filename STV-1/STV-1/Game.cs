@@ -24,6 +24,7 @@ namespace STV1
             if (d == null)
             {
                 d = new Dungeon(1);
+                d.GenerateDungeon(1);
                 level = 1;
                 player = new Player(50, 5, d.nodes[0], d);
             }
@@ -31,6 +32,7 @@ namespace STV1
             {
                 level++;
                 d = new Dungeon(level);
+                d.GenerateDungeon(level);
                 player.Location = d.nodes[0];
             }
             return d;
