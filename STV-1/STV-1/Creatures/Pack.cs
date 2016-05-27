@@ -13,7 +13,7 @@ namespace STV1
      */
     public class Pack
     {
-        List<Monster> monsters; // A list to hold all the monsters.
+        public List<Monster> monsters; // A list to hold all the monsters.
         public Node packStartLocation;
 
         // The constructor will handle the creation of the pack. We will give the pack a 
@@ -23,8 +23,8 @@ namespace STV1
         {
             monsters = new List<Monster>();
 
-            if (packStartLocation.type == "normal" || packStartLocation.type == "bridge")
-            {
+            //if (packStartLocation.type == "normal" || packStartLocation.type == "bridge")
+            //{
                 if (packSize >= packStartLocation.MaxMonsters)
                     packSize = packStartLocation.MaxMonsters;
 
@@ -38,7 +38,7 @@ namespace STV1
                 this.packStartLocation = packStartLocation;
                 this.packStartLocation.nodePacks.Add(this);
 
-            }
+            //}
         }
 
         // We will move the pack by moving each monster in the pack to the destination location.

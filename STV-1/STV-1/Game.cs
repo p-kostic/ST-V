@@ -15,6 +15,14 @@ namespace STV1
         public Game()
         {
             NextDungeon();
+
+            while (true) {
+                DrawUI();
+                // Monster doet wat
+                Console.ReadLine();
+
+            }
+            
         }
 
         // geen save en load meer
@@ -36,6 +44,73 @@ namespace STV1
                 player.Location = d.nodes[0];
             }
             return d;
+        }
+
+        public void DrawUI() {
+            Console.SetCursorPosition(0,0);
+            Console.Write("HP: " + player.HP);
+            Console.SetCursorPosition(0,1);
+            Console.Write("ATK: " + player.ATK);
+            Console.SetCursorPosition(0,2);
+            Console.Write("KP: " + player.kp);
+
+            Console.SetCursorPosition(0, 4);
+            Console.Write("Inventory: ");
+            Console.SetCursorPosition(0, 5);
+            int potionCount = player.inventory.Count(s => s.ItemType() == "HealingPotion");
+            int crystalCount = player.inventory.Count(s => s.ItemType() == "TimeCrystal");
+            Console.Write("Healing Potions: " + potionCount);
+            Console.SetCursorPosition(0, 6);
+            Console.Write("Time Crystals: " + crystalCount);
+
+            int curX = 1;
+            int curY = 10;
+            Console.SetCursorPosition(curX, curY);
+            Console.Write("Paths from this node:");
+            curY++;
+            Console.SetCursorPosition(curX, curY);
+            for (int i = 0; i < player.Location.connections.Count; i++ )
+            {
+                Console.Write(player.Location.connections[i].id + ", type: " + player.Location.connections[i].type);
+                Console.SetCursorPosition(curX, curY + i);
+            }
+            
+            Console.SetCursorPosition(25, 15);
+            Console.Write("Current node: " + player.Location.id);
+            Console.SetCursorPosition(33, 16);
+            Console.Write("type: " + player.Location.type);
+
+            curX = 60;
+            curY = 0;
+            Console.SetCursorPosition(curX, curY);
+            Console.Write("Current packs: " + player.Location.nodePacks.Count);
+            curY++;
+            Console.SetCursorPosition(curX, curY);
+            for (int i = 0; i < player.Location.nodePacks.Count; i++ )
+            {
+                
+                Console.Write("Pack nr: " + i);
+                curY++;
+                Console.SetCursorPosition(curX, curY);
+                for (int j = 0; j < player.Location.nodePacks[i].monsters.Count; j++ )
+                {
+                    curX++;
+                    Console.SetCursorPosition(curX, curY);
+                    Console.Write("Monster " + j);
+                    curY++;
+                    curX++;
+                    Console.SetCursorPosition(curX, curY);
+                    Console.Write("HP: " + player.Location.nodePacks[i].monsters[j].HP);
+                    curY++;
+                    Console.SetCursorPosition(curX, curY);
+                    Console.Write("ATK: " + player.Location.nodePacks[i].monsters[j].ATK);
+                    curY++;
+                    curX--;
+                    curX--;
+                }
+            }
+            Console.ReadLine();
+            Console.ReadLine();
         }
     }
 }

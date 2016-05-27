@@ -125,6 +125,7 @@ namespace STV1
             return null;
         }
 
+
         // With this method we can add commands to the list that the player should do.
         // This method is mainly used in the test cases.
         public void SetCommand(BotPlayer command)

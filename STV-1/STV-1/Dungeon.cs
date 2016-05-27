@@ -38,14 +38,14 @@ namespace STV1
             }
             nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
 
-            for (int i = 0; i < nodes.Count(); i++)
+            /*for (int i = 0; i < nodes.Count(); i++)
             {
                 Console.WriteLine(nodes[i].type + " " + nodes[i].id + " lvl: " + nodes[i].level);
                 for (int j = 0; j < nodes[i].connections.Count(); j++)
                 {
                     Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
                 }
-            }
+            }*/
 
 
         }
@@ -58,7 +58,7 @@ namespace STV1
 
             // Determines how many monsters and packs should be in the current zone
             int zoneMonsterNr = (2 * (zoneLvl + 1) * monsterNr) / ((level + 2) * (level + 1));
-            Console.WriteLine("zonemonsternr: " + zoneMonsterNr);
+            //Console.WriteLine("zonemonsternr: " + zoneMonsterNr);
             int zonePackNr = (int)Math.Floor((double)packNr / (double)(level + 1));
 
             for (int i = 0; i < zoneNodeNr; i++) // Loop that fills the zone with a random amount of nodes
@@ -200,7 +200,7 @@ namespace STV1
                 int packLocation = rand.Next(0, curZone.Count() - 1);
                 Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
                 remainingMonsters -= zoneMonsterNr / zonePackNr;
-                Console.WriteLine("Added pack to node " + curZone[packLocation].id + ", remaining monsters: " + remainingMonsters);
+                //Console.WriteLine("Added pack to node " + curZone[packLocation].id + ", remaining monsters: " + remainingMonsters);
             }
         }
 
@@ -213,7 +213,7 @@ namespace STV1
             {
                 if (curNode.id <= b.id)
                 {
-                    Console.WriteLine("removing... " + curNode.id);
+                    //Console.WriteLine("removing... " + curNode.id);
                     toRemove.Add(curNode);
                 }
             }

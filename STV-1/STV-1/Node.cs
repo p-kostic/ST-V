@@ -48,7 +48,7 @@ namespace STV1
         /// <param name="pack">The pack that is being added</param>
         public void AddPack(Pack pack)
         {
-            if (this.type == "normal" || this.type == "bridge")
+            //if (this.type == "normal" || this.type == "bridge")
                 if (PackFitsInNode(pack))
                 {
                     nodePacks.Add(pack);
