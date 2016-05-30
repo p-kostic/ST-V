@@ -11,16 +11,26 @@ namespace STV1
         public Dungeon d;
         Player player;
         int level;
+        bool quit = false;
 
         public Game()
         {
             NextDungeon();
+            player = new Player(100, 10, d.nodes[0], d);
 
-            while (true) {
+            while (!quit) { // Game loop
                 DrawUI();
-                // Monster doet wat
-                Console.ReadLine();
-
+                string input = Console.ReadLine();
+                if (input == "quit")
+                    quit = true;
+                switch (player.inCombat) { 
+                    case true:
+                        HandleCombat(input);
+                        break;
+                    case false:
+                        HandleMovement(input);
+                        break;
+                }
             }
             
         }
@@ -109,8 +119,21 @@ namespace STV1
                     curX--;
                 }
             }
-            Console.ReadLine();
-            Console.ReadLine();
+
+            Console.SetCursorPosition(0, 24);
         }
+
+        void HandleMovement(string input) { 
+            //TODO: Player movement based on input
+
+            //TODO: Monster movement and monsters attacking eachother
+        }
+
+        void HandleCombat(string input) { 
+            //TODO: Player attack/item usage based on input
+
+            //TODO: Monsters attacking players
+        }
+
     }
 }

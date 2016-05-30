@@ -19,6 +19,7 @@ namespace STV1
         private Dungeon dungeon;
         public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
         public Queue<BotPlayer> playerCommands;
+        public bool inCombat;
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
@@ -30,6 +31,7 @@ namespace STV1
             this.dungeon = dungeon;
             loc.AddPlayer(this);
             playerCommands = new Queue<BotPlayer>();
+            inCombat = false;
         }
 
         // We will move the player to the given destination.
