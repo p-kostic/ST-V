@@ -119,7 +119,6 @@ namespace STV1
             Console.SetCursorPosition(curX, curY);
             for (int i = 0; i < player.Location.nodePacks.Count; i++ )
             {
-                
                 Console.Write("Pack nr: " + i);
                 curY++;
                 Console.SetCursorPosition(curX, curY);
@@ -192,10 +191,21 @@ namespace STV1
                     catch
                     {
                         Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.WriteLine("Command invalid: given node not an integer.");
+                        Console.WriteLine("Command invalid: given node isn't an integer.");
                     }
 
-                    // TODO: methode afschrijven.
+                    if (player.Location.connections.Exists(item => item.id == goToNode))
+                    {
+                        Node destination = player.Location.connections.First(item => item.id == goToNode);
+                        player.Move(destination);
+                        Console.SetCursorPosition(0, cursorInfoPos);
+                        Console.WriteLine("You moved to path " + destination.id);
+                    } 
+                    else
+                    {
+                        Console.SetCursorPosition(0, cursorInfoPos);
+                        Console.WriteLine("Command invalid: non-existing path or already at that location.");
+                    }
                 }
                 else
                 {
