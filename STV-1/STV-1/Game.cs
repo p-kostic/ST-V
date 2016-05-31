@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace STV1
         Player player;
         int level;
         bool quit = false;
+        int curSeed;
 
         public int cursorInfoPos = 19;
 
@@ -19,7 +21,7 @@ namespace STV1
         {
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
-
+            SaveGame("save");
             // The console window size.
             Console.SetWindowSize(80, 50);
 
@@ -31,11 +33,16 @@ namespace STV1
                 // Get the input and clear the previous console window.
                 // Then use the new input to advance the game.
                 string input = GetInput();
+                string[] iArray = input.Split(' ');
                 Console.Clear();
                 if (input == "quit")
                     quit = true;
                 if (input == "?")
                     DisplayHelp();
+                if (iArray[0] == "save")
+                    SaveGame(iArray[1]);
+                if (iArray[0] == "load")
+                    LoadGame(iArray[1]);
                 if (input != "input not valid")
                 {
                     switch (player.inCombat)
@@ -56,13 +63,13 @@ namespace STV1
             }         
         }
 
-        // geen save en load meer
-
         public Dungeon NextDungeon()
         {
+            Random rand = new Random();
+            curSeed = rand.Next(0, 1000);
             if (d == null)
             {
-                d = new Dungeon(1);
+                d = new Dungeon(1, curSeed);
                 d.GenerateDungeon(1);
                 level = 1;
                 player = new Player(50, 5, d.nodes[0], d);
@@ -70,7 +77,7 @@ namespace STV1
             else
             {
                 level++;
-                d = new Dungeon(level);
+                d = new Dungeon(level, curSeed);
                 d.GenerateDungeon(level);
                 player.Location = d.nodes[0];
             }
@@ -154,7 +161,7 @@ namespace STV1
             if (iArray[0] == "goto" || i == "stay" ||
                 i == "retreat" || i == "continue" || 
                 i == "quit" || i == "?" || i == "y" ||
-                i == "n" || i == "hp" || i == "tc")
+                i == "n" || i == "hp" || i == "tc" || iArray[0] == "save" || iArray[0] == "load")
                 return i;
             else return "input not valid";
         }
@@ -167,6 +174,8 @@ namespace STV1
             Console.WriteLine("- quit     : quit the game");
             Console.WriteLine("- goto x   : move to node x (x has to be a valid path)");
             Console.WriteLine("- stay     : stay in the current node");
+            Console.WriteLine("- save x   : save the current game under a chosen filename x.txt");
+            Console.WriteLine("- load x   : load the chosen savefile x");
             Console.WriteLine();
             Console.WriteLine("When in combat:");
             Console.WriteLine("- continue : continue with another round of combat");
@@ -336,6 +345,32 @@ namespace STV1
                 if (input != "?")
                     Console.Write("Command invalid: Only combat actions allowed!");
             }
+        }
+
+        void SaveGame(string fileName) {
+            if (fileName == "")
+                throw new ArgumentException("Not a valid filename");
+            if (d == null)
+                throw new NullReferenceException("No dungeon to save");
+
+            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            List<string> saveList = new List<string>();
+            saveList.Add("" + level);
+            saveList.Add("" + player.HP);
+            saveList.Add("" + player.ATK);
+            saveList.Add("" + player.kp);
+            saveList.Add("" + player.Location.id);
+            int potionCount = player.inventory.Count(s => s.ItemType() == "HealingPotion");
+            int crystalCount = player.inventory.Count(s => s.ItemType() == "TimeCrystal");
+            saveList.Add("" + potionCount);
+            saveList.Add("" + crystalCount);
+            saveList.Add("" + d.seed);
+
+            File.WriteAllLines(saveLocation, saveList);
+        }
+
+        void LoadGame(string fileName) { 
+            //List<string> 
         }
     }
 }
