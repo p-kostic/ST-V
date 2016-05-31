@@ -225,15 +225,22 @@ namespace STV1
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("You stay at your current location.");
-
-                // TODO: monsters moeten zich verplaatsen naar de speler toe etc.
+                
             }
 
             else
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("Command invalid: not in a combat situation.");
-            } 
+            }
+            
+            // Move the packs this turn accordingly after a player action 
+            foreach (Node node in d.nodes)
+                foreach (Pack pack in node.nodePacks)
+                {
+                    pack.HandlePackAI(player, d);
+                }
+
         }
 
         private void HandleCombat(string input)
@@ -307,9 +314,9 @@ namespace STV1
                 if (!player.IsDead)
                 {
                     player.inCombat = false;
-                    player.Move(player.Location.connections[0]);
                     Console.SetCursorPosition(0, cursorInfoPos);
                     Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
+                    player.Move(player.Location.connections[0]);
                 }
             }
 

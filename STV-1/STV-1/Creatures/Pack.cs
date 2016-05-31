@@ -23,8 +23,8 @@ namespace STV1
         {
             monsters = new List<Monster>();
 
-            //if (packStartLocation.type == "normal" || packStartLocation.type == "bridge")
-            //{
+            if (packStartLocation.type == "normal" || packStartLocation.type == "bridge")
+            {
                 if (packSize >= packStartLocation.MaxMonsters)
                     packSize = packStartLocation.MaxMonsters;
 
@@ -38,7 +38,7 @@ namespace STV1
                 this.packStartLocation = packStartLocation;
                 this.packStartLocation.nodePacks.Add(this);
 
-            //}
+            }
         }
 
         // We will move the pack by moving each monster in the pack to the destination location.
@@ -71,6 +71,29 @@ namespace STV1
 
             //if (monsters.Count == 0)
             //    PackLocation.RemovePack(this);
+        }
+
+        public void HandlePackAI(Player player, Dungeon dungeon)
+        {
+            List<List<Node>> paths = new List<List<Node>>();
+            // Find path to closest bridge
+            foreach (Node node in dungeon.nodes)
+            {
+                if (node.type == "Bridge")
+                    paths.Add(dungeon.FindShortestPath(PackLocation, node));
+            }
+
+            List<Node> closestPath = paths.OrderByDescending(x => x.Count).ElementAt(paths.Count);
+            List<Node> pathToPlayer = dungeon.FindShortestPath(this.PackLocation, player.Location);
+
+            if (pathToPlayer.Count <= closestPath.Count)
+            {
+                this.MovePack(pathToPlayer[0]);
+            }
+            else
+            {
+                this.MovePack(closestPath[0]);
+            }
         }
 
         // A few getters/setters to get the size and location of the pack,
