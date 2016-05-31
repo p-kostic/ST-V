@@ -20,9 +20,11 @@ namespace STV1
 
             while (!quit) { // Game loop
                 DrawUI();
-                string input = Console.ReadLine();
+                string input = GetInput();
                 if (input == "quit")
                     quit = true;
+                if (input == "?")
+                    DisplayHelp();
                 switch (player.inCombat) { 
                     case true:
                         HandleCombat(input);
@@ -31,8 +33,7 @@ namespace STV1
                         HandleMovement(input);
                         break;
                 }
-            }
-            
+            }         
         }
 
         // geen save en load meer
@@ -120,20 +121,48 @@ namespace STV1
                 }
             }
 
+            Console.SetCursorPosition(0, 23);
+            Console.Write("Give the next command by typing below. Type '?' for a list of commands.");
             Console.SetCursorPosition(0, 24);
         }
 
-        void HandleMovement(string input) { 
-            //TODO: Player movement based on input
+        // This method retrieves the input from the player, 
+        // and makes sure that it's a valid string.
+        private string GetInput()
+        {
+            string i = Console.ReadLine();
+            string[] iArray = i.Split(' ');
+            if (iArray[0] == "goto" || i == "stay" ||
+                i == "retreat" || i == "continue" || 
+                i == "quit" || i == "?")
+                return i;
+            else return "input not valid";
+        }
 
+        // Displays all the usable commands in the game.
+        private void DisplayHelp()
+        {
+            Console.WriteLine("List of commands:");
+            Console.WriteLine("- quit    : quit the game");
+            Console.WriteLine("- goto x  : move to node x (x has to be an adjecent node)");
+            Console.WriteLine("- stay    : stay in the current node");
+            Console.WriteLine();
+            Console.WriteLine("When in combat:");
+            Console.WriteLine("- continue: continue with another round of combat");
+            Console.WriteLine("- retreat : retreat from combat to an adjecent node");      
+        }
+
+        private void HandleMovement(string input)
+        { 
+            //TODO: Player movement based on input
             //TODO: Monster movement and monsters attacking eachother
         }
 
-        void HandleCombat(string input) { 
+        private void HandleCombat(string input)
+        { 
             //TODO: Player attack/item usage based on input
 
             //TODO: Monsters attacking players
         }
-
     }
 }
