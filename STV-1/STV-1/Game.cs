@@ -18,20 +18,38 @@ namespace STV1
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
 
-            while (!quit) { // Game loop
-                DrawUI();
+            // The console window size.
+            Console.SetWindowSize(80, 33);
+
+            // Game loop
+            while (!quit)
+            {
+                DrawUI(); // Draw the UI.
+
+                // Get the input and clear the previous console window.
+                // Then use the new input to advance the game.
                 string input = GetInput();
+                Console.Clear();
                 if (input == "quit")
                     quit = true;
                 if (input == "?")
                     DisplayHelp();
-                switch (player.inCombat) { 
-                    case true:
-                        HandleCombat(input);
-                        break;
-                    case false:
-                        HandleMovement(input);
-                        break;
+                if (input != "input not valid")
+                {
+                    switch (player.inCombat)
+                    {
+                        case true:
+                            HandleCombat(input);
+                            break;
+                        case false:
+                            HandleMovement(input);
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, 25);
+                    Console.WriteLine("The given input was not valid.");
                 }
             }         
         }
@@ -142,20 +160,19 @@ namespace STV1
         // Displays all the usable commands in the game.
         private void DisplayHelp()
         {
+            Console.SetCursorPosition(0, 25);
             Console.WriteLine("List of commands:");
-            Console.WriteLine("- quit    : quit the game");
-            Console.WriteLine("- goto x  : move to node x (x has to be an adjecent node)");
-            Console.WriteLine("- stay    : stay in the current node");
+            Console.WriteLine("- quit     : quit the game");
+            Console.WriteLine("- goto x   : move to node x (x has to be a valid path)");
+            Console.WriteLine("- stay     : stay in the current node");
             Console.WriteLine();
             Console.WriteLine("When in combat:");
-            Console.WriteLine("- continue: continue with another round of combat");
-            Console.WriteLine("- retreat : retreat from combat to an adjecent node");      
+            Console.WriteLine("- continue : continue with another round of combat");
+            Console.WriteLine("- retreat  : retreat from combat to an adjecent node");      
         }
 
         private void HandleMovement(string input)
         { 
-            //TODO: Player movement based on input
-            //TODO: Monster movement and monsters attacking eachother
         }
 
         private void HandleCombat(string input)
