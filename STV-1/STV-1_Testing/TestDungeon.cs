@@ -12,7 +12,8 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestDungeonGenerator()
         {
-            Dungeon d = new Dungeon(1);
+            Random rand = new Random();
+            Dungeon d = new Dungeon(1, rand.Next());
             d.GenerateDungeon(1);
 
             // Test if start != exit node
@@ -37,7 +38,7 @@ namespace STV_1_Testing
             // Test if the amount of bridges in the dungeon is equal to the level of the dungeon
             int level = 3;
             int count = 0;
-            Dungeon d2 = new Dungeon(level);
+            Dungeon d2 = new Dungeon(level, rand.Next());
             d2.GenerateDungeon(level);
             foreach (Node node in d2.nodes)
             {
@@ -47,7 +48,7 @@ namespace STV_1_Testing
             Assert.AreEqual(count, level);
 
             // Test if no nodes lack any connections
-            Dungeon d3 = new Dungeon(2);
+            Dungeon d3 = new Dungeon(2, rand.Next());
             d3.GenerateDungeon(2);
             foreach (Node n in d.nodes)
             {
@@ -58,7 +59,8 @@ namespace STV_1_Testing
         public void TestDungeonDestroy()
         {
             // DEEP COPY NODIG VOOR DE TEST 
-            Dungeon d = new Dungeon(2);
+            Random rand = new Random();
+            Dungeon d = new Dungeon(2, rand.Next());
             d.GenerateDungeon(2);
             int size = d.nodes.Count;
 
@@ -81,22 +83,23 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestDungeonShortestPath()
         {
+            Random rand = new Random();
             // Test shortest path
             for (int i = 1; i <= 5; i++)
             {
-                Dungeon d = new Dungeon(i);
+                Dungeon d = new Dungeon(i, rand.Next());
                 d.GenerateDungeon(i);
                 Assert.IsTrue(d.FindShortestPath(d.nodes[0], d.nodes[d.nodes.Count - 1]) != null);
             }
 
             // Test trivial path
-            Dungeon d2 = new Dungeon(1);
+            Dungeon d2 = new Dungeon(1, rand.Next());
             Node startend = new Node(1,1);
             d2.nodes.Add(startend);
             Assert.IsTrue(d2.FindShortestPath(d2.nodes[0], d2.nodes[0]).Contains(startend));
 
             // Test if it can find an impossible path
-            Dungeon d3 = new Dungeon(2);
+            Dungeon d3 = new Dungeon(2, rand.Next());
             Node start = new Node(1,1, "start");
             Node end = new Node(1,1, "exit");
             d3.nodes.Add(start);
@@ -108,7 +111,8 @@ namespace STV_1_Testing
         [TestMethod]
         public void TestDungeonGetters()
         {
-            Dungeon d = new Dungeon(2);
+            Random rand = new Random();
+            Dungeon d = new Dungeon(2, rand.Next());
             d.GenerateDungeon(2);
             Assert.IsTrue(d.GetExit.type == "exit");
             Assert.IsTrue(d.GetStart.type == "start");

@@ -13,19 +13,23 @@ namespace STV1
         public List<Node> nodes;
         private int nodeNr;
         public int level;
-        Random rand = new Random();
+        Random rand;
+        public int seed;
 
         int monsterNr;
         int packNr;
 
-        public Dungeon(int level)
+        public Dungeon(int level, int seed)
         {
             this.level = level;
             nodeNr = 1;
             monsterNr = 15 * level;
             packNr = 5 * level;
             nodes = new List<Node>();
+            this.seed = seed;
+            rand = new Random(seed);
         }
+        
 
         public void GenerateDungeon(int level)
         {
@@ -38,7 +42,7 @@ namespace STV1
             }
             nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
 
-            /*for (int i = 0; i < nodes.Count(); i++)
+            /*for (int i = 0; i < nodes.Count(); i++) // Code snippet to print legible map of the dungeon
             {
                 Console.WriteLine(nodes[i].type + " " + nodes[i].id + " lvl: " + nodes[i].level);
                 for (int j = 0; j < nodes[i].connections.Count(); j++)
