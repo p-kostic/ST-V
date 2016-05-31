@@ -13,6 +13,8 @@ namespace STV1
         int level;
         bool quit = false;
 
+        public int cursorInfoPos = 25;
+
         public Game()
         {
             NextDungeon();
@@ -48,7 +50,7 @@ namespace STV1
                 }
                 else
                 {
-                    Console.SetCursorPosition(0, 25);
+                    Console.SetCursorPosition(0, cursorInfoPos);
                     Console.WriteLine("The given input was not valid.");
                 }
             }         
@@ -160,7 +162,7 @@ namespace STV1
         // Displays all the usable commands in the game.
         private void DisplayHelp()
         {
-            Console.SetCursorPosition(0, 25);
+            Console.SetCursorPosition(0, cursorInfoPos);
             Console.WriteLine("List of commands:");
             Console.WriteLine("- quit     : quit the game");
             Console.WriteLine("- goto x   : move to node x (x has to be a valid path)");
@@ -171,8 +173,47 @@ namespace STV1
             Console.WriteLine("- retreat  : retreat from combat to an adjecent node");      
         }
 
+        // This method handles the movement of the player.
         private void HandleMovement(string input)
-        { 
+        {
+            // Check for the goto command. Makes sure that a node is given,
+            // and that it's a valid node. If it's valid, move the player to
+            // that node.
+            string[] i = input.Split(' ');
+            if (i[0] == "goto")
+            {
+                if(i.Length > 1)
+                {
+                    int goToNode = -1;
+                    try
+                    {
+                        goToNode = int.Parse(i[1]);
+                    }
+                    catch
+                    {
+                        Console.SetCursorPosition(0, cursorInfoPos);
+                        Console.WriteLine("Command invalid: given node not an integer.");
+                    }
+
+                    // TODO: methode afschrijven.
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, cursorInfoPos);
+                    Console.WriteLine("Command invalid: no destination node given.");
+                }
+            }
+
+            else if (input == "stay")
+            {
+                // TODO: deze command afmaken.
+            }
+
+            else
+            {
+                Console.SetCursorPosition(0, cursorInfoPos);
+                Console.WriteLine("Command invalid: not in a combat situation.");
+            } 
         }
 
         private void HandleCombat(string input)
