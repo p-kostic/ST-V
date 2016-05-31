@@ -13,7 +13,7 @@ namespace STV1
         int level;
         bool quit = false;
 
-        public int cursorInfoPos = 25;
+        public int cursorInfoPos = 19;
 
         public Game()
         {
@@ -51,7 +51,7 @@ namespace STV1
                 else
                 {
                     Console.SetCursorPosition(0, cursorInfoPos);
-                    Console.WriteLine("The given input was not valid.");
+                    Console.Write("The given input was not valid.");
                 }
             }         
         }
@@ -106,9 +106,9 @@ namespace STV1
                 Console.SetCursorPosition(curX, curY + i);
             }
             
-            Console.SetCursorPosition(25, 15);
+            Console.SetCursorPosition(25, 14);
             Console.Write("Current node: " + player.Location.id);
-            Console.SetCursorPosition(33, 16);
+            Console.SetCursorPosition(33, 15);
             Console.Write("type: " + player.Location.type);
 
             curX = 60;
@@ -140,9 +140,9 @@ namespace STV1
                 }
             }
 
-            Console.SetCursorPosition(0, 23);
-            Console.Write("Give the next command by typing below. Type '?' for a list of commands.");
-            Console.SetCursorPosition(0, 24);
+            Console.SetCursorPosition(0, 17);
+            Console.Write("Give the next command. Type '?' for a list of commands.");
+            Console.SetCursorPosition(0, 18);
         }
 
         // This method retrieves the input from the player, 
@@ -153,7 +153,8 @@ namespace STV1
             string[] iArray = i.Split(' ');
             if (iArray[0] == "goto" || i == "stay" ||
                 i == "retreat" || i == "continue" || 
-                i == "quit" || i == "?")
+                i == "quit" || i == "?" || i == "y" ||
+                i == "n" || i == "hp" || i == "tc")
                 return i;
             else return "input not valid";
         }
@@ -169,7 +170,13 @@ namespace STV1
             Console.WriteLine();
             Console.WriteLine("When in combat:");
             Console.WriteLine("- continue : continue with another round of combat");
-            Console.WriteLine("- retreat  : retreat from combat to an adjecent node");      
+            Console.WriteLine("- retreat  : retreat from combat to an adjecent node");
+            Console.WriteLine();
+            Console.WriteLine("Confirmations and item usage: ");
+            Console.WriteLine("- y  : confirm question");
+            Console.WriteLine("- n  : dismiss question");
+            Console.WriteLine("- hp : use a healing potion (if you have any)");
+            Console.WriteLine("- tc : use a timecrystal (if you have any)");
         }
 
         // This method handles the movement of the player.
@@ -191,7 +198,7 @@ namespace STV1
                     catch
                     {
                         Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.WriteLine("Command invalid: given node isn't an integer.");
+                        Console.Write("Command invalid: given node isn't an integer.");
                     }
 
                     if (player.Location.connections.Exists(item => item.id == goToNode))
@@ -199,38 +206,119 @@ namespace STV1
                         Node destination = player.Location.connections.First(item => item.id == goToNode);
                         player.Move(destination);
                         Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.WriteLine("You moved to path " + destination.id);
+                        Console.Write("You moved to path " + destination.id);
                     } 
                     else
                     {
                         Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.WriteLine("Command invalid: non-existing path or already at that location.");
+                        Console.Write("Command invalid: non-existing path or already at that location.");
                     }
                 }
                 else
                 {
                     Console.SetCursorPosition(0, cursorInfoPos);
-                    Console.WriteLine("Command invalid: no destination node given.");
+                    Console.Write("Command invalid: no destination node given.");
                 }
             }
 
             else if (input == "stay")
             {
-                // TODO: deze command afmaken.
+                Console.SetCursorPosition(0, cursorInfoPos);
+                Console.Write("You stay at your current location.");
+
+                // TODO: monsters moeten zich verplaatsen naar de speler toe etc.
             }
 
             else
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
-                Console.WriteLine("Command invalid: not in a combat situation.");
+                Console.Write("Command invalid: not in a combat situation.");
             } 
         }
 
         private void HandleCombat(string input)
         { 
-            //TODO: Player attack/item usage based on input
+            if (input == "continue")
+            {
+                DrawUI();
+                Console.SetCursorPosition(0, cursorInfoPos);
+                Console.WriteLine("Commencing combat!");
+                Console.WriteLine("Do you want to use an item? (y/n)");
 
-            //TODO: Monsters attacking players
+                bool validAction = false;
+                string action;
+                while (!validAction)
+                {
+                    action = GetInput();
+
+                    if (action == "y")
+                    {
+                        validAction = true;
+                        bool validItem = false;
+                        Console.WriteLine("Which item do you want to use? (hp/tc)");
+
+                        while (!validItem)
+                        {
+                            action = GetInput();
+
+                            if (action == "hp")
+                            {
+                                validItem = true;
+                                if (player.inventory.Exists(item => item.ItemType() == "HealingPotion"))
+                                {
+                                    player.UsePotion();
+                                    Console.WriteLine("Used a healing potion!");
+                                }
+                                else
+                                    Console.WriteLine("You don't have a healing potion!");          
+                            }
+
+                            else if (action == "tc")
+                            {
+                                validItem = true;
+                                if (player.inventory.Exists(item => item.ItemType() == "TimeCrystal"))
+                                {
+                                    player.UseCrystal();
+                                    Console.WriteLine("Used a time crystal!");
+                                }
+                                else  
+                                    Console.WriteLine("You don't have a time crystal!");                
+                            }
+
+                            else
+                                Console.WriteLine("Action not valid! Choose 'hp' or 'tc'."); 
+                        }
+
+                        player.Location.DoCombatRound(player.Location.nodePacks[0], player);
+                    }
+
+                    else if (action == "n")
+                    {
+                        validAction = true;
+                        player.Location.DoCombatRound(player.Location.nodePacks[0], player);
+                    }
+
+                    else { Console.WriteLine("Action not valid! Choose 'y' or 'n'."); }
+                }
+            }
+
+            else if (input == "retreat")
+            {
+                if (!player.IsDead)
+                {
+                    player.inCombat = false;
+                    player.Move(player.Location.connections[0]);
+                    Console.SetCursorPosition(0, cursorInfoPos);
+                    Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
+                }
+            }
+
+            else
+            {
+                Console.SetCursorPosition(0, cursorInfoPos);
+                if (input != "?")
+                    Console.Write("Command invalid: Only combat actions allowed!");
+            }
         }
     }
 }

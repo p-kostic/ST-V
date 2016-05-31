@@ -93,10 +93,9 @@ namespace STV1
         }
 
         // This method checks if the player should be in combat, by checking health, position and pack count.
-        public void CheckInCombat()
+        public bool CheckInCombat()
         {
-            while (nodePacks.Count > 0 && nodePlayer != null && !nodePlayer.IsDead)
-                DoCombat();
+            return (nodePacks.Count > 0 && nodePlayer != null && !nodePlayer.IsDead);
         }
 
         // This method will play out a combat situation as long as the player is in combat.

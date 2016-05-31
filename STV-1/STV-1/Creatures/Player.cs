@@ -41,7 +41,8 @@ namespace STV1
             Location = destination;
             Location.AddPlayer(this);
             GrabItems();
-            //destination.CheckInCombat();
+            if (destination.CheckInCombat())
+                inCombat = true;
         }
 
         // The attacked creature is dealt damage equal to the player's attack power.
