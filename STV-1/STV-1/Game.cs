@@ -21,7 +21,7 @@ namespace STV1
             player = new Player(100, 10, d.nodes[0], d);
 
             // The console window size.
-            Console.SetWindowSize(80, 33);
+            Console.SetWindowSize(80, 50);
 
             // Game loop
             while (!quit)
@@ -107,7 +107,7 @@ namespace STV1
             }
             
             Console.SetCursorPosition(25, 14);
-            Console.Write("Current node: " + player.Location.id);
+            Console.Write("Current node: " + player.Location.id + "  ");
             Console.SetCursorPosition(33, 15);
             Console.Write("type: " + player.Location.type);
 
@@ -204,9 +204,19 @@ namespace STV1
                     if (player.Location.connections.Exists(item => item.id == goToNode))
                     {
                         Node destination = player.Location.connections.First(item => item.id == goToNode);
-                        player.Move(destination);
-                        Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.Write("You moved to path " + destination.id);
+                        if (destination.type == "exit")
+                        {
+                            player.Move(this.NextDungeon().nodes[0]);
+                            Console.SetCursorPosition(0, cursorInfoPos);
+                            Console.Write("Welcome to level " + d.level + ". This is node " + d.nodes[0].id);
+                            // TODO: Current node en d.nodes[0].id geven nog niet de goede node weer als we naar het volgende level gaan
+                        }
+                        else
+                        {
+                            player.Move(destination);
+                            Console.SetCursorPosition(0, cursorInfoPos);
+                            Console.Write("You moved to path " + destination.id);
+                        }
                     } 
                     else
                     {
