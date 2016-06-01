@@ -146,6 +146,8 @@ namespace STV1
             if(mons){
                 addMonsters(zoneMonsterNr, zonePackNr, curZone);
             }
+            addMonsters(zoneMonsterNr, zonePackNr, curZone);
+
             return curZone;
         }
 

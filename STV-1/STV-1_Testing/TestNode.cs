@@ -120,7 +120,7 @@ namespace STV_1_Testing
             Pack pack = new Pack(5, node);
 
             // Do the actual combat
-            node.DoCombatRound(pack, player);
+            node.DoCombatRound(pack, player, false);
 
             // We check if a monster died in the pack,
             // since the attack power of the player is equal to the monster his health.
@@ -183,7 +183,7 @@ namespace STV_1_Testing
             player.AddItem(true);
 
             // Do the actual combat.
-            node.DoCombatRound(pack, player);
+            node.DoCombatRound(pack, player, false);
 
             // Check if the code went through the code, and thus the player has healed a bit.
             Assert.IsTrue(player.HP > 5);
@@ -204,7 +204,7 @@ namespace STV_1_Testing
             player.AddItem(false);
 
             // Do the actual combat.
-            node.DoCombatRound(pack, player);
+            node.DoCombatRound(pack, player, false);
 
             // Timecrystal has been used, and since the attack is 10, all monsters should be dead.
             Assert.IsTrue(pack.PackSize == 0);
@@ -246,7 +246,7 @@ namespace STV_1_Testing
             Pack pack = new Pack(5, node1);
 
             // Do the actual combat.
-            node1.DoCombatRound(pack, player);
+            node1.DoCombatRound(pack, player, false);
 
             // The player should have fled to the other node.
             Assert.IsTrue(node2.PlayerInNode());
@@ -266,7 +266,7 @@ namespace STV_1_Testing
             Pack pack = new Pack(5, node1);
 
             // Do the actual combat.
-            node1.DoCombatRound(pack, player);
+            node1.DoCombatRound(pack, player, false);
 
             // The pack should have fled to the other node.
             Assert.IsTrue(pack.PackLocation == node2);
