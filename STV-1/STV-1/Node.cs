@@ -17,7 +17,7 @@ namespace STV1
         public int level;
         public string type;
         public int id;
-        static int idCounter = 0; // To give an id to a certain node.
+        public static int idCounter = 0; // To give an id to a certain node.
 
         public List<Pack> nodePacks;
         public List<Item> items;

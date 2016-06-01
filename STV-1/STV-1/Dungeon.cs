@@ -15,6 +15,7 @@ namespace STV1
         public int level;
         Random rand;
         public int seed;
+        public List<Pack> packs = new List<Pack>();
 
         int monsterNr;
         int packNr;
@@ -31,14 +32,14 @@ namespace STV1
         }
         
 
-        public void GenerateDungeon(int level)
+        public void GenerateDungeon(int level, bool generateMonsters = true)
         {
             startNode = new Node(0, M, "start");
             nodes.Add(startNode);
 
             for (int i = 0; i <= level; i++) // Generates the chosen amount of zones with bridges inbetween them
             {
-                nodes.AddRange(GenerateZone(nodes[nodes.Count() - 1], i));
+                nodes.AddRange(GenerateZone(nodes[nodes.Count() - 1], i, generateMonsters));
             }
             nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
 
@@ -54,7 +55,7 @@ namespace STV1
 
         }
 
-        List<Node> GenerateZone(Node firstNode, int zoneLvl)
+        List<Node> GenerateZone(Node firstNode, int zoneLvl, bool mons)
         {
             int zoneNodeNr = rand.Next(1, 6);
             List<Node> curZone = new List<Node>();
@@ -142,8 +143,9 @@ namespace STV1
             curZone.RemoveAt(0);
 
             // Add packs of monsters to the generated dungeon
-            // addMonsters(zoneMonsterNr, zonePackNr, curZone);
-
+            if(mons){
+                addMonsters(zoneMonsterNr, zonePackNr, curZone);
+            }
             return curZone;
         }
 
@@ -203,8 +205,9 @@ namespace STV1
             {
                 int packLocation = rand.Next(0, curZone.Count() - 1);
                 Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
+                packs.Add(curPack);
                 remainingMonsters -= zoneMonsterNr / zonePackNr;
-                //Console.WriteLine("Added pack to node " + curZone[packLocation].id + ", remaining monsters: " + remainingMonsters);
+
             }
         }
 
@@ -240,6 +243,18 @@ namespace STV1
                     }
                 }
             }
+        }
+
+        public Node GetNodeByID(int id) {
+            
+            foreach(Node n in nodes){
+                if(n.id == id){
+                    return n;
+                }
+            }
+            
+            throw new NullReferenceException("Node not found");
+            
         }
 
         public Node GetStart { get { return startNode; } }

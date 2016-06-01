@@ -161,9 +161,15 @@ namespace STV1
             if (iArray[0] == "goto" || i == "stay" ||
                 i == "retreat" || i == "continue" || 
                 i == "quit" || i == "?" || i == "y" ||
-                i == "n" || i == "hp" || i == "tc" || iArray[0] == "save" || iArray[0] == "load")
+                i == "n" || i == "hp" || i == "tc" || 
+                iArray[0] == "save" || iArray[0] == "load"){
+                if(iArray[0] == "save" || iArray[0] == "load"){
+                    if(!CheckName(iArray[1])){
+                        return "input not valid";
+                    }
+                }
                 return i;
-            else return "input not valid";
+            }else return "input not valid";
         }
 
         // Displays all the usable commands in the game.
@@ -239,12 +245,22 @@ namespace STV1
                     Console.Write("Command invalid: no destination node given.");
                 }
             }
+            else if (i[0] == "save") 
+            {
+                Console.SetCursorPosition(0, cursorInfoPos);
+                Console.Write("Successfully saved the game");
+            }
+            else if (i[0] == "load")
+            {
+                Console.SetCursorPosition(0, cursorInfoPos);
+                Console.Write("Successfully loaded the game");
+            }
 
             else if (input == "stay")
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("You stay at your current location.");
-                
+
             }
 
             else
@@ -365,12 +381,40 @@ namespace STV1
             saveList.Add("" + potionCount);
             saveList.Add("" + crystalCount);
             saveList.Add("" + d.seed);
+            foreach(Pack pack in d.packs){
+                saveList.Add("" + pack.monsters.Count);
+                saveList.Add("" + pack.PackLocation.id);
+                
+            }
 
             File.WriteAllLines(saveLocation, saveList);
         }
 
-        void LoadGame(string fileName) { 
-            //List<string> 
+        void LoadGame(string fileName) {
+            string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            string[] loaded = File.ReadAllLines(location);
+            level = int.Parse(loaded[0]);
+            Node.idCounter = 0;
+            d = new Dungeon(level, int.Parse(loaded[7]));
+            d.GenerateDungeon(level, false);
+            Node playerLocation = d.GetNodeByID(int.Parse(loaded[4]));
+            player = new Player(int.Parse(loaded[1]), int.Parse(loaded[2]), playerLocation, d);
+            player.kp = int.Parse(loaded[3]);
+
+            for (int i = 7; i < loaded.Length - 1; i+=2 )
+            {
+                d.packs.Add(new Pack(int.Parse(loaded[i]), d.GetNodeByID(int.Parse(loaded[i+1]))));
+            }
+        }
+
+        bool CheckName(string name) { 
+            string[] illegalChars = {",", ".", "\\", "/" };
+            foreach(string chr in illegalChars){
+                if(name.Contains(chr)){
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
