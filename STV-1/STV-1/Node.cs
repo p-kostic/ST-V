@@ -98,48 +98,31 @@ namespace STV1
             return (nodePacks.Count > 0 && nodePlayer != null && !nodePlayer.IsDead);
         }
 
-        // This method will play out a combat situation as long as the player is in combat.
-        public void DoCombat()
-        {
-            repeatCombat = true;
-            while (repeatCombat)
-                DoCombatRound(nodePacks[0], nodePlayer);
-        }
-
         // This method will do a round of combat. We will explain how it works as we go through it.
-        public void DoCombatRound(Pack pack, Player player)
+        public void DoCombatRound(Pack pack, Player player, bool usedTC)
         {
+            int dealtDMG = 0;
+            int receivedDMG = 0;
             nodePlayer = player;
 
-            // We get the next command from the botplayer, and set the timecrystal use to false.
-            BotPlayer command = nodePlayer.GetCommand();
-            bool activeTimeCrystal = false;
+            // We set the timecrystal use to false.
+            bool activeTimeCrystal = usedTC;
 
-            // As long as there is a command, we pass.
-            if (command != null)
-            {
-                // If the command is to use an item, we will check which item has been used and act
-                // accordingly.
-                if (command.itemUsed)
+            // If a timecrystal has been used, we let the player attack each monster in the group.
+            // Else the player will only attack the first monster in the group.
+            if (activeTimeCrystal)
+                foreach (Monster monster in pack.Monsters)
                 {
-                    if (command.usedHP)
-                        nodePlayer.UsePotion();
-                    else if (command.usedTC)
-                        activeTimeCrystal = nodePlayer.UseCrystal();
+                    nodePlayer.Attack(monster);
+                    dealtDMG += player.ATK;
                 }
-
-                // If a timecrystal has been used, we let the player attack each monster in the group.
-                // Else the player will only attack the first monster in the group.
-                if (activeTimeCrystal)
-                    foreach (Monster monster in pack.Monsters)
-                        nodePlayer.Attack(monster);
-                else
-                    nodePlayer.Attack(pack.Monsters[0]);
-            }
-            // If there is no command, we will just do the basic combat, in which the player attacks, and
-            // then the pack will attack.
             else
+            {
                 nodePlayer.Attack(pack.Monsters[0]);
+                dealtDMG = player.ATK;
+            }
+
+            Console.WriteLine("You dealt " + dealtDMG + " damage on the pack!");
 
             // We update the pack to see if it died and whatnot.
             pack.UpdatePack();
@@ -147,22 +130,16 @@ namespace STV1
             // Let the pack attack the player.
             pack.PackAttack(nodePlayer);
 
-            // If the pack or the player died, we will end combat the next turn.
-            if (pack.PackHP <= 0 || nodePlayer.IsDead)
-                repeatCombat = false;
+            foreach (Monster monster in pack.Monsters)
+                receivedDMG += monster.ATK;
+            Console.WriteLine("You received " + receivedDMG + " damage, ouch!");
 
-            // Else we will check for retreats. if the command is the retreat command, move to the
-            // adjoining node, else if the accumulative HP of the pack is lower then the HP of the player,
-            // move to the pack to the adjoining node and end the combat in both cases.
-            if (command != null && command.retreated && connections.Count > 0)
-            {
-                nodePlayer.Move(connections[0]);
-                repeatCombat = false;
-            }
-            else if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
+            // If the accumulative HP of the pack is lower then the HP of the player,
+            // move to the pack to the adjoining node.
+            if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
             {
                 pack.MovePack(connections[0]);
-                repeatCombat = false;
+                Console.WriteLine("The pack fled from battle!");
             }
         }
 

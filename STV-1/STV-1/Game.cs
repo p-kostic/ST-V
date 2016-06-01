@@ -13,6 +13,7 @@ namespace STV1
         Player player;
         int level;
         bool quit = false;
+        bool inCombat;
         int curSeed;
 
         public int cursorInfoPos = 21;
@@ -35,6 +36,7 @@ namespace STV1
                 string input = GetInput();
                 string[] iArray = input.Split(' ');
                 Console.Clear();
+
                 if (input == "quit")
                     quit = true;
                 if (input == "?")
@@ -43,17 +45,18 @@ namespace STV1
                     SaveGame(iArray[1]);
                 if (iArray[0] == "load")
                     LoadGame(iArray[1]);
+
+                if (player.Location.CheckInCombat())
+                    inCombat = true;
+                else
+                    inCombat = false;
+
                 if (input != "input not valid")
                 {
-                    switch (player.inCombat)
-                    {
-                        case true:
-                            HandleCombat(input);
-                            break;
-                        case false:
-                            HandleMovement(input);
-                            break;
-                    }
+                    if (inCombat)
+                        HandleCombat(input);
+                    else
+                        HandleMovement(input);
                 }
                 else
                 {
@@ -116,7 +119,7 @@ namespace STV1
             Console.SetCursorPosition(25, 14);
             Console.Write("Current level: " + player.Location.level);
             Console.SetCursorPosition(25, 15);
-            Console.Write("Visited nodes: " + player.VisitedList());
+            Console.Write("Visited nodes: " + player.VisitedList(level));
             Console.SetCursorPosition(25, 16);
             Console.Write("Current node : " + player.Location.id + "  ");
             Console.SetCursorPosition(33, 17);
@@ -278,6 +281,7 @@ namespace STV1
                 Console.WriteLine("Commencing combat!");
                 Console.WriteLine("Do you want to use an item? (y/n)");
 
+                bool usedTC = false;
                 bool validAction = false;
                 string action;
                 while (!validAction)
@@ -312,6 +316,7 @@ namespace STV1
                                 if (player.inventory.Exists(item => item.ItemType() == "TimeCrystal"))
                                 {
                                     player.UseCrystal();
+                                    usedTC = true;
                                     Console.WriteLine("Used a time crystal!");
                                 }
                                 else  
@@ -322,27 +327,41 @@ namespace STV1
                                 Console.WriteLine("Action not valid! Choose 'hp' or 'tc'."); 
                         }
 
-                        player.Location.DoCombatRound(player.Location.nodePacks[0], player);
+                        player.Location.DoCombatRound(player.Location.nodePacks[0], player, usedTC);
                     }
 
                     else if (action == "n")
                     {
                         validAction = true;
-                        player.Location.DoCombatRound(player.Location.nodePacks[0], player);
+                        player.Location.DoCombatRound(player.Location.nodePacks[0], player, usedTC);
                     }
 
                     else { Console.WriteLine("Action not valid! Choose 'y' or 'n'."); }
                 }
-            }
 
-            else if (input == "retreat")
-            {
-                if (!player.IsDead)
+                Console.WriteLine("Combat round finished! What's your next action?");
+                bool validMove = false;
+                while (!validMove)
                 {
-                    player.inCombat = false;
-                    Console.SetCursorPosition(0, cursorInfoPos);
-                    Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
-                    player.Move(player.Location.connections[0]);
+                    action = GetInput();
+                    if (action == "continue")
+                    {
+                        validMove = true;
+                        HandleCombat(action);
+                        Console.Clear();
+                    }
+                    else if (action == "retreat")
+                    {
+                        validMove = true;
+                        if (!player.IsDead)
+                        {
+                            Console.SetCursorPosition(0, cursorInfoPos);
+                            Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
+                            player.Move(player.Location.connections[0]);
+                        }
+                    }
+
+                    else { Console.WriteLine("Action not valid! Choose 'continue' or 'retreat'."); }
                 }
             }
 
@@ -350,7 +369,7 @@ namespace STV1
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 if (input != "?")
-                    Console.Write("Command invalid: Only combat actions allowed!");
+                    Console.Write("Command invalid: Only 'continue' allowed!");
             }
         }
 

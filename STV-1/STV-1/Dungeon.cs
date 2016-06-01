@@ -142,7 +142,7 @@ namespace STV1
             curZone.RemoveAt(0);
 
             // Add packs of monsters to the generated dungeon
-            // addMonsters(zoneMonsterNr, zonePackNr, curZone);
+            addMonsters(zoneMonsterNr, zonePackNr, curZone);
 
             return curZone;
         }
