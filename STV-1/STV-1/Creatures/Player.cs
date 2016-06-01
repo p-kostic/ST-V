@@ -17,6 +17,7 @@ namespace STV1
         private int atk;
         public int kp = 0;
         private Dungeon dungeon;
+        private List<int> visitedList = new List<int>();
         public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
         public Queue<BotPlayer> playerCommands;
         public bool inCombat;
@@ -134,6 +135,23 @@ namespace STV1
         public void SetCommand(BotPlayer command)
         {
             playerCommands.Enqueue(command);
+        }
+
+        public string VisitedList()
+        {
+            string visitedString = "";
+            if (!visitedList.Contains(this.Location.id))
+                visitedList.Add(this.Location.id);
+
+            foreach (int id in visitedList)
+            {
+                if (visitedList.Count == 1)
+                    visitedString += id;
+                else
+                    visitedString += (id + " ");
+            }
+
+            return visitedString;
         }
     }
 }

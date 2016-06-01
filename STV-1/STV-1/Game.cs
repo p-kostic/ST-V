@@ -15,7 +15,7 @@ namespace STV1
         bool quit = false;
         int curSeed;
 
-        public int cursorInfoPos = 19;
+        public int cursorInfoPos = 21;
 
         public Game()
         {
@@ -23,7 +23,7 @@ namespace STV1
             player = new Player(100, 10, d.nodes[0], d);
             SaveGame("save");
             // The console window size.
-            Console.SetWindowSize(80, 50);
+            Console.SetWindowSize(80, 37);
 
             // Game loop
             while (!quit)
@@ -86,11 +86,11 @@ namespace STV1
 
         public void DrawUI() {
             Console.SetCursorPosition(0,0);
-            Console.Write("HP: " + player.HP);
+            Console.Write("HP : " + player.HP);
             Console.SetCursorPosition(0,1);
             Console.Write("ATK: " + player.ATK);
             Console.SetCursorPosition(0,2);
-            Console.Write("KP: " + player.kp);
+            Console.Write("KP : " + player.kp);
 
             Console.SetCursorPosition(0, 4);
             Console.Write("Inventory: ");
@@ -99,9 +99,9 @@ namespace STV1
             int crystalCount = player.inventory.Count(s => s.ItemType() == "TimeCrystal");
             Console.Write("Healing Potions: " + potionCount);
             Console.SetCursorPosition(0, 6);
-            Console.Write("Time Crystals: " + crystalCount);
+            Console.Write("Time Crystals  : " + crystalCount);
 
-            int curX = 1;
+            int curX = 0;
             int curY = 10;
             Console.SetCursorPosition(curX, curY);
             Console.Write("Paths from this node:");
@@ -112,11 +112,15 @@ namespace STV1
                 Console.Write(player.Location.connections[i].id + ", type: " + player.Location.connections[i].type);
                 Console.SetCursorPosition(curX, curY + i);
             }
-            
+
             Console.SetCursorPosition(25, 14);
-            Console.Write("Current node: " + player.Location.id + "  ");
-            Console.SetCursorPosition(33, 15);
-            Console.Write("type: " + player.Location.type);
+            Console.Write("Current level: " + player.Location.level);
+            Console.SetCursorPosition(25, 15);
+            Console.Write("Visited nodes: " + player.VisitedList());
+            Console.SetCursorPosition(25, 16);
+            Console.Write("Current node : " + player.Location.id + "  ");
+            Console.SetCursorPosition(33, 17);
+            Console.Write("type : " + player.Location.type);
 
             curX = 60;
             curY = 0;
@@ -147,9 +151,9 @@ namespace STV1
                 }
             }
 
-            Console.SetCursorPosition(0, 17);
+            Console.SetCursorPosition(0, 19);
             Console.Write("Give the next command. Type '?' for a list of commands.");
-            Console.SetCursorPosition(0, 18);
+            Console.SetCursorPosition(0, 20);
         }
 
         // This method retrieves the input from the player, 
@@ -249,8 +253,11 @@ namespace STV1
 
             else
             {
-                Console.SetCursorPosition(0, cursorInfoPos);
-                Console.Write("Command invalid: not in a combat situation.");
+                if (input != "?")
+                {
+                    Console.SetCursorPosition(0, cursorInfoPos);
+                    Console.Write("Command invalid: not in a combat situation.");
+                }
             }
             
             // Move the packs this turn accordingly after a player action 
@@ -353,7 +360,7 @@ namespace STV1
             if (d == null)
                 throw new NullReferenceException("No dungeon to save");
 
-            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            //string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
             List<string> saveList = new List<string>();
             saveList.Add("" + level);
             saveList.Add("" + player.HP);
@@ -366,7 +373,7 @@ namespace STV1
             saveList.Add("" + crystalCount);
             saveList.Add("" + d.seed);
 
-            File.WriteAllLines(saveLocation, saveList);
+           // File.WriteAllLines(saveLocation, saveList);
         }
 
         void LoadGame(string fileName) { 
