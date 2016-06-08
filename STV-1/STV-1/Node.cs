@@ -12,7 +12,6 @@ namespace STV1
         public List<Node> connections;
 
         private int maxmonsters;
-        private bool repeatCombat;
 
         public int level;
         public string type;
@@ -200,7 +199,5 @@ namespace STV1
         }
 
         public int MaxMonsters { get { return maxmonsters; } }
-
-        public bool RepeatCombat { get { return repeatCombat; } }
     }
 }

@@ -11,7 +11,7 @@ namespace STV1
     public class Game
     {
         public Dungeon d;
-        Player player;
+        static Player player;
         int level;
         bool quit = false;
         bool inCombat;
