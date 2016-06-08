@@ -17,9 +17,9 @@ namespace STV1
         private int atk;
         public int kp = 0;
         private Dungeon dungeon;
+        private List<int> visitedList = new List<int>();
+        private int levelChecker = 0;
         public List<Item> inventory = new List<Item>(); // To keep track of the items in the player's inventory.
-        public Queue<BotPlayer> playerCommands;
-        public bool inCombat;
 
         // We call the base method in the abstract creature class, and we will set the
         // maxHP to the hp value.
@@ -30,8 +30,6 @@ namespace STV1
             this.atk = atk;
             this.dungeon = dungeon;
             loc.AddPlayer(this);
-            playerCommands = new Queue<BotPlayer>();
-            inCombat = false;
         }
 
         // We will move the player to the given destination.
@@ -41,8 +39,6 @@ namespace STV1
             Location = destination;
             Location.AddPlayer(this);
             GrabItems();
-            if (destination.CheckInCombat())
-                inCombat = true;
         }
 
         // The attacked creature is dealt damage equal to the player's attack power.
@@ -115,25 +111,28 @@ namespace STV1
 
         public Dungeon Dungeon { get { return dungeon; } }
 
-        // This method is used to get the next command from the queue. If there are no
-        // other commands, we will return a null value.
-        public BotPlayer GetCommand()
+        // A method that keeps track of the visited nodes.
+        public string VisitedList(int curLevel)
         {
-            if (playerCommands.Count > 0)
+            if (levelChecker != curLevel)
             {
-                BotPlayer nextCommand = playerCommands.Dequeue();
-                return nextCommand;
+                levelChecker = curLevel;
+                visitedList.Clear();
             }
 
-            return null;
-        }
+            string visitedString = "";
+            if (!visitedList.Contains(this.Location.id))
+                visitedList.Add(this.Location.id);
 
+            foreach (int id in visitedList)
+            {
+                if (id == visitedList.First())
+                    visitedString += id;
+                else
+                    visitedString += "," + id;
+            }
 
-        // With this method we can add commands to the list that the player should do.
-        // This method is mainly used in the test cases.
-        public void SetCommand(BotPlayer command)
-        {
-            playerCommands.Enqueue(command);
+            return visitedString;
         }
     }
 }

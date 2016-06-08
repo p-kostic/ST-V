@@ -29,7 +29,6 @@ namespace STV1
         public override void Move(Node destination)
         {
             this.Location = destination;
-            destination.CheckInCombat();
         }
 
         // The attacked creature is dealt damage equal to the monster's attack power.
