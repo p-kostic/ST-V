@@ -20,7 +20,7 @@ namespace STV1
         int monsterNr;
         int packNr;
 
-        public Dungeon(int level, int seed)
+        public Dungeon(int level, int seed = 33)
         {
             this.level = level;
             nodeNr = 1;
@@ -30,7 +30,7 @@ namespace STV1
             this.seed = seed;
             rand = new Random(seed);
         }
-        
+
 
         public void GenerateDungeon(int level, bool generateMonsters = true)
         {
@@ -143,7 +143,8 @@ namespace STV1
             curZone.RemoveAt(0);
 
             // Add packs of monsters to the generated dungeon
-            if(mons){
+            if (mons)
+            {
                 addMonsters(zoneMonsterNr, zonePackNr, curZone);
             }
             addMonsters(zoneMonsterNr, zonePackNr, curZone);
@@ -207,9 +208,12 @@ namespace STV1
             {
                 int packLocation = rand.Next(0, curZone.Count() - 1);
                 Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
-                packs.Add(curPack);
-                remainingMonsters -= zoneMonsterNr / zonePackNr;
-
+                if (curZone[packLocation].PackFitsInNode(curPack))
+                {
+                    packs.Add(curPack);
+                    remainingMonsters -= zoneMonsterNr / zonePackNr;
+                    i--;
+                }
             }
         }
 
@@ -247,16 +251,19 @@ namespace STV1
             }
         }
 
-        public Node GetNodeByID(int id) {
-            
-            foreach(Node n in nodes){
-                if(n.id == id){
+        public Node GetNodeByID(int id)
+        {
+
+            foreach (Node n in nodes)
+            {
+                if (n.id == id)
+                {
                     return n;
                 }
             }
-            
+
             throw new NullReferenceException("Node not found");
-            
+
         }
 
         public Node GetStart { get { return startNode; } }

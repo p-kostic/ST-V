@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using STV_1;
 
 namespace STV1
 {
@@ -15,6 +16,7 @@ namespace STV1
         bool quit = false;
         bool inCombat;
         int curSeed;
+        Specification spec = new Specification();
 
         public int cursorInfoPos = 21;
 
@@ -63,6 +65,10 @@ namespace STV1
                     Console.SetCursorPosition(0, cursorInfoPos);
                     Console.Write("The given input was not valid.");
                 }
+
+                // Test specifications each turn
+                if (!spec.TestSpecifications(d))
+                    throw new Exception("kappa");    
             }         
         }
 
@@ -285,7 +291,6 @@ namespace STV1
                 {
                     pack.HandlePackAI(player, d);
                 }
-
         }
 
         private void HandleCombat(string input)
