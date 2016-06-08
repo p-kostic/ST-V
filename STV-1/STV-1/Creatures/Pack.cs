@@ -16,7 +16,7 @@ namespace STV1
     {
         public List<Monster> monsters; // A list to hold all the monsters.
         public Node packStartLocation;
-        public Node rememberedLocation;
+        public Node rememberedLocation; // Deletion Cheese
 
         // The constructor will handle the creation of the pack. We will give the pack a 
         // size and a location to start in the dungeon. The monsters will have 10 hp and
@@ -71,7 +71,7 @@ namespace STV1
             {
                 if (monsters[i].IsDead)
                     monsters.Remove(monsters[i]);
-                if (monsters.Count == 1)
+                if (monsters.Count == 1) // Save the last location (see PackLocation)
                     rememberedLocation = monsters[0].Location;
             }
 
