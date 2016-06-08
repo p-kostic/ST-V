@@ -107,6 +107,8 @@ namespace STV1
 
             // We set the timecrystal use to false.
             bool activeTimeCrystal = usedTC;
+            // Check if the pack could flee.
+            bool packMoved = false;
 
             // If a timecrystal has been used, we let the player attack each monster in the group.
             // Else the player will only attack the first monster in the group.
@@ -131,7 +133,17 @@ namespace STV1
             // If the accumulative HP of the pack is lower then the HP of the player,
             // move to the pack to the adjoining node.
             if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
-                pack.MovePack(connections[0]);
+            {
+                for (int i = 0; i < connections.Count; i++)
+                {
+                    if (connections[i].PackFitsInNode(pack) && connections[i].type != "exit" && connections[i].type != "start")
+                    {
+                        pack.MovePack(connections[i]);
+                        packMoved = true;
+                        break;
+                    }
+                }
+            }
 
             // Info for the player when the battle is being played out.
             Console.Clear();
@@ -140,8 +152,10 @@ namespace STV1
             foreach (Monster monster in pack.Monsters)
                 receivedDMG += monster.ATK;
             Console.WriteLine("You received " + receivedDMG + " damage, ouch!");
-            if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
+            if (packMoved)
                 Console.WriteLine("The pack fled from battle!");
+            else if (!packMoved)
+                Console.WriteLine("The pack couldn't flee from battle!");
         }
 
         /// <summary>
