@@ -31,6 +31,12 @@ namespace STV1
             {
                 DrawUI(); // Draw the UI.
 
+                // Check if the player is in combat or not.
+                if (player.Location.CheckInCombat())
+                    inCombat = true;
+                else
+                    inCombat = false;
+
                 // Get the input and clear the previous console window.
                 // Then use the new input to advance the game.
                 string input = GetInput();
@@ -45,11 +51,6 @@ namespace STV1
                     SaveGame(iArray[1]);
                 if (iArray[0] == "load")
                     LoadGame(iArray[1]);
-
-                if (player.Location.CheckInCombat())
-                    inCombat = true;
-                else
-                    inCombat = false;
 
                 if (input != "input not valid")
                 {
@@ -208,24 +209,17 @@ namespace STV1
             // and that it's a valid node. If it's valid, move the player to
             // that node.
             string[] i = input.Split(' ');
+
+            #region goto command
             if (i[0] == "goto")
             {
                 if(i.Length > 1)
                 {
                     int goToNode = -1;
-                    try
+                    try { goToNode = int.Parse(i[1]); } catch { }
+                    if (player.Location.connections.Exists(dest => dest.id == goToNode))
                     {
-                        goToNode = int.Parse(i[1]);
-                    }
-                    catch
-                    {
-                        Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.Write("Command invalid: given node isn't an integer.");
-                    }
-
-                    if (player.Location.connections.Exists(item => item.id == goToNode))
-                    {
-                        Node destination = player.Location.connections.First(item => item.id == goToNode);
+                        Node destination = player.Location.connections.First(n => n.id == goToNode);
                         if (destination.type == "exit")
                         {
                             player.Move(this.NextDungeon().nodes[0]);
@@ -252,23 +246,31 @@ namespace STV1
                     Console.Write("Command invalid: no destination node given.");
                 }
             }
+            #endregion
+
+            #region save command
             else if (i[0] == "save") 
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("Successfully saved the game");
             }
+            #endregion
+
+            #region load command
             else if (i[0] == "load")
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("Successfully loaded the game");
             }
+            #endregion
 
+            #region stay command
             else if (input == "stay")
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("You stay at your current location.");
-
             }
+            #endregion
 
             else
             {
