@@ -69,8 +69,8 @@ namespace STV1
                 if (monsters[i].IsDead)
                     monsters.Remove(monsters[i]);
 
-            //if (monsters.Count == 0)
-            //    PackLocation.RemovePack(this);
+           if (monsters.Count == 0)
+                PackLocation.RemovePack(this);
         }
 
         public void HandlePackAI(Player player, Dungeon dungeon)
