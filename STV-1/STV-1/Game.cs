@@ -140,6 +140,7 @@ namespace STV1
             Console.SetCursorPosition(curX, curY);
             for (int i = 0; i < player.Location.nodePacks.Count; i++ )
             {
+                Console.SetCursorPosition(curX, curY);
                 Console.Write("Pack nr: " + i);
                 curY++;
                 Console.SetCursorPosition(curX, curY);

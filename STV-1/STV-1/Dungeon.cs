@@ -206,13 +206,17 @@ namespace STV1
             int remainingMonsters = zoneMonsterNr;
             for (int i = 0; i < zonePackNr && remainingMonsters > 0; i++)
             {
-                int packLocation = rand.Next(0, curZone.Count() - 1);
-                Pack curPack = new Pack(zoneMonsterNr / zonePackNr, curZone[packLocation]);
-                if (curZone[packLocation].PackFitsInNode(curPack))
+                Node packLocation = curZone[rand.Next(0, curZone.Count() - 1)];
+                int packMonsterNr = zoneMonsterNr / zonePackNr;
+                int count = 0;
+                foreach(Pack p in packLocation.nodePacks){
+                    count += p.monsters.Count;
+                }
+                if (packLocation.MaxMonsters >= packMonsterNr + count)
                 {
+                    Pack curPack = new Pack(packMonsterNr, packLocation);
                     packs.Add(curPack);
                     remainingMonsters -= zoneMonsterNr / zonePackNr;
-                    i--;
                 }
             }
         }
