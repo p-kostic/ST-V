@@ -17,21 +17,35 @@ namespace STV1
         bool inCombat;
         int curSeed;
         Specification spec = new Specification();
+        bool play;
         string[] inputList;
+        List<string> saveInputList;
         int curCommand = 0;
 
         public int cursorInfoPos = 21;
 
         public Game()
         {
+            Console.SetWindowSize(80, 37);
+            Console.WriteLine("Type 'r' followed by a filename if you want to record a playthrough, and 'p' if you want to play an existing one");
+            string firstInput = Console.ReadLine();
+            if (firstInput[0] == 'r')
+                play = true;
+            else play = false;
+            Console.Clear();
+
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
             // The console window size.
-            Console.SetWindowSize(80, 37);
             string inputName = Console.ReadLine();
-            string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
-            inputList = File.ReadAllLines(location);
-
+            if (!play)
+            {
+                string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
+                inputList = File.ReadAllLines(location);
+            }
+            else {
+                saveInputList = new List<string>();
+            }
             // Game loop
             while (!quit)
             {
@@ -175,8 +189,24 @@ namespace STV1
         // and makes sure that it's a valid string.
         private string GetInput()
         {
-            string i = Console.ReadLine();
-            //string i = inputList[curCommand];
+            string i = "";
+            if (play)
+            {
+                i = Console.ReadLine();
+                saveInputList.Add(i);
+            }
+            else {
+                if (curCommand < inputList.Count())
+                {
+                    i = inputList[curCommand];
+                    curCommand++;
+                }
+                else {
+                    quit = true;
+                }
+                
+            }
+            
             string[] iArray = i.Split(' ');
             if (iArray[0] == "goto" || i == "stay" ||
                 i == "retreat" || i == "continue" || 
