@@ -191,6 +191,14 @@ namespace STV1
             return false;
         }
 
+        public int HowManyMonsters() {
+            int count = 0;
+            foreach(Pack p in nodePacks){
+                count += p.monsters.Count;
+            }
+            return count;
+        }
+
         public int MaxMonsters { get { return maxmonsters; } }
 
         public bool RepeatCombat { get { return repeatCombat; } }

@@ -17,6 +17,8 @@ namespace STV1
         bool inCombat;
         int curSeed;
         Specification spec = new Specification();
+        string[] inputList;
+        int curCommand = 0;
 
         public int cursorInfoPos = 21;
 
@@ -24,9 +26,11 @@ namespace STV1
         {
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
-            SaveGame("save");
             // The console window size.
             Console.SetWindowSize(80, 37);
+            string inputName = Console.ReadLine();
+            string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
+            inputList = File.ReadAllLines(location);
 
             // Game loop
             while (!quit)
@@ -172,6 +176,7 @@ namespace STV1
         private string GetInput()
         {
             string i = Console.ReadLine();
+            //string i = inputList[curCommand];
             string[] iArray = i.Split(' ');
             if (iArray[0] == "goto" || i == "stay" ||
                 i == "retreat" || i == "continue" || 
@@ -418,7 +423,7 @@ namespace STV1
             if (d == null)
                 throw new NullReferenceException("No dungeon to save");
 
-            //string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
             List<string> saveList = new List<string>();
             saveList.Add("" + level);
             saveList.Add("" + player.HP);
@@ -430,13 +435,14 @@ namespace STV1
             saveList.Add("" + potionCount);
             saveList.Add("" + crystalCount);
             saveList.Add("" + d.seed);
+            int temp = 0;
             foreach(Pack pack in d.packs){
                 saveList.Add("" + pack.monsters.Count);
                 saveList.Add("" + pack.PackLocation.id);
-                
+                temp++;
             }
-
-           // File.WriteAllLines(saveLocation, saveList);
+            
+            File.WriteAllLines(saveLocation, saveList);
         }
 
         void LoadGame(string fileName) {
@@ -449,10 +455,14 @@ namespace STV1
             Node playerLocation = d.GetNodeByID(int.Parse(loaded[4]));
             player = new Player(int.Parse(loaded[1]), int.Parse(loaded[2]), playerLocation, d);
             player.kp = int.Parse(loaded[3]);
-
-            for (int i = 7; i < loaded.Length - 1; i+=2 )
+            int temp = 0;
+            
+            for (int i = 8; i < loaded.Length - 1; i+=2 )
             {
-                d.packs.Add(new Pack(int.Parse(loaded[i]), d.GetNodeByID(int.Parse(loaded[i+1]))));
+                int monsterNr = int.Parse(loaded[i]);
+                Node destinationNode = d.GetNodeByID(int.Parse(loaded[i+1]));
+                d.packs.Add(new Pack(monsterNr, d.GetNodeByID(int.Parse(loaded[i+1]))));
+                temp++;
             }
         }
 
