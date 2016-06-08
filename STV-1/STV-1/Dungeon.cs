@@ -43,8 +43,9 @@ namespace STV1
             }
             nodes[nodes.Count() - 1].type = "exit"; // Make the last bridge the exit node
 
-            /*for (int i = 0; i < nodes.Count(); i++) // Code snippet to print legible map of the dungeon
-            {
+
+            // Code snippet to print legible map of the dungeon
+            /*for (int i = 0; i < nodes.Count(); i++) 
                 Console.WriteLine(nodes[i].type + " " + nodes[i].id + " lvl: " + nodes[i].level);
                 for (int j = 0; j < nodes[i].connections.Count(); j++)
                 {
@@ -209,7 +210,8 @@ namespace STV1
                 Node packLocation = curZone[rand.Next(0, curZone.Count() - 1)];
                 int packMonsterNr = zoneMonsterNr / zonePackNr;
                 int count = 0;
-                foreach(Pack p in packLocation.nodePacks){
+                foreach (Pack p in packLocation.nodePacks)
+                {
                     count += p.monsters.Count;
                 }
                 if (packLocation.MaxMonsters >= packMonsterNr + count)
@@ -238,9 +240,7 @@ namespace STV1
             foreach (Node curNode in toRemove)
             {
                 if (nodes.Contains(curNode))
-                {
                     nodes.Remove(curNode);
-                }
             }
 
             foreach (Node curNode in nodes)
@@ -248,9 +248,7 @@ namespace STV1
                 for (int i = 0; i < curNode.connections.Count; i++)
                 {
                     if (curNode.connections[i].id <= b.id)
-                    {
                         curNode.connections.RemoveAt(i);
-                    }
                 }
             }
         }
@@ -261,13 +259,9 @@ namespace STV1
             foreach (Node n in nodes)
             {
                 if (n.id == id)
-                {
                     return n;
-                }
             }
-
             throw new NullReferenceException("Node not found");
-
         }
 
         public Node GetStart { get { return startNode; } }
