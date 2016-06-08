@@ -12,7 +12,6 @@ namespace STV1
         public List<Node> connections;
 
         private int maxmonsters;
-        private bool repeatCombat;
 
         public int level;
         public string type;
@@ -63,6 +62,7 @@ namespace STV1
         /// <param name="pack">The pack that is to be removed</param>
         public void RemovePack(Pack pack)
         {
+            if (nodePacks.Contains(pack))
                 nodePacks.Remove(pack);
         }
 
@@ -122,25 +122,26 @@ namespace STV1
                 dealtDMG = player.ATK;
             }
 
-            Console.WriteLine("You dealt " + dealtDMG + " damage on the pack!");
-
             // We update the pack to see if it died and whatnot.
             pack.UpdatePack();
 
             // Let the pack attack the player.
             pack.PackAttack(nodePlayer);
 
-            foreach (Monster monster in pack.Monsters)
-                receivedDMG += monster.ATK;
-            Console.WriteLine("You received " + receivedDMG + " damage, ouch!");
-
             // If the accumulative HP of the pack is lower then the HP of the player,
             // move to the pack to the adjoining node.
             if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
-            {
                 pack.MovePack(connections[0]);
+
+            // Info for the player when the battle is being played out.
+            Console.Clear();
+            Game.DrawUI();
+            Console.WriteLine("You dealt " + dealtDMG + " damage on the pack!");
+            foreach (Monster monster in pack.Monsters)
+                receivedDMG += monster.ATK;
+            Console.WriteLine("You received " + receivedDMG + " damage, ouch!");
+            if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
                 Console.WriteLine("The pack fled from battle!");
-            }
         }
 
         /// <summary>
@@ -200,7 +201,5 @@ namespace STV1
         }
 
         public int MaxMonsters { get { return maxmonsters; } }
-
-        public bool RepeatCombat { get { return repeatCombat; } }
     }
 }
