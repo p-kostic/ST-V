@@ -85,9 +85,10 @@ namespace STV1
                     Console.Write("The given input was not valid.");
                 }
 
-                // Test specifications each turn
-                if (!spec.TestSpecifications(d))
-                    throw new Exception("kappa");    
+
+                spec.TestSpecifications(d);
+
+
             }
             string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + inputName + ".txt";
             File.WriteAllLines(saveLocation, saveInputList);
