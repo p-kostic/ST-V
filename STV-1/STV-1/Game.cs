@@ -133,7 +133,7 @@ namespace STV1
             Console.Write("Time Crystals  : " + crystalCount);
 
             int curX = 0;
-            int curY = 10;
+            int curY = 9;
             Console.SetCursorPosition(curX, curY);
             Console.Write("Paths from this node:");
             curY++;

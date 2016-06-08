@@ -70,7 +70,7 @@ namespace STV1
                     monsters.Remove(monsters[i]);
 
             if (monsters.Count == 0)
-                this.PackLocation.RemovePack(this);
+                PackLocation.RemovePack(this);
         }
 
         public void HandlePackAI(Player player, Dungeon dungeon)
