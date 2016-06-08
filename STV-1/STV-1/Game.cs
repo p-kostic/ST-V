@@ -286,13 +286,13 @@ namespace STV1
                     Console.Write("Command invalid: not in a combat situation.");
                 }
             }
-            
             // Move the packs this turn accordingly after a player action 
             foreach (Node node in d.nodes)
                 foreach (Pack pack in node.nodePacks)
                 {
                     pack.HandlePackAI(player, d);
                 }
+
         }
 
         private void HandleCombat(string input)

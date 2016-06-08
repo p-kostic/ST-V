@@ -83,13 +83,15 @@ namespace STV1
                     paths.Add(dungeon.FindShortestPath(PackLocation, node));
             }
 
-            List<Node> closestPath = paths.OrderByDescending(x => x.Count).ElementAt(paths.Count - 1);
+            List<Node> closestBridge = paths.OrderByDescending(x => x.Count).ElementAt(paths.Count - 1);
             List<Node> pathToPlayer = dungeon.FindShortestPath(this.PackLocation, player.Location);
 
-            if (pathToPlayer.Count <= closestPath.Count)
+            // If the player is closer to the pack than the closest bridge node, we move to the player
+            if (pathToPlayer.Count <= closestBridge.Count)
                 this.MovePack(pathToPlayer[0]);
+            // else, we move to the closest bridge
             else
-                this.MovePack(closestPath[0]);
+                this.MovePack(closestBridge[0]);
 
         }
 

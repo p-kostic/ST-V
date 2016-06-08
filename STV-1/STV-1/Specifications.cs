@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,9 @@ namespace STV_1
                     count += pack.monsters.Count;
                 }
                 if (n.MaxMonsters < count)
+                {
                     return false;
+                }
             }
             return true;
         }
