@@ -122,8 +122,7 @@ namespace STV1
                 dealtDMG = player.ATK;
             }
 
-            // We update the pack to see if it died and whatnot.
-            pack.UpdatePack();
+            
 
             // Let the pack attack the player.
             pack.PackAttack(nodePlayer);
@@ -134,14 +133,17 @@ namespace STV1
                 pack.MovePack(connections[0]);
 
             // Info for the player when the battle is being played out.
-            Console.Clear();
-            Game.DrawUI();
+            //Console.Clear();
+            //Game.DrawUI();
             Console.WriteLine("You dealt " + dealtDMG + " damage on the pack!");
             foreach (Monster monster in pack.Monsters)
                 receivedDMG += monster.ATK;
             Console.WriteLine("You received " + receivedDMG + " damage, ouch!");
             if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
                 Console.WriteLine("The pack fled from battle!");
+
+            // We update the pack to see if it died and whatnot.
+            pack.UpdatePack();
         }
 
         /// <summary>

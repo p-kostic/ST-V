@@ -10,12 +10,14 @@ namespace STV_1
 {
     public class Specification
     {
+
+
         public bool TestSpecifications(Dungeon d)
         {
             bool AllTest = true;
 
             AllTest &= SpecificationTestDungeonMonsters(d);
-            AllTest &= SpecificationTestLeaveZones(d);
+            //AllTest &= SpecificationTestLeaveZones(d);
 
             return AllTest;
         }
@@ -23,17 +25,22 @@ namespace STV_1
         // #############################[   1   ]############################################
         // In any state s along a play, the number of monsters in every node u in s does not
         // exceed its capacity.
+        bool cap = true;
+        bool zero = false;
+        bool low = false;
+        bool high = false;
+        bool zeroN = false;
+        bool partial = false;
+        bool full = false;
 
+        bool entered = false;
+        bool left = false;
 
-        public static bool SpecificationTestDungeonMonsters(Dungeon d)
+        Dictionary<Pack, Node> prevLocations = new Dictionary<Pack, Node>();
+        int lastDungeonLevel = -1;
+        public bool SpecificationTestDungeonMonsters(Dungeon d)
         {
-            bool cap = true;
-            bool zero = false;
-            bool low = false;
-            bool high = false;
-            bool zeroN = false;
-            bool partial = false;
-            bool full = false;
+
 
             //----------- [General] Test Node capacity -------------//
             foreach (Node n in d.nodes)
@@ -71,12 +78,35 @@ namespace STV_1
             //-----------[C] Test Node Movement -------------// 
             // pack movement, all four of disjoint combinations of: there is (or not) pack entering u
             // and there is (or not) a pack leaving u.
-            List<Tuple<Pack, Node>> lastLocation = new List<Tuple<Pack, Node>>();
-            int lastDungeonLevel;
+            if(d.level != this.lastDungeonLevel){
+                prevLocations.Clear();
+                lastDungeonLevel = d.level;
+            }
+            else
+            {
+                if (prevLocations.Count == 0)
+                {
+                    for (int i = 0; i < d.packs.Count; i++)
+                    {
+                        prevLocations[d.packs[i]] = d.packs[i].PackLocation;
+                    }
+                }
 
+                foreach(Node n in d.nodes){
+                    foreach(Pack p in n.nodePacks){
+                        if (prevLocations[p] != n)
+                            entered = true;
+                    }
 
+                    foreach(Pack p in n.nodePacks){
+                        if (prevLocations[p] == n && p.PackLocation != n)
+                            left = true;
+                    }
+                }
 
-            return cap & zeroN & low & high & zero & partial & full;
+            }
+
+            return cap & zeroN & low & high & zero & partial & full & entered & left;
         }
 
         // #############################[   2   ]############################################
