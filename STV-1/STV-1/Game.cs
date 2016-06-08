@@ -88,7 +88,9 @@ namespace STV1
                 // Test specifications each turn
                 if (!spec.TestSpecifications(d))
                     throw new Exception("kappa");    
-            }         
+            }
+            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + inputName + ".txt";
+            File.WriteAllLines(saveLocation, saveInputList);
         }
 
         public Dungeon NextDungeon()
