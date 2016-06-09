@@ -11,8 +11,6 @@ namespace STV_1
 {
     public class Specification
     {
-
-
         public bool TestSpecifications(Dungeon d, Player p)
         {
             bool AllTest = true;
@@ -172,6 +170,8 @@ namespace STV_1
         private int previousZone = -1;
         public bool SpecificationTestDistanceZone(Dungeon d, Player player)
         {
+
+            //-----------[General] Distance between monster and player never increases -------------// 
             if (player.Location.level != previousZone)
             {
                 distanceToPlayer.Clear();
@@ -197,6 +197,17 @@ namespace STV_1
                     }
                 }
             }
+
+            //------------[A] The zone’s location (first, middle, last). ----------------//
+
+
+
+            //------------[B] the player’s location (just entering the bridge at the end of the zone, ----------------//
+            //-------------                       remaining on that bridge, not yet on that bridge).  ----------------//
+
+            //------------[C] the player’s movement (moving towards the                                      ----------------//
+            //------------  bridge at the end of the zone, moving away from that bridge, stay on its place). ----------------//
+
 
             return first3 & middle3 & last3 & entering3 & remaining3 & notEntered3 & towards3 & awayFrom3 & stay3;
         }
