@@ -63,7 +63,9 @@ namespace STV1
         public void RemovePack(Pack pack)
         {
             if (nodePacks.Contains(pack))
+            {
                 nodePacks.Remove(pack);
+            }
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace STV1
 
             // If the accumulative HP of the pack is lower then the HP of the player,
             // move to the pack to the adjoining node.
-            if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
+            if (pack.PackHP < nodePlayer.HP && connections.Count > 0 && pack.monsters.Count > 0)
             {
                 for (int i = 0; i < connections.Count; i++)
                 {
@@ -146,13 +148,11 @@ namespace STV1
             }
 
             // Info for the player when the battle is being played out.
-            Console.Clear();
-            Game.DrawUI();
             Console.WriteLine("You dealt " + dealtDMG + " damage on the pack!");
             foreach (Monster monster in pack.Monsters)
                 receivedDMG += monster.ATK;
             Console.WriteLine("You received " + receivedDMG + " damage, ouch!");
-            if (packMoved)
+            if (packMoved && pack.PackHP > 0)
                 Console.WriteLine("The pack fled from battle!");
             else if (!packMoved)
                 Console.WriteLine("The pack couldn't flee from battle!");

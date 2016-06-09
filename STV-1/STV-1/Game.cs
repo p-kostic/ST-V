@@ -88,13 +88,20 @@ namespace STV1
                 // Test specifications each turn
                 //if (!spec.TestSpecifications(d))
                 //    throw new Exception("kappa");    
-            }         
+            }
+            if (play)
+            {
+                string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\" + inputName + ".txt";
+                File.WriteAllLines(saveLocation, saveInputList);
+            }
         }
 
         public Dungeon NextDungeon()
         {
             Random rand = new Random();
             curSeed = rand.Next(0, 1000);
+            Node.idCounter = 0;
             if (d == null)
             {
                 d = new Dungeon(1);
@@ -112,7 +119,7 @@ namespace STV1
             return d;
         }
 
-        public static void DrawUI() {
+        public void DrawUI() {
             Console.SetCursorPosition(0,0);
             Console.Write("HP : " + player.HP);
             Console.SetCursorPosition(0,1);
@@ -132,17 +139,17 @@ namespace STV1
             int curX = 0;
             int curY = 10;
             Console.SetCursorPosition(curX, curY);
-            Console.Write("Paths from this node:");
+            Console.Write("Paths from this node: " + player.Location.connections.Count);
             curY++;
             Console.SetCursorPosition(curX, curY);
             for (int i = 0; i < player.Location.connections.Count; i++ )
             {
-                Console.Write(player.Location.connections[i].id + ", type: " + player.Location.connections[i].type);
-                Console.SetCursorPosition(curX, curY + i);
+                Console.WriteLine(player.Location.connections[i].id + ", type: " + player.Location.connections[i].type);
+                // Console.SetCursorPosition(curX, curY + i);
             }
 
             Console.SetCursorPosition(25, 14);
-            Console.Write("Current level: " + player.Location.level);
+            Console.Write("Current level: " + d.level);
             Console.SetCursorPosition(25, 15);
             Console.Write("Visited nodes: " + player.VisitedList(level));
             Console.SetCursorPosition(25, 16);
@@ -264,7 +271,9 @@ namespace STV1
                         Node destination = player.Location.connections.First(n => n.id == goToNode);
                         if (destination.type == "exit")
                         {
-                            player.Move(this.NextDungeon().nodes[0]);
+                            d = NextDungeon();
+                            player.Move(d.nodes[0]);
+                            
                             Console.SetCursorPosition(0, cursorInfoPos);
                             Console.Write("Welcome to level " + d.level + ". This is node " + d.nodes[0].id);
                             // TODO: Current node en d.nodes[0].id geven nog niet de goede node weer als we naar het volgende level gaan
