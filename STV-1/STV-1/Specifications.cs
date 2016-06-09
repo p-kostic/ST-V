@@ -17,7 +17,7 @@ namespace STV_1
             bool AllTest = true;
 
             AllTest &= SpecificationTestDungeonMonsters(d);
-            //AllTest &= SpecificationTestLeaveZones(d);
+            AllTest &= SpecificationTestLeaveZones(d);
 
             return AllTest;
         }
@@ -78,42 +78,66 @@ namespace STV_1
             //-----------[C] Test Node Movement -------------// 
             // pack movement, all four of disjoint combinations of: there is (or not) pack entering u
             // and there is (or not) a pack leaving u.
-            if(d.level != this.lastDungeonLevel){
+            if (d.level != this.lastDungeonLevel)
+            {
                 prevLocations.Clear();
                 lastDungeonLevel = d.level;
             }
             else
             {
                 if (prevLocations.Count == 0)
-                {
-                    for (int i = 0; i < d.packs.Count; i++)
-                    {
-                        prevLocations[d.packs[i]] = d.packs[i].PackLocation;
-                    }
-                }
+                    foreach (Pack t in d.packs)
+                        prevLocations[t] = t.PackLocation;
 
-                foreach(Node n in d.nodes){
-                    foreach(Pack p in n.nodePacks){
+
+                foreach (Node n in d.nodes)
+                {
+                    foreach (Pack p in n.nodePacks)
                         if (prevLocations[p] != n)
                             entered = true;
-                    }
 
-                    foreach(Pack p in n.nodePacks){
+
+                    foreach (Pack p in n.nodePacks)
                         if (prevLocations[p] == n && p.PackLocation != n)
                             left = true;
-                    }
                 }
-
             }
-
             return cap & zeroN & low & high & zero & partial & full & entered & left;
         }
 
+        Dictionary<Pack, int> startingLevels = new Dictionary<Pack, int>();
+        private bool general = true;
+        private bool first, middle, last = false;
+        private bool fleeing, moving = false;
+        private bool onBridge, notOnBridge = false;
+        int lastDungeonLevel2 = -1;
         // #############################[   2   ]############################################
         // Every monster pack never leaves its zone
-        public static bool SpecificationTestLeaveZones(Dungeon d)
+        public bool SpecificationTestLeaveZones(Dungeon d)
         {
-            throw new NotImplementedException();
+            //-----------[General] Never leaves its own zone -------------// 
+            if (d.level != this.lastDungeonLevel2)
+            {
+                foreach (Pack p in d.packs)
+                    startingLevels[p] = p.PackLocation.level;
+
+                lastDungeonLevel = d.level;
+            }
+            else
+            {
+                foreach (Pack p in d.packs)
+                    if (p.PackLocation.level != startingLevels[p])
+                        general = false;
+            }
+
+            //-----------[A] The Zone's position n (first, middle, last). -------------// 
+
+
+            //-----------[B] The monster's action n (fleeing a combat, just moving). -------------// 
+
+            //-----------[C] the monster's location (on a bridge, not on a bridge). -------------// 
+
+            return general & first & middle & last & fleeing & moving & onBridge & notOnBridge;
         }
 
         // #############################[   3   ]############################################

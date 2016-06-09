@@ -100,7 +100,7 @@ namespace STV1
             curSeed = rand.Next(0, 1000);
             if (d == null)
             {
-                d = new Dungeon(1, curSeed);
+                d = new Dungeon(1);
                 d.GenerateDungeon(1);
                 level = 1;
                 player = new Player(50, 5, d.nodes[0], d);
@@ -108,7 +108,7 @@ namespace STV1
             else
             {
                 level++;
-                d = new Dungeon(level, curSeed);
+                d = new Dungeon(level);
                 d.GenerateDungeon(level);
                 player.Location = d.nodes[0];
             }
@@ -396,15 +396,29 @@ namespace STV1
                             else
                                 Console.WriteLine("Action not valid! Choose 'hp' or 'tc'."); 
                         }
-
-                        player.Location.DoCombatRound(player.Location.nodePacks[0], player, usedTC);
+                        for (int i = 0; i < player.Location.nodePacks.Count; i++)
+                        {
+                            if (player.Location.nodePacks.Count > 0)
+                            {
+                                player.Location.DoCombatRound(player.Location.nodePacks[i], player, usedTC);
+                                break;
+                            }
+                        }
                     }
                     #endregion
 
                     else if (action == "n")
                     {
                         validAction = true;
-                        player.Location.DoCombatRound(player.Location.nodePacks[0], player, usedTC);
+                        for (int i = 0; i < player.Location.nodePacks.Count; i++)
+                        {
+                            if (player.Location.nodePacks.Count > 0)
+                            {
+                                player.Location.DoCombatRound(player.Location.nodePacks[i], player, usedTC);
+                                break;
+                            }
+                        }
+
                     }
 
                     else { Console.WriteLine("Action not valid! Choose 'y' or 'n'."); }

@@ -70,9 +70,10 @@ namespace STV1
             for (int i = monsters.Count - 1; i > -1; i--)
             {
                 if (monsters[i].IsDead)
-                    monsters.Remove(monsters[i]);
-                if (monsters.Count == 1) // Save the last location (see PackLocation)
+                {
                     rememberedLocation = monsters[0].Location;
+                    monsters.Remove(monsters[i]); // Save the last location (see PackLocation) 
+                }
             }
 
             if (monsters.Count == 0)

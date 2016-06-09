@@ -113,16 +113,23 @@ namespace STV1
             if (activeTimeCrystal)
                 foreach (Monster monster in pack.Monsters)
                 {
-                    nodePlayer.Attack(monster);
-                    dealtDMG += player.ATK;
+                    if (pack.monsters.Count > 0)
+                    {
+                        nodePlayer.Attack(monster);
+                        dealtDMG += player.ATK;
+                    }
                 }
             else
             {
-                nodePlayer.Attack(pack.Monsters[0]);
-                dealtDMG = player.ATK;
+                if (pack.monsters.Count > 0)
+                {
+                    nodePlayer.Attack(pack.Monsters[0]);
+                    dealtDMG = player.ATK;
+                }
             }
 
-            
+            // We update the pack to see if it died and whatnot.
+            pack.UpdatePack();
 
             // Let the pack attack the player.
             pack.PackAttack(nodePlayer);
@@ -142,8 +149,7 @@ namespace STV1
             if (pack.PackHP < nodePlayer.HP && connections.Count > 0)
                 Console.WriteLine("The pack fled from battle!");
 
-            // We update the pack to see if it died and whatnot.
-            pack.UpdatePack();
+
         }
 
         /// <summary>
