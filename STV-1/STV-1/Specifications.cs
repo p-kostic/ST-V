@@ -160,8 +160,7 @@ namespace STV_1
 
         // #############################[   3   ]############################################
         // Suppose Z is the player’s current zone. At every turn, and while the player is still in Z, the
-        // distance between every monster pack in Z to either the player or the bridge at the zone’s
-        // end should not increase
+        // distance between every monster pack in Z to the player should not increase
         private bool first3, middle3, last3 = false;
         private bool entering3, remaining3, notEntered3 = false;
         private bool towards3, awayFrom3, stay3 = false;
@@ -180,7 +179,7 @@ namespace STV_1
                 {
                     if (p.PackLocation.level == player.Location.level)
                     {
-                        // If we enter a zone, we add all the distances of the pack to the player to the dictionary
+                        // If we enter a zone, we add all the distances of the packs to the player to the dictionary
                         int curDistanceToPlayer = d.FindShortestPath(p.PackLocation, player.Location).Count;
                         distanceToPlayer[p] = curDistanceToPlayer;
                     }

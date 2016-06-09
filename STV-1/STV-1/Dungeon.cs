@@ -45,13 +45,13 @@ namespace STV1
 
 
             // Code snippet to print legible map of the dungeon
-            /*for (int i = 0; i < nodes.Count(); i++) 
+            for (int i = 0; i < nodes.Count(); i++){
                 Console.WriteLine(nodes[i].type + " " + nodes[i].id + " lvl: " + nodes[i].level);
                 for (int j = 0; j < nodes[i].connections.Count(); j++)
                 {
                     Console.WriteLine("  " + nodes[i].connections[j].type + " " + nodes[i].connections[j].id);
                 }
-            }*/
+            }
 
 
         }

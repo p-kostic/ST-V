@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using STV_1;
+using System.Reflection;
 
 namespace STV1
 {
@@ -21,13 +22,25 @@ namespace STV1
         string[] inputList;
         List<string> saveInputList;
         int curCommand = 0;
+        string path;
+        string finalPath = "";
 
         public int cursorInfoPos = 21;
 
         public Game()
         {
+            path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string[] p = path.Split('\\');
+            for (int i = 0; i < p.Length - 2; i++ ) {
+                finalPath += p[i] + "\\";
+            }
+            
+
             Console.SetWindowSize(80, 37);
             Console.WriteLine("Type 'r' followed by a filename if you want to record a playthrough, and 'p' if you want to play an existing one");
+            Console.WriteLine(path);
+            Console.WriteLine(finalPath);
+
             string firstInput = Console.ReadLine();
             if (firstInput[0] == 'r')
                 play = true;
@@ -40,7 +53,7 @@ namespace STV1
             string inputName = Console.ReadLine();
             if (!play)
             {
-                string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
+                string location = finalPath + inputName + ".txt";
                 inputList = File.ReadAllLines(location);
             }
             else
@@ -90,12 +103,11 @@ namespace STV1
                 spec.TestSpecifications(d, player);
             }
             if(!spec.TestSpecifications(d, player))
-                throw new Exception("KAPPASTORM");
+                //throw new Exception("KAPPASTORM");
 
             if (play)
             {
-                string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
+                string saveLocation = finalPath + "\\inputlists\\" + inputName + ".txt";
                 File.WriteAllLines(saveLocation, saveInputList);
             }
         }
@@ -505,10 +517,11 @@ namespace STV1
 
         void LoadGame(string fileName)
         {
-            string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            string location = finalPath + fileName + ".txt";
             string[] loaded = File.ReadAllLines(location);
             level = int.Parse(loaded[0]);
             Node.idCounter = 0;
+            string seed = loaded[7];
             d = new Dungeon(level, int.Parse(loaded[7]));
             d.GenerateDungeon(level, false);
             Node playerLocation = d.GetNodeByID(int.Parse(loaded[4]));
@@ -521,6 +534,7 @@ namespace STV1
                 int monsterNr = int.Parse(loaded[i]);
                 Node destinationNode = d.GetNodeByID(int.Parse(loaded[i + 1]));
                 d.packs.Add(new Pack(monsterNr, d.GetNodeByID(int.Parse(loaded[i + 1]))));
+
                 temp++;
             }
         }
