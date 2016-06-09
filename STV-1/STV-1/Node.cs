@@ -171,7 +171,7 @@ namespace STV1
             {
                 amountOfMonsters += p.PackSize;
             }
-            return maxmonsters - (amountOfMonsters + pack.PackSize) >= 0;
+            return maxmonsters - (amountOfMonsters + pack.PackSize) >= 0; //
         }
 
         /// <summary>
