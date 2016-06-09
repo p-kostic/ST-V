@@ -1,0 +1,73 @@
+got 1
+goto 1
+goto 3
+continue
+n
+retreat
+goto 3
+continue
+n
+goto 1
+continue
+n
+
+continue
+n
+goto 5
+goto 2
+goto 5
+goto 1
+goto 4
+goto 1
+goto 4
+goto 1
+goto 4
+goto 6
+stay
+stay
+stay
+goto 4
+stay
+stay
+goto 6
+goto 7
+goto 12
+goto 3
+continue
+n
+continue
+y
+hp
+goto 1
+goto 4
+goto1
+goto1
+goto 1
+goto 3
+stay
+stay
+stay
+goto 1
+goto 5
+continue
+n
+goto 2
+goto 5
+goto 1
+goto 4
+goto 6
+stay
+stay
+stay
+goto 7
+goto 9
+continue
+y
+tc
+goto 11
+goto 13
+continue
+y
+tc
+goto 17
+quit

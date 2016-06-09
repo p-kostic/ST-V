@@ -15,8 +15,10 @@ namespace STV_1
         {
             bool AllTest = true;
 
-            AllTest &= SpecificationTestDungeonMonsters(d);
-            AllTest &= SpecificationTestLeaveZones(d);
+           AllTest &= SpecificationTestDungeonMonsters(d); //1
+           AllTest &= SpecificationTestLeaveZones(d);      //2
+           AllTest &= SpecificationTestSurvival(d, p);     //5
+           AllTest &= SpecificationTestDistanceZone(d, p); //3
 
             return AllTest;
         }
@@ -198,7 +200,7 @@ namespace STV_1
 
         // #############################[   3   ]############################################
         // Suppose Z is the player’s current zone. At every turn, and while the player is still in Z, the
-        // distance between every monster pack in Z to either the player or the bridge at the zone’s
+        // distance between every monster pack in Z to player at the zone’s
         // end should not increase
         private bool first3, middle3, last3 = false;
         private bool entering3, remaining3, notEntered3 = false;
@@ -229,16 +231,14 @@ namespace STV_1
                 foreach (Pack p in d.packs)
                 {
                     int curDistanceToPlayer = d.FindShortestPath(p.PackLocation, player.Location).Count;
-                    if (curDistanceToPlayer > distanceToPlayer[p])
-                    {
-                        general3 = false;
-                    }
+                    // if (curDistanceToPlayer > distanceToPlayer[]) TODO: FIX
+                    //{
+                    general3 = false;
+                    //}
                 }
             }
 
             //------------[A] The zone’s location (first, middle, last). ----------------//
-
-
 
             //------------[B] the player’s location (just entering the bridge at the end of the zone, ----------------//
             //-------------                       remaining on that bridge, not yet on that bridge).  ----------------//
@@ -300,11 +300,13 @@ namespace STV_1
         int lastLevel = -1;
         int goalCombats = 0;
         int combatCount = 0;
+        private bool general5;
         List<Pack> alreadyFought = new List<Pack>();
-        
+
         public bool SpecificationTestSurvival(Dungeon d, Player player)
         {
-            if(lastLevel < d.level){
+            if (lastLevel < d.level)
+            {
                 goalCombats = d.level + 1;
                 lastLevel = d.level;
                 combatCount = 0;
@@ -313,13 +315,17 @@ namespace STV_1
                 {
                     return true;
                 }
-                else {
+                else
+                {
+                    Debug.WriteLine("###### Specification 5's general test failed! Not enough combats have been played.  ########");
                     return false;
                 }
             }
 
-            foreach(Pack p in d.packs){
-                if(p.PackLocation == player.Location && !alreadyFought.Contains(p)){
+            foreach (Pack p in d.packs)
+            {
+                if (p.PackLocation == player.Location && !alreadyFought.Contains(p))
+                {
                     combatCount++;
                     alreadyFought.Add(p);
                 }

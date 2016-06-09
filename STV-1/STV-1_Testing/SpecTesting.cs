@@ -17,7 +17,7 @@ namespace STV_1_Testing
         public void SpecTestingAll()
         {
             // Specify the name of the file you want to test using Visual Studio's unit testing without the txt here.
-            Game game = new Game(false, "meme");
+            Game game = new Game(false, "besttest");
         }
     }
 }
