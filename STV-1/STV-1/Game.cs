@@ -90,8 +90,8 @@ namespace STV1
                 // Test specifications each turn
                 spec.TestSpecifications(d, player);
             }
-            //if (!spec.TestSpecifications(d, player))
-             //   throw new Exception("Not all boolean specifications returned true, refer to the Visual Studio debugger to know which ones.");
+            if (!spec.TestSpecifications(d, player))
+                throw new Exception("Not all boolean specifications returned true, refer to the Visual Studio debugger to know which ones.");
 
             if (play)
             {
