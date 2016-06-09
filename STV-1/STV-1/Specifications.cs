@@ -257,8 +257,38 @@ namespace STV_1
         // use of a time crystal on a bridge, The sum of:
         // player.KP + total number of monsters in s remains constant.
         // This time, define your own black box coverage criterion.
-        public static bool SpecificationTestTimeCrystalDistance(Dungeon d)
+        int prevTcCount = 0;
+        int k = 0;
+        int prevK = 0;
+        int sum = 0;
+        int prevSum = 0;
+        public bool SpecificationTestTimeCrystalDistance(Dungeon d, Player player)
         {
+            /*int curCount = player.inventory.Count(s => s.ItemType() == "TimeCrystal");
+            if(prevTcCount > curCount){ // Check if a TC was used this turn
+                k++;
+            }
+            prevTcCount = curCount;
+
+            int monsterCount = 0;
+            foreach(Pack p in d.packs){
+                monsterCount += p.monsters.Count;
+            }
+
+            sum = player.kp + monsterCount;
+            if (k > prevK)
+            {
+                prevK = k;
+                prevSum = sum;
+                return true;
+            }
+            else {
+                if (prevSum != sum)
+                {
+                    return false;
+                }
+            }
+            return true;*/
             throw new NotImplementedException();
         }
 
@@ -267,9 +297,35 @@ namespace STV_1
         // a dungeon of level L, the player must be confronted with at least L+1 unique combats
         // (combats against different packs) before he can reach the exit.
         // Come up with your own black box coverage criterion.
-        public static bool SpecificationTestSurvival(Dungeon d)
+        int lastLevel = -1;
+        int goalCombats = 0;
+        int combatCount = 0;
+        List<Pack> alreadyFought = new List<Pack>();
+        
+        public bool SpecificationTestSurvival(Dungeon d, Player player)
         {
-            throw new NotImplementedException();
+            if(lastLevel < d.level){
+                goalCombats = d.level + 1;
+                lastLevel = d.level;
+                combatCount = 0;
+                alreadyFought.Clear();
+                if (combatCount > goalCombats)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            foreach(Pack p in d.packs){
+                if(p.PackLocation == player.Location && !alreadyFought.Contains(p)){
+                    combatCount++;
+                    alreadyFought.Add(p);
+                }
+            }
+
+            return true;
         }
 
     }

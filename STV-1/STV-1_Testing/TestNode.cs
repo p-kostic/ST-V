@@ -174,5 +174,33 @@ namespace STV_1_Testing
             // The pack should have fled to the other node.
             Assert.IsTrue(pack.PackLocation == node2);
         }
+
+        [TestMethod]
+        public void TestHowManyMonsters()
+        {
+            // Create the packs and a starting point.
+            Node s = new Node(1, 1);
+            Pack p1 = new Pack(5, s);
+            Pack p2 = new Pack(5, s);
+
+            // Place the packs in a new node.
+            Node n = new Node(1, 1);
+            n.AddPack(p1);
+            n.AddPack(p2);
+
+            // The method should return 10 (5 * 2)
+            Assert.AreEqual(2, n.HowManyPacks());
+        }
+
+        [TestMethod]
+        public void CheckInCombat2()
+        {
+            Dungeon d = new Dungeon(2);
+            Node n = new Node(1, 1);
+            Player p = new Player(10, 5, n, d);
+
+            // Combat should be false.
+            Assert.IsFalse(n.CheckInCombat());
+        }
     }
 }

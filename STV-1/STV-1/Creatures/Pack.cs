@@ -138,10 +138,7 @@ namespace STV1
             {
                 if (monsters.Count > 0)
                     return monsters[0].Location;
-                else if (monsters.Count == 0)
-                    return rememberedLocation;
-                else
-                    throw new NullReferenceException("MEMEMEME");
+                return rememberedLocation;
             }
         }
         public List<Monster> Monsters { get { return monsters; } }

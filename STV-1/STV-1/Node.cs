@@ -173,7 +173,7 @@ namespace STV1
             {
                 amountOfMonsters += p.PackSize;
             }
-            return maxmonsters - (amountOfMonsters + pack.PackSize) >= 0; //
+            return maxmonsters - (amountOfMonsters + pack.PackSize) >= 0;
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace STV1
             return false;
         }
 
-        public int HowManyMonsters() {
+        public int HowManyPacks() {
             int count = 0;
             foreach(Pack p in nodePacks){
                 count += p.monsters.Count;

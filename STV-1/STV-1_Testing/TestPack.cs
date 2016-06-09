@@ -182,5 +182,19 @@ namespace STV_1_Testing
             p.UpdatePack();
             Assert.IsNotNull(p.PackLocation);
         }
+
+        [TestMethod]
+        public void TestHandlePackAI()
+        {
+            Dungeon d = new Dungeon(1);
+            d.GenerateDungeon(1, false);
+            Player p = new Player(10, 2, d.nodes[0], d);
+            Pack packie = new Pack(5, d.nodes[2]);
+
+            packie.HandlePackAI(p, d);
+
+            // The pack shouldn't move to the player.
+            Assert.IsFalse(packie.PackLocation != d.nodes[2]);
+        }
     }
 }
