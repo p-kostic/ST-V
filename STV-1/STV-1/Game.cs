@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,26 +28,14 @@ namespace STV1
 
         public int cursorInfoPos = 21;
 
-        public Game(bool play, string recordedName, bool isTesting = true)
+        public Game(bool play, string inputName, bool isTesting = true)
         {
             path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             string[] p = path.Split('\\');
             for (int i = 0; i < p.Length - 2; i++ ) {
                 finalPath += p[i] + "\\";
             }
-            
-
-            Console.SetWindowSize(80, 37);
-            Console.WriteLine("Type 'r' followed by a filename if you want to record a playthrough, and 'p' if you want to play an existing one");
-            Console.WriteLine(path);
-            Console.WriteLine(finalPath);
-
-            string firstInput = Console.ReadLine();
-            if (firstInput[0] == 'r')
-                play = true;
-            else play = false;
-            Console.Clear();
-
+         
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
             
