@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,6 @@ namespace STV1
     {
         public List<Monster> monsters; // A list to hold all the monsters.
         public Node packStartLocation;
-        public Node rememberedLocation; // Deletion Cheese
 
         // The constructor will handle the creation of the pack. We will give the pack a 
         // size and a location to start in the dungeon. The monsters will have 10 hp and
@@ -68,16 +66,11 @@ namespace STV1
         public void UpdatePack()
         {
             for (int i = monsters.Count - 1; i > -1; i--)
-            {
                 if (monsters[i].IsDead)
-                {
-                    rememberedLocation = monsters[0].Location;
-                    monsters.Remove(monsters[i]); // Save the last location (see PackLocation) 
-                }
-            }
+                    monsters.Remove(monsters[i]);
 
             if (monsters.Count == 0)
-                PackLocation.RemovePack(this);
+                this.PackLocation.RemovePack(this);
         }
 
         public void HandlePackAI(Player player, Dungeon dungeon)
@@ -109,17 +102,10 @@ namespace STV1
         {
             get
             {
-
                 if (monsters.Count > 0)
                     return monsters[0].Location;
-                else if (monsters.Count == 0)
-                    return rememberedLocation;
                 else
-                {
-                    throw new NullReferenceException("WATF");
                     return null;
-                }
-
             }
         }
         public List<Monster> Monsters { get { return monsters; } }

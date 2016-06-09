@@ -11,8 +11,8 @@ namespace STV1
     public class Game
     {
         public Dungeon d;
-        Player player;
-        int level;
+        static Player player;
+        static int level;
         bool quit = false;
         bool inCombat;
         int curSeed;
@@ -85,13 +85,10 @@ namespace STV1
                     Console.Write("The given input was not valid.");
                 }
 
-
-                spec.TestSpecifications(d);
-
-
-            }
-            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + inputName + ".txt";
-            File.WriteAllLines(saveLocation, saveInputList);
+                // Test specifications each turn
+                //if (!spec.TestSpecifications(d))
+                //    throw new Exception("kappa");    
+            }         
         }
 
         public Dungeon NextDungeon()
@@ -115,7 +112,7 @@ namespace STV1
             return d;
         }
 
-        public void DrawUI() {
+        public static void DrawUI() {
             Console.SetCursorPosition(0,0);
             Console.Write("HP : " + player.HP);
             Console.SetCursorPosition(0,1);
@@ -133,7 +130,7 @@ namespace STV1
             Console.Write("Time Crystals  : " + crystalCount);
 
             int curX = 0;
-            int curY = 9;
+            int curY = 10;
             Console.SetCursorPosition(curX, curY);
             Console.Write("Paths from this node:");
             curY++;
@@ -328,10 +325,7 @@ namespace STV1
             // Move the packs this turn accordingly after a player action 
             foreach (Node node in d.nodes)
                 foreach (Pack pack in node.nodePacks)
-                {
                     pack.HandlePackAI(player, d);
-                }
-
         }
 
         private void HandleCombat(string input)
@@ -426,33 +420,30 @@ namespace STV1
                 #endregion
 
                 #region post combat
-                Console.WriteLine("Combat round finished!");
-                if (!player.Location.CheckInCombat())
-                    Console.WriteLine("The pack left the location!");
                 bool validMove = false;
                 while (!validMove && player.Location.CheckInCombat())
                 {
+                    Console.WriteLine("What's your next action? Choose 'continue' or 'retreat'.");
                     action = GetInput();
                     if (action == "continue")
                     {
                         validMove = true;
                         HandleCombat(action);
-                        Console.Clear();
                     }
                     else if (action == "retreat")
                     {
                         validMove = true;
                         if (!player.IsDead)
                         {
-                            Console.SetCursorPosition(0, cursorInfoPos);
                             Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
                             player.Move(player.Location.connections[0]);
                             inCombat = false;
                         }
                     }
-
-                    else { Console.WriteLine("Action not valid! Choose 'continue' or 'retreat'."); }
                 }
+                Console.WriteLine("Combat round finished! Press a key to continue.");
+                Console.ReadKey();
+                Console.Clear();
                 #endregion
             }
 
