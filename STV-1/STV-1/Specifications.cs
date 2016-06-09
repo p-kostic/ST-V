@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using STV1;
@@ -12,12 +13,12 @@ namespace STV_1
     {
 
 
-        public bool TestSpecifications(Dungeon d)
+        public bool TestSpecifications(Dungeon d, Player p)
         {
             bool AllTest = true;
 
             AllTest &= SpecificationTestDungeonMonsters(d);
-            AllTest &= SpecificationTestLeaveZones(d);
+            // AllTest &= SpecificationTestLeaveZones(d, p);
 
             return AllTest;
         }
@@ -105,14 +106,17 @@ namespace STV_1
             return cap & zeroN & low & high & zero & partial & full & entered & left;
         }
 
+
+        // #############################[   2   ]############################################
+        // Every monster pack never leaves its zone
         Dictionary<Pack, int> startingLevels = new Dictionary<Pack, int>();
         private bool general = true;
         private bool first, middle, last = false;
-        private bool fleeing, moving = false;
+        public static bool fleeing, moving = false;
         private bool onBridge, notOnBridge = false;
+
         int lastDungeonLevel2 = -1;
-        // #############################[   2   ]############################################
-        // Every monster pack never leaves its zone
+
         public bool SpecificationTestLeaveZones(Dungeon d)
         {
             //-----------[General] Never leaves its own zone -------------// 
@@ -131,11 +135,27 @@ namespace STV_1
             }
 
             //-----------[A] The Zone's position n (first, middle, last). -------------// 
+            for (int i = 0; i < d.packs.Count; i++)
+            {
+                if (d.packs[i].PackLocation.level == 1)
+                    first = true;
 
+                if (d.packs[i].PackLocation.level == 2)
+                    middle = true;
 
-            //-----------[B] The monster's action n (fleeing a combat, just moving). -------------// 
+                if (d.packs[i].PackLocation.level > 2)
+                    last = true;
 
-            //-----------[C] the monster's location (on a bridge, not on a bridge). -------------// 
+                //-----------[C] the monster's location (on a bridge, not on a bridge). -----// 
+                if (d.packs[i].PackLocation.type == "bridge")
+                    onBridge = true;
+                else
+                    notOnBridge = true;
+            }
+
+            //-----------[B] The monster's action n (fleeing a combat, just moving). -------------//
+            // We didn't know how to do this properly, so we made the booleans static and set them to true inside
+            // the fleeing code (Node.cs doCombatRound method) and the move code (Pack.cs MovePack method)
 
             return general & first & middle & last & fleeing & moving & onBridge & notOnBridge;
         }
@@ -144,9 +164,41 @@ namespace STV_1
         // Suppose Z is the player’s current zone. At every turn, and while the player is still in Z, the
         // distance between every monster pack in Z to either the player or the bridge at the zone’s
         // end should not increase
-        public static bool SpecificationTestDistanceZone(Dungeon d)
+        private bool first3, middle3, last3 = false;
+        private bool entering3, remaining3, notEntered3 = false;
+        private bool towards3, awayFrom3, stay3 = false;
+        private bool general3 = true;
+        Dictionary<Pack, int> distanceToPlayer = new Dictionary<Pack, int>();
+        private int previousZone = -1;
+        public bool SpecificationTestDistanceZone(Dungeon d, Player player)
         {
-            throw new NotImplementedException();
+            if (player.Location.level != previousZone)
+            {
+                distanceToPlayer.Clear();
+                previousZone = player.Location.level;
+                foreach (Pack p in d.packs)
+                {
+                    if (p.PackLocation.level == player.Location.level)
+                    {
+                        // If we enter a zone, we add all the distances of the pack to the player to the dictionary
+                        int curDistanceToPlayer = d.FindShortestPath(p.PackLocation, player.Location).Count;
+                        distanceToPlayer[p] = curDistanceToPlayer;
+                    }
+                }
+            }
+            else
+            {
+                foreach (Pack p in d.packs)
+                {
+                    int curDistanceToPlayer = d.FindShortestPath(p.PackLocation, player.Location).Count;
+                    if (curDistanceToPlayer > distanceToPlayer[p])
+                    {
+                        general3 = false;
+                    }
+                }
+            }
+
+            return first3 & middle3 & last3 & entering3 & remaining3 & notEntered3 & towards3 & awayFrom3 & stay3;
         }
 
 

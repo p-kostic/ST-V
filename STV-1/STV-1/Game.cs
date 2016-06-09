@@ -43,7 +43,8 @@ namespace STV1
                 string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
                 inputList = File.ReadAllLines(location);
             }
-            else {
+            else
+            {
                 saveInputList = new List<string>();
             }
             // Game loop
@@ -86,13 +87,15 @@ namespace STV1
                 }
 
                 // Test specifications each turn
-                //if (!spec.TestSpecifications(d))
-                //    throw new Exception("kappa");    
+                spec.TestSpecifications(d, player);
             }
+            if(!spec.TestSpecifications(d, player))
+                throw new Exception("KAPPASTORM");
+
             if (play)
             {
                 string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\" + inputName + ".txt";
+                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
                 File.WriteAllLines(saveLocation, saveInputList);
             }
         }
@@ -119,12 +122,13 @@ namespace STV1
             return d;
         }
 
-        public void DrawUI() {
-            Console.SetCursorPosition(0,0);
+        public void DrawUI()
+        {
+            Console.SetCursorPosition(0, 0);
             Console.Write("HP : " + player.HP);
-            Console.SetCursorPosition(0,1);
+            Console.SetCursorPosition(0, 1);
             Console.Write("ATK: " + player.ATK);
-            Console.SetCursorPosition(0,2);
+            Console.SetCursorPosition(0, 2);
             Console.Write("KP : " + player.kp);
 
             Console.SetCursorPosition(0, 4);
@@ -142,7 +146,7 @@ namespace STV1
             Console.Write("Paths from this node: " + player.Location.connections.Count);
             curY++;
             Console.SetCursorPosition(curX, curY);
-            for (int i = 0; i < player.Location.connections.Count; i++ )
+            for (int i = 0; i < player.Location.connections.Count; i++)
             {
                 Console.WriteLine(player.Location.connections[i].id + ", type: " + player.Location.connections[i].type);
                 // Console.SetCursorPosition(curX, curY + i);
@@ -163,13 +167,13 @@ namespace STV1
             Console.Write("Current packs: " + player.Location.nodePacks.Count);
             curY++;
             Console.SetCursorPosition(curX, curY);
-            for (int i = 0; i < player.Location.nodePacks.Count; i++ )
+            for (int i = 0; i < player.Location.nodePacks.Count; i++)
             {
                 Console.SetCursorPosition(curX, curY);
                 Console.Write("Pack nr: " + i);
                 curY++;
                 Console.SetCursorPosition(curX, curY);
-                for (int j = 0; j < player.Location.nodePacks[i].monsters.Count; j++ )
+                for (int j = 0; j < player.Location.nodePacks[i].monsters.Count; j++)
                 {
                     curX++;
                     Console.SetCursorPosition(curX, curY);
@@ -202,31 +206,37 @@ namespace STV1
                 i = Console.ReadLine();
                 saveInputList.Add(i);
             }
-            else {
+            else
+            {
                 if (curCommand < inputList.Count())
                 {
                     i = inputList[curCommand];
                     curCommand++;
                 }
-                else {
+                else
+                {
                     quit = true;
                 }
-                
+
             }
-            
+
             string[] iArray = i.Split(' ');
             if (iArray[0] == "goto" || i == "stay" ||
-                i == "retreat" || i == "continue" || 
+                i == "retreat" || i == "continue" ||
                 i == "quit" || i == "?" || i == "y" ||
-                i == "n" || i == "hp" || i == "tc" || 
-                iArray[0] == "save" || iArray[0] == "load"){
-                if(iArray[0] == "save" || iArray[0] == "load"){
-                    if(!CheckName(iArray[1])){
+                i == "n" || i == "hp" || i == "tc" ||
+                iArray[0] == "save" || iArray[0] == "load")
+            {
+                if (iArray[0] == "save" || iArray[0] == "load")
+                {
+                    if (!CheckName(iArray[1]))
+                    {
                         return "input not valid";
                     }
                 }
                 return i;
-            }else return "input not valid";
+            }
+            else return "input not valid";
         }
 
         // Displays all the usable commands in the game.
@@ -262,7 +272,7 @@ namespace STV1
             #region goto command
             if (i[0] == "goto")
             {
-                if(i.Length > 1)
+                if (i.Length > 1)
                 {
                     int goToNode = -1;
                     try { goToNode = int.Parse(i[1]); } catch { }
@@ -273,7 +283,7 @@ namespace STV1
                         {
                             d = NextDungeon();
                             player.Move(d.nodes[0]);
-                            
+
                             Console.SetCursorPosition(0, cursorInfoPos);
                             Console.Write("Welcome to level " + d.level + ". This is node " + d.nodes[0].id);
                         }
@@ -283,7 +293,7 @@ namespace STV1
                             Console.SetCursorPosition(0, cursorInfoPos);
                             Console.Write("You moved to path " + destination.id);
                         }
-                    } 
+                    }
                     else
                     {
                         Console.SetCursorPosition(0, cursorInfoPos);
@@ -299,7 +309,7 @@ namespace STV1
             #endregion
 
             #region save command
-            else if (i[0] == "save") 
+            else if (i[0] == "save")
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("Successfully saved the game");
@@ -337,7 +347,7 @@ namespace STV1
         }
 
         private void HandleCombat(string input)
-        { 
+        {
             if (input == "continue")
             {
                 Console.Clear();
@@ -376,7 +386,7 @@ namespace STV1
                                     Console.WriteLine("Used a healing potion!");
                                 }
                                 else
-                                    Console.WriteLine("You don't have a healing potion!");          
+                                    Console.WriteLine("You don't have a healing potion!");
                             }
                             #endregion
 
@@ -390,13 +400,13 @@ namespace STV1
                                     usedTC = true;
                                     Console.WriteLine("Used a time crystal!");
                                 }
-                                else  
-                                    Console.WriteLine("You don't have a time crystal!");                
+                                else
+                                    Console.WriteLine("You don't have a time crystal!");
                             }
                             #endregion
 
                             else
-                                Console.WriteLine("Action not valid! Choose 'hp' or 'tc'."); 
+                                Console.WriteLine("Action not valid! Choose 'hp' or 'tc'.");
                         }
                         for (int i = 0; i < player.Location.nodePacks.Count; i++)
                         {
@@ -463,7 +473,8 @@ namespace STV1
             }
         }
 
-        void SaveGame(string fileName) {
+        void SaveGame(string fileName)
+        {
             if (fileName == "")
                 throw new ArgumentException("Not a valid filename");
             if (d == null)
@@ -482,16 +493,18 @@ namespace STV1
             saveList.Add("" + crystalCount);
             saveList.Add("" + d.seed);
             int temp = 0;
-            foreach(Pack pack in d.packs){
+            foreach (Pack pack in d.packs)
+            {
                 saveList.Add("" + pack.monsters.Count);
                 saveList.Add("" + pack.PackLocation.id);
                 temp++;
             }
-            
+
             File.WriteAllLines(saveLocation, saveList);
         }
 
-        void LoadGame(string fileName) {
+        void LoadGame(string fileName)
+        {
             string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
             string[] loaded = File.ReadAllLines(location);
             level = int.Parse(loaded[0]);
@@ -502,20 +515,23 @@ namespace STV1
             player = new Player(int.Parse(loaded[1]), int.Parse(loaded[2]), playerLocation, d);
             player.kp = int.Parse(loaded[3]);
             int temp = 0;
-            
-            for (int i = 8; i < loaded.Length - 1; i+=2 )
+
+            for (int i = 8; i < loaded.Length - 1; i += 2)
             {
                 int monsterNr = int.Parse(loaded[i]);
-                Node destinationNode = d.GetNodeByID(int.Parse(loaded[i+1]));
-                d.packs.Add(new Pack(monsterNr, d.GetNodeByID(int.Parse(loaded[i+1]))));
+                Node destinationNode = d.GetNodeByID(int.Parse(loaded[i + 1]));
+                d.packs.Add(new Pack(monsterNr, d.GetNodeByID(int.Parse(loaded[i + 1]))));
                 temp++;
             }
         }
 
-        bool CheckName(string name) { 
-            string[] illegalChars = {",", ".", "\\", "/" };
-            foreach(string chr in illegalChars){
-                if(name.Contains(chr)){
+        bool CheckName(string name)
+        {
+            string[] illegalChars = { ",", ".", "\\", "/" };
+            foreach (string chr in illegalChars)
+            {
+                if (name.Contains(chr))
+                {
                     return false;
                 }
             }

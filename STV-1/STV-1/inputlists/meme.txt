@@ -1,0 +1,18 @@
+goto 2
+goto 5
+goto 2
+goto 0
+goto 3
+continue
+n
+continue
+n
+goto 1
+continue
+n
+continue
+n
+goto 4
+goto 6
+goto 7
+goto 12

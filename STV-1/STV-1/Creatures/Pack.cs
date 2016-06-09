@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using STV_1;
 
 namespace STV1
 {
@@ -53,6 +54,7 @@ namespace STV1
                 // Update the nodePack list accordingly to the move
                 this.packStartLocation.RemovePack(this);
                 destination.AddPack(this);
+                Specification.moving = true;
             }
         }
 

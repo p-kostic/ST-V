@@ -1,2 +1,0 @@
-load d
-goto 2

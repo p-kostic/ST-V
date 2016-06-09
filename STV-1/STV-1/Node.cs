@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using STV_1;
 
 namespace STV1
 {
@@ -142,6 +143,7 @@ namespace STV1
                     {
                         pack.MovePack(connections[i]);
                         packMoved = true;
+                        Specification.fleeing = true;
                         break;
                     }
                 }
