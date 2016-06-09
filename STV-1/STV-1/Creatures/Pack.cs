@@ -45,7 +45,7 @@ namespace STV1
         // We will move the pack by moving each monster in the pack to the destination location.
         public void MovePack(Node destination)
         {
-            if (PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start" && destination.PackFitsInNode(this))
+            if (PackLocation.ConnectedTo(destination) && destination.type != "exit" && destination.type != "start" && destination.PackFitsInNode(this) && PackLocation.level == destination.level)
             {
                 foreach (Monster monster in monsters)
                     monster.Location = destination;
@@ -81,24 +81,50 @@ namespace STV1
 
         public void HandlePackAI(Player player, Dungeon dungeon)
         {
-            List<List<Node>> paths = new List<List<Node>>();
-            // Find path to closest bridge
-            foreach (Node node in dungeon.nodes)
+            // Note: node levels are based on the zone, see Dungeon generation
+            if (PackLocation.level != dungeon.level + 1) // Pack AI for if they're not in the last zone
             {
-                if (node.type == "bridge")
-                    paths.Add(dungeon.FindShortestPath(PackLocation, node));
+                List<List<Node>> paths = new List<List<Node>>();
+                // Find path to closest bridge
+                foreach (Node node in dungeon.nodes)
+                {
+                    if (node.type == "bridge")
+                        paths.Add(dungeon.FindShortestPath(PackLocation, node));
+                }
+
+                List<Node> closestBridge = paths.OrderByDescending(x => x.Count).ElementAt(paths.Count - 1);
+                List<Node> pathToPlayer = dungeon.FindShortestPath(this.PackLocation, player.Location);
+
+                // If the player is closer to the pack than the closest bridge node, we move to the player
+                if (pathToPlayer.Count <= closestBridge.Count)
+                    this.MovePack(pathToPlayer[0]);
+                // else, we move to the closest bridge
+                else
+                    this.MovePack(closestBridge[0]);
             }
-
-            List<Node> closestBridge = paths.OrderByDescending(x => x.Count).ElementAt(paths.Count - 1);
-            List<Node> pathToPlayer = dungeon.FindShortestPath(this.PackLocation, player.Location);
-
-            // If the player is closer to the pack than the closest bridge node, we move to the player
-            if (pathToPlayer.Count <= closestBridge.Count)
-                this.MovePack(pathToPlayer[0]);
-            // else, we move to the closest bridge
             else
-                this.MovePack(closestBridge[0]);
+            {
+                if (player.Location.level == dungeon.level) // Player in the zone before the last zone.
+                {
+                    List<List<Node>> paths = new List<List<Node>>();
+                    // Find path to closest bridge
+                    foreach (Node node in dungeon.nodes)
+                    {
+                        if (node.type == "bridge")
+                            paths.Add(dungeon.FindShortestPath(PackLocation, node));
+                    }
 
+                    List<Node> closestBridge = paths.OrderByDescending(x => x.Count).ElementAt(paths.Count - 1);
+                    if (closestBridge.Count > 1) // Stop just before the bridge and wait for the player
+                        this.MovePack(closestBridge[0]);
+                }
+                else if (player.Location.level == dungeon.level + 1) // Player is in the last zone
+                {
+                    // Chase the player
+                    List<Node> pathToPlayer = dungeon.FindShortestPath(this.PackLocation, player.Location);
+                    this.MovePack(pathToPlayer[0]);
+                }
+            }
         }
 
         // A few getters/setters to get the size and location of the pack,

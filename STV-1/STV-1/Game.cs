@@ -149,7 +149,7 @@ namespace STV1
             }
 
             Console.SetCursorPosition(25, 14);
-            Console.Write("Current level: " + d.level);
+            Console.Write("Current dungeon level: " + d.level);
             Console.SetCursorPosition(25, 15);
             Console.Write("Visited nodes: " + player.VisitedList(level));
             Console.SetCursorPosition(25, 16);
@@ -276,7 +276,6 @@ namespace STV1
                             
                             Console.SetCursorPosition(0, cursorInfoPos);
                             Console.Write("Welcome to level " + d.level + ". This is node " + d.nodes[0].id);
-                            // TODO: Current node en d.nodes[0].id geven nog niet de goede node weer als we naar het volgende level gaan
                         }
                         else
                         {
