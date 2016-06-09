@@ -492,7 +492,7 @@ namespace STV1
             if (d == null)
                 throw new NullReferenceException("No dungeon to save");
 
-            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            string saveLocation = finalPath + fileName + ".txt";
             List<string> saveList = new List<string>();
             saveList.Add("" + level);
             saveList.Add("" + player.HP);
