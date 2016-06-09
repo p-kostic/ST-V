@@ -132,7 +132,7 @@ namespace STV_1_Testing
             Player player = new Player(5, 5, n, d);
 
             // The bag shouldn't currently hold a healing potion.
-            Assert.IsFalse(player.inventory.Exists(x => x.ItemType() == "HealingPotion"));
+            Assert.IsTrue(player.inventory.Count == 0);
             // Add a healing potion.
             player.AddItem(true);
             // The player should now have a healing potion.
@@ -162,9 +162,9 @@ namespace STV_1_Testing
         public void TestVisitedList()
         {
             // Make a new player.
-            Dungeon d = new Dungeon(3);
+            Dungeon x = new Dungeon(1);
             Node n = new Node(1, 1);
-            Player player = new Player(5, 5, n, d);
+            Player player = new Player(5, 5, n, x);
 
             // Level isn't equal to curLevel, so clear the list.
             Assert.AreNotEqual(player.levelChecker, 5);
@@ -173,14 +173,19 @@ namespace STV_1_Testing
             // Now they should be equal.
             Assert.AreEqual(player.levelChecker, 5);
 
-            // add some new nodes to the list
-            player.visitedList.Add(6);
-            player.visitedList.Add(10);
-            // This is the fourth node
-            player.VisitedList(7);
+            // Add some nodes to the visitedList.
+            player.visitedList.Add(1);
+            player.visitedList.Add(2);
+            player.visitedList.Add(3);
+            player.visitedList.Add(4);
 
-            // Check if the string gets printed correctly.
-            Assert.AreEqual(1, player.visitedList.Count);
+            // Run the method, and check if it returns the correct string.
+            player.levelChecker = 1;
+            string[] testString = player.VisitedList(1).Split(',');
+            string[] withoutStart = new string[4];
+            for (int i = 1; i < testString.Length; i++)
+                withoutStart[i - 1] = testString[i];
+            Assert.AreEqual("1,2,3,4", string.Join(",", withoutStart));
         }
     }
 }
