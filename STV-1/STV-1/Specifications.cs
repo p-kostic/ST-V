@@ -259,9 +259,35 @@ namespace STV_1
         // a dungeon of level L, the player must be confronted with at least L+1 unique combats
         // (combats against different packs) before he can reach the exit.
         // Come up with your own black box coverage criterion.
-        public static bool SpecificationTestSurvival(Dungeon d)
+        int lastLevel = -1;
+        int goalCombats = 0;
+        int combatCount = 0;
+        List<Pack> alreadyFought = new List<Pack>();
+        
+        public bool SpecificationTestSurvival(Dungeon d, Player player)
         {
-            throw new NotImplementedException();
+            if(lastLevel < d.level){
+                goalCombats = d.level + 1;
+                lastLevel = d.level;
+                combatCount = 0;
+                alreadyFought.Clear();
+                if (combatCount > goalCombats)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            foreach(Pack p in d.packs){
+                if(p.PackLocation == player.Location && !alreadyFought.Contains(p)){
+                    combatCount++;
+                    alreadyFought.Add(p);
+                }
+            }
+
+            return true;
         }
 
     }
