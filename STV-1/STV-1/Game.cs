@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using STV_1;
+using System.Reflection;
 
 namespace STV1
 {
@@ -22,18 +22,37 @@ namespace STV1
         string[] inputList;
         List<string> saveInputList;
         int curCommand = 0;
+        string path;
+        string finalPath = "";
 
         public int cursorInfoPos = 21;
 
         public Game(bool play, string recordedName, bool isTesting = true)
         {
-            this.play = play;
+            path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string[] p = path.Split('\\');
+            for (int i = 0; i < p.Length - 2; i++ ) {
+                finalPath += p[i] + "\\";
+            }
+            
+
+            Console.SetWindowSize(80, 37);
+            Console.WriteLine("Type 'r' followed by a filename if you want to record a playthrough, and 'p' if you want to play an existing one");
+            Console.WriteLine(path);
+            Console.WriteLine(finalPath);
+
+            string firstInput = Console.ReadLine();
+            if (firstInput[0] == 'r')
+                play = true;
+            else play = false;
+            Console.Clear();
+
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
             
             if (!play)
             {
-                string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + recordedName + ".txt";
+                string location = finalPath + inputName + ".txt";
                 inputList = File.ReadAllLines(location);
             }
             else
@@ -95,8 +114,7 @@ namespace STV1
 
             if (play)
             {
-                string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + recordedName + ".txt";
+                string saveLocation = finalPath + "\\inputlists\\" + inputName + ".txt";
                 File.WriteAllLines(saveLocation, saveInputList);
             }
         }
@@ -122,7 +140,7 @@ namespace STV1
             }
             return d;
         }
-
+        
         [ExcludeFromCodeCoverage]
         public void DrawUI()
         {
@@ -509,7 +527,7 @@ namespace STV1
             if (d == null)
                 throw new NullReferenceException("No dungeon to save");
 
-            string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            string saveLocation = finalPath + fileName + ".txt";
             List<string> saveList = new List<string>();
             saveList.Add("" + level);
             saveList.Add("" + player.HP);
@@ -535,7 +553,7 @@ namespace STV1
         [ExcludeFromCodeCoverage]
         void LoadGame(string fileName)
         {
-            string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
+            string location = finalPath + fileName + ".txt";
             string[] loaded = File.ReadAllLines(location);
             level = int.Parse(loaded[0]);
             Node.idCounter = 0;

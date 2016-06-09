@@ -15,10 +15,8 @@ namespace STV_1
         {
             bool AllTest = true;
 
-           AllTest &= SpecificationTestDungeonMonsters(d); //1
-           AllTest &= SpecificationTestLeaveZones(d);      //2
-           AllTest &= SpecificationTestSurvival(d, p);     //5
-           AllTest &= SpecificationTestDistanceZone(d, p); //3
+            AllTest &= SpecificationTestDungeonMonsters(d);
+            // AllTest &= SpecificationTestLeaveZones(d, p);
 
             return AllTest;
         }
@@ -50,10 +48,7 @@ namespace STV_1
                 foreach (Pack pack in n.nodePacks)
                     count += pack.monsters.Count;
                 if (n.MaxMonsters < count)
-                {
                     cap = false;
-                    Debug.WriteLine("####### Specification 1's general test failed! A node exceeded its MaxMonster capacity! ########");
-                }
             }
 
             //-----------[A + B] Test Node Level & Occupancy -------------// 
@@ -64,38 +59,19 @@ namespace STV_1
                 foreach (Pack pack in n.nodePacks)
                     count += pack.monsters.Count;
 
-                if (zero == false && count == 0)
-                {
+                if (count == 0)
                     zero = true;
-                    Debug.WriteLine("Specification 1, Characteristic B's bool 'zero' was set to true");
-                }
-
-                if (partial == false && count > 0 && count < n.MaxMonsters)
-                {
+                if (count > 0 && count < n.MaxMonsters)
                     partial = true;
-                    Debug.WriteLine("Specification 1, Characteristic B's bool 'partial' was set to true");
-                }
-                if (full == false && count == n.MaxMonsters)
-                {
+                if (count == n.MaxMonsters)
                     full = true;
-                    Debug.WriteLine("Specification 1, Characteristic B's bool 'full' was set to true");
-                }
 
-                if (zeroN == false && n.level == 0)
-                {
+                if (n.level == 0)
                     zeroN = true;
-                    Debug.WriteLine("Specification 1, Characteristic A's bool 'zeroN' was set to true");
-                }
-                if (low == false && n.level == 1)
-                {
+                if (n.level == 1)
                     low = true;
-                    Debug.WriteLine("Specification 1, Characteristic A's bool 'low' was set to true");
-                }
-                if (high == false && n.level > 1)
-                {
+                if (n.level > 1)
                     high = true;
-                    Debug.WriteLine("Specification 1, Characteristic A's bool 'high' was set to true");
-                }
             }
 
             //-----------[C] Test Node Movement -------------// 
@@ -142,53 +118,37 @@ namespace STV_1
         public bool SpecificationTestLeaveZones(Dungeon d)
         {
             //-----------[General] Never leaves its own zone -------------// 
-            if (general && d.level != this.lastDungeonLevel2)
+            if (d.level != this.lastDungeonLevel2)
             {
                 foreach (Pack p in d.packs)
                     startingLevels[p] = p.PackLocation.level;
 
                 lastDungeonLevel = d.level;
             }
-            else if (general)
+            else
             {
                 foreach (Pack p in d.packs)
                     if (p.PackLocation.level != startingLevels[p])
-                    {
                         general = false;
-                        Debug.WriteLine("#### Specification 2's general test failed! A pack left its own zone! ######");
-                    }
             }
 
             //-----------[A] The Zone's position n (first, middle, last). -------------// 
             for (int i = 0; i < d.packs.Count; i++)
             {
-                if (first == false && d.packs[i].PackLocation.level == 1)
-                {
+                if (d.packs[i].PackLocation.level == 1)
                     first = true;
-                    Debug.WriteLine("Specification 2, Characteristic A's bool 'first' was set to true");
-                }
-                if (middle == false && d.packs[i].PackLocation.level == 2)
-                {
+
+                if (d.packs[i].PackLocation.level == 2)
                     middle = true;
-                    Debug.WriteLine("Specification 2, Characteristic A's bool 'middle' was set to true");
-                }
-                if (last == false && d.packs[i].PackLocation.level > 2)
-                {
+
+                if (d.packs[i].PackLocation.level > 2)
                     last = true;
-                    Debug.WriteLine("Specification 2, Characteristic A's bool 'last' was set to true");
-                }
 
                 //-----------[C] the monster's location (on a bridge, not on a bridge). -----// 
-                if (onBridge == false & d.packs[i].PackLocation.type == "bridge")
-                {
+                if (d.packs[i].PackLocation.type == "bridge")
                     onBridge = true;
-                    Debug.WriteLine("Specification 2, Characteristic C's bool 'onBridge' was set to true");
-                }
-                else if (notOnBridge == false)
-                {
+                else
                     notOnBridge = true;
-                    Debug.WriteLine("Specification 2, Characteristic C's bool 'notOnBridge' was set to true");
-                }
             }
 
             //-----------[B] The monster's action n (fleeing a combat, just moving). -------------//
@@ -200,8 +160,7 @@ namespace STV_1
 
         // #############################[   3   ]############################################
         // Suppose Z is the player’s current zone. At every turn, and while the player is still in Z, the
-        // distance between every monster pack in Z to player at the zone’s
-        // end should not increase
+        // distance between every monster pack in Z to the player should not increase
         private bool first3, middle3, last3 = false;
         private bool entering3, remaining3, notEntered3 = false;
         private bool towards3, awayFrom3, stay3 = false;
@@ -220,7 +179,7 @@ namespace STV_1
                 {
                     if (p.PackLocation.level == player.Location.level)
                     {
-                        // If we enter a zone, we add all the distances of the pack to the player to the dictionary
+                        // If we enter a zone, we add all the distances of the packs to the player to the dictionary
                         int curDistanceToPlayer = d.FindShortestPath(p.PackLocation, player.Location).Count;
                         distanceToPlayer[p] = curDistanceToPlayer;
                     }
@@ -231,14 +190,16 @@ namespace STV_1
                 foreach (Pack p in d.packs)
                 {
                     int curDistanceToPlayer = d.FindShortestPath(p.PackLocation, player.Location).Count;
-                    // if (curDistanceToPlayer > distanceToPlayer[]) TODO: FIX
-                    //{
-                    general3 = false;
-                    //}
+                    if (curDistanceToPlayer > distanceToPlayer[p])
+                    {
+                        general3 = false;
+                    }
                 }
             }
 
             //------------[A] The zone’s location (first, middle, last). ----------------//
+
+
 
             //------------[B] the player’s location (just entering the bridge at the end of the zone, ----------------//
             //-------------                       remaining on that bridge, not yet on that bridge).  ----------------//
@@ -300,13 +261,11 @@ namespace STV_1
         int lastLevel = -1;
         int goalCombats = 0;
         int combatCount = 0;
-        private bool general5;
         List<Pack> alreadyFought = new List<Pack>();
-
+        
         public bool SpecificationTestSurvival(Dungeon d, Player player)
         {
-            if (lastLevel < d.level)
-            {
+            if(lastLevel < d.level){
                 goalCombats = d.level + 1;
                 lastLevel = d.level;
                 combatCount = 0;
@@ -315,17 +274,13 @@ namespace STV_1
                 {
                     return true;
                 }
-                else
-                {
-                    Debug.WriteLine("###### Specification 5's general test failed! Not enough combats have been played.  ########");
+                else {
                     return false;
                 }
             }
 
-            foreach (Pack p in d.packs)
-            {
-                if (p.PackLocation == player.Location && !alreadyFought.Contains(p))
-                {
+            foreach(Pack p in d.packs){
+                if(p.PackLocation == player.Location && !alreadyFought.Contains(p)){
                     combatCount++;
                     alreadyFought.Add(p);
                 }
