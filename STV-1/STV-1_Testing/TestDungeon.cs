@@ -117,5 +117,22 @@ namespace STV_1_Testing
             Assert.IsTrue(d.GetExit.type == "exit");
             Assert.IsTrue(d.GetStart.type == "start");
         }
+
+        [TestMethod]
+        public void TestGetNode()
+        {
+            Random random = new Random();
+            Dungeon d = new Dungeon(2, random.Next());
+            
+            // We shouldn't return a value.
+            Assert.IsNull(d.GetNodeByID(0));
+
+            // Add a node, and check if we return that id.
+            Node n = new Node(2, 2);
+            Node z = new Node(3, 2);
+            d.nodes.Add(z);
+            d.nodes.Add(n);
+            Assert.IsNotNull(d.GetNodeByID(n.id));
+        }
     }
 }

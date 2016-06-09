@@ -124,6 +124,26 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
+        public void TestAddItem()
+        {
+            // Make a new player
+            Dungeon d = new Dungeon(3);
+            Node n = new Node(1, 1);
+            Player player = new Player(5, 5, n, d);
+
+            // The bag shouldn't currently hold a healing potion.
+            Assert.IsFalse(player.inventory.Exists(x => x.ItemType() == "HealingPotion"));
+            // Add a healing potion.
+            player.AddItem(true);
+            // The player should now have a healing potion.
+            Assert.IsTrue(player.inventory.Exists(x => x.ItemType() == "HealingPotion"));
+            // Do the same for the timecrystal.
+            Assert.IsFalse(player.inventory.Exists(x => x.ItemType() == "TimeCrystal"));
+            player.AddItem(false);
+            Assert.IsTrue(player.inventory.Exists(x => x.ItemType() == "TimeCrystal"));
+        }
+
+        [TestMethod]
         public void TestPlayerGrabItems()
         {
             Dungeon d = new Dungeon(2);
@@ -139,31 +159,28 @@ namespace STV_1_Testing
         }
 
         [TestMethod]
-        public void TestPlayerSetCommand()
+        public void TestVisitedList()
         {
-            Dungeon d = new Dungeon(2);
-            Node a = new Node(1,1);
-            Player player = new Player(50,5,a,d);
-            int val = player.playerCommands.Count;
-            BotPlayer botPlayer = new BotPlayer(false, false, true, false);
-            player.SetCommand(botPlayer);
-            Assert.AreNotEqual(val, player.playerCommands.Count);
-        }
+            // Make a new player.
+            Dungeon d = new Dungeon(3);
+            Node n = new Node(1, 1);
+            Player player = new Player(5, 5, n, d);
 
-        [TestMethod]
-        public void TestPlayerGetCommand()
-        {
-            Dungeon d = new Dungeon(2);
-            Node a = new Node(1, 1);
-            Player player = new Player(50, 5, a, d);
-            int val = player.playerCommands.Count;
-            BotPlayer botPlayer = new BotPlayer(false, false, true, false);
-            player.SetCommand(botPlayer);
+            // Level isn't equal to curLevel, so clear the list.
+            Assert.AreNotEqual(player.levelChecker, 5);
+            player.levelChecker = 0;
+            player.VisitedList(5);
+            // Now they should be equal.
+            Assert.AreEqual(player.levelChecker, 5);
 
-            BotPlayer comparison = player.GetCommand();
-            Assert.AreEqual(botPlayer, comparison);
-            comparison = player.GetCommand();
-            Assert.IsNull(comparison);
+            // add some new nodes to the list
+            player.visitedList.Add(6);
+            player.visitedList.Add(10);
+            // This is the fourth node
+            player.VisitedList(7);
+
+            // Check if the string gets printed correctly.
+            Assert.AreEqual(1, player.visitedList.Count);
         }
     }
 }

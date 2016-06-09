@@ -171,5 +171,16 @@ namespace STV_1_Testing
             Pack pack = new Pack(0, new Node(1,1));
             Assert.AreEqual(pack.PackLocation, null);
         }
+
+        [TestMethod]
+        public void TestUpdatePack2()
+        {
+            Pack p = new Pack(1, new Node(1, 1));
+
+            p.monsters[0].HP -= 10;
+            // Check if the pack gets deleted.
+            p.UpdatePack();
+            Assert.IsNotNull(p.PackLocation);
+        }
     }
 }

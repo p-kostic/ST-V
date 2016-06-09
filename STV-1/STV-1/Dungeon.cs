@@ -261,7 +261,7 @@ namespace STV1
                 if (n.id == id)
                     return n;
             }
-            throw new NullReferenceException("Node not found");
+            return null;
         }
 
         public Node GetStart { get { return startNode; } }

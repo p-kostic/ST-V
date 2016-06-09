@@ -141,10 +141,7 @@ namespace STV1
                 else if (monsters.Count == 0)
                     return rememberedLocation;
                 else
-                {
                     throw new NullReferenceException("MEMEMEME");
-                    return null;
-                }
             }
         }
         public List<Monster> Monsters { get { return monsters; } }

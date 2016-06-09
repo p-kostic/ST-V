@@ -59,7 +59,6 @@
     <Compile Include="TestNode.cs" />
     <Compile Include="TestPack.cs" />
     <Compile Include="TestPlayer.cs" />
-    <Compile Include="TestGame.cs" />
     <Compile Include="TestTimeCrystal.cs" />
   </ItemGroup>
   <ItemGroup>
