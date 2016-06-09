@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,23 +25,15 @@ namespace STV1
 
         public int cursorInfoPos = 21;
 
-        public Game()
+        public Game(bool play, string recordedName, bool isTesting = true)
         {
-            Console.SetWindowSize(80, 37);
-            Console.WriteLine("Type 'r' followed by a filename if you want to record a playthrough, and 'p' if you want to play an existing one");
-            string firstInput = Console.ReadLine();
-            if (firstInput[0] == 'r')
-                play = true;
-            else play = false;
-            Console.Clear();
-
+            this.play = play;
             NextDungeon();
             player = new Player(100, 10, d.nodes[0], d);
-            // The console window size.
-            string inputName = Console.ReadLine();
+            
             if (!play)
             {
-                string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
+                string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + recordedName + ".txt";
                 inputList = File.ReadAllLines(location);
             }
             else
@@ -50,7 +43,10 @@ namespace STV1
             // Game loop
             while (!quit)
             {
-                DrawUI(); // Draw the UI.
+                if (!isTesting)
+                {
+                    DrawUI(); // Draw the UI. 
+                }
 
                 // Check if the player is in combat or not.
                 if (player.Location.CheckInCombat())
@@ -62,7 +58,9 @@ namespace STV1
                 // Then use the new input to advance the game.
                 string input = GetInput();
                 string[] iArray = input.Split(' ');
-                Console.Clear();
+
+                if (!isTesting)
+                    Console.Clear();
 
                 if (input == "quit")
                     quit = true;
@@ -76,26 +74,29 @@ namespace STV1
                 if (input != "input not valid")
                 {
                     if (inCombat)
-                        HandleCombat(input);
+                        HandleCombat(input, isTesting);
                     else
-                        HandleMovement(input);
+                        HandleMovement(input, isTesting);
                 }
                 else
                 {
-                    Console.SetCursorPosition(0, cursorInfoPos);
-                    Console.Write("The given input was not valid.");
+                    if (!isTesting)
+                    {
+                        Console.SetCursorPosition(0, cursorInfoPos);
+                        Console.Write("The given input was not valid.");
+                    }
                 }
 
                 // Test specifications each turn
                 spec.TestSpecifications(d, player);
             }
-            if(!spec.TestSpecifications(d, player))
-                throw new Exception("KAPPASTORM");
+           // if (!spec.TestSpecifications(d, player))
+           //     throw new Exception("Not all boolean specifications returned true, refer to the Visual Studio debugger to know which ones.");
 
             if (play)
             {
                 string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + inputName + ".txt";
+                                      "\\GitHub\\ST-V\\STV-1\\STV-1\\inputlists\\" + recordedName + ".txt";
                 File.WriteAllLines(saveLocation, saveInputList);
             }
         }
@@ -122,6 +123,7 @@ namespace STV1
             return d;
         }
 
+        [ExcludeFromCodeCoverage]
         public void DrawUI()
         {
             Console.SetCursorPosition(0, 0);
@@ -240,6 +242,7 @@ namespace STV1
         }
 
         // Displays all the usable commands in the game.
+        [ExcludeFromCodeCoverage]
         private void DisplayHelp()
         {
             Console.SetCursorPosition(0, cursorInfoPos);
@@ -262,7 +265,7 @@ namespace STV1
         }
 
         // This method handles the movement of the player.
-        private void HandleMovement(string input)
+        private void HandleMovement(string input, bool isTesting)
         {
             // Check for the goto command. Makes sure that a node is given,
             // and that it's a valid node. If it's valid, move the player to
@@ -283,33 +286,44 @@ namespace STV1
                         {
                             d = NextDungeon();
                             player.Move(d.nodes[0]);
-
-                            Console.SetCursorPosition(0, cursorInfoPos);
-                            Console.Write("Welcome to level " + d.level + ". This is node " + d.nodes[0].id);
+                            if (!isTesting)
+                            {
+                                Console.SetCursorPosition(0, cursorInfoPos);
+                                Console.Write("Welcome to level " + d.level + ". This is node " + d.nodes[0].id);
+                            }
                         }
                         else
                         {
                             player.Move(destination);
-                            Console.SetCursorPosition(0, cursorInfoPos);
-                            Console.Write("You moved to path " + destination.id);
+                            if (!isTesting)
+                            {
+                                Console.SetCursorPosition(0, cursorInfoPos);
+                                Console.Write("You moved to path " + destination.id);
+                            }
                         }
                     }
                     else
                     {
-                        Console.SetCursorPosition(0, cursorInfoPos);
-                        Console.Write("Command invalid: non-existing path or already at that location.");
+                        if (!isTesting)
+                        {
+                            Console.SetCursorPosition(0, cursorInfoPos);
+                            Console.Write("Command invalid: non-existing path or already at that location.");
+                        }
                     }
                 }
                 else
                 {
-                    Console.SetCursorPosition(0, cursorInfoPos);
-                    Console.Write("Command invalid: no destination node given.");
+                    if (!isTesting)
+                    {
+                        Console.SetCursorPosition(0, cursorInfoPos);
+                        Console.Write("Command invalid: no destination node given.");
+                    }
                 }
             }
             #endregion
 
             #region save command
-            else if (i[0] == "save")
+            else if (i[0] == "save" && !isTesting)
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("Successfully saved the game");
@@ -317,7 +331,7 @@ namespace STV1
             #endregion
 
             #region load command
-            else if (i[0] == "load")
+            else if (i[0] == "load" && !isTesting)
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("Successfully loaded the game");
@@ -325,7 +339,7 @@ namespace STV1
             #endregion
 
             #region stay command
-            else if (input == "stay")
+            else if (input == "stay" && !isTesting)
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 Console.Write("You stay at your current location.");
@@ -334,7 +348,7 @@ namespace STV1
 
             else
             {
-                if (input != "?")
+                if (input != "?" && !isTesting)
                 {
                     Console.SetCursorPosition(0, cursorInfoPos);
                     Console.Write("Command invalid: not in a combat situation.");
@@ -346,15 +360,18 @@ namespace STV1
                     pack.HandlePackAI(player, d);
         }
 
-        private void HandleCombat(string input)
+        private void HandleCombat(string input, bool isTesting)
         {
             if (input == "continue")
             {
-                Console.Clear();
-                DrawUI();
-                Console.SetCursorPosition(0, cursorInfoPos);
-                Console.WriteLine("Commencing combat!");
-                Console.WriteLine("Do you want to use an item? (y/n)");
+                if (!isTesting)
+                {
+                    Console.Clear();
+                    DrawUI();
+                    Console.SetCursorPosition(0, cursorInfoPos);
+                    Console.WriteLine("Commencing combat!");
+                    Console.WriteLine("Do you want to use an item? (y/n)");
+                }
 
                 bool usedTC = false;
                 bool validAction = false;
@@ -370,7 +387,8 @@ namespace STV1
                     {
                         validAction = true;
                         bool validItem = false;
-                        Console.WriteLine("Which item do you want to use? (hp/tc)");
+                        if (!isTesting)
+                            Console.WriteLine("Which item do you want to use? (hp/tc)");
 
                         while (!validItem)
                         {
@@ -383,10 +401,13 @@ namespace STV1
                                 if (player.inventory.Exists(item => item.ItemType() == "HealingPotion"))
                                 {
                                     player.UsePotion();
-                                    Console.WriteLine("Used a healing potion!");
+                                    if (!isTesting)
+                                        Console.WriteLine("Used a healing potion!");
                                 }
-                                else
+                                else if (!isTesting)
+                                {
                                     Console.WriteLine("You don't have a healing potion!");
+                                }
                             }
                             #endregion
 
@@ -398,14 +419,15 @@ namespace STV1
                                 {
                                     player.UseCrystal();
                                     usedTC = true;
-                                    Console.WriteLine("Used a time crystal!");
+                                    if (!isTesting)
+                                        Console.WriteLine("Used a time crystal!");
                                 }
-                                else
+                                else if (!isTesting)
                                     Console.WriteLine("You don't have a time crystal!");
                             }
                             #endregion
-
-                            else
+                            
+                            else if (!isTesting)
                                 Console.WriteLine("Action not valid! Choose 'hp' or 'tc'.");
                         }
                         for (int i = 0; i < player.Location.nodePacks.Count; i++)
@@ -433,7 +455,7 @@ namespace STV1
 
                     }
 
-                    else { Console.WriteLine("Action not valid! Choose 'y' or 'n'."); }
+                    else if (!isTesting) { Console.WriteLine("Action not valid! Choose 'y' or 'n'."); }
                 }
                 #endregion
 
@@ -441,31 +463,37 @@ namespace STV1
                 bool validMove = false;
                 while (!validMove && player.Location.CheckInCombat())
                 {
-                    Console.WriteLine("What's your next action? Choose 'continue' or 'retreat'.");
+                    if (!isTesting)
+                        Console.WriteLine("What's your next action? Choose 'continue' or 'retreat'.");
                     action = GetInput();
                     if (action == "continue")
                     {
                         validMove = true;
-                        HandleCombat(action);
+                        HandleCombat(action, isTesting);
                     }
                     else if (action == "retreat")
                     {
                         validMove = true;
                         if (!player.IsDead)
                         {
-                            Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
+                            if (!isTesting)
+                                Console.WriteLine("Got away safely to node " + player.Location.connections[0].id + "!");
                             player.Move(player.Location.connections[0]);
                             inCombat = false;
                         }
                     }
                 }
-                Console.WriteLine("Combat round finished! Press a key to continue.");
-                Console.ReadKey();
-                Console.Clear();
+
+                if (!isTesting)
+                {
+                    Console.WriteLine("Combat round finished! Press a key to continue.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
                 #endregion
             }
 
-            else
+            else if (!isTesting)
             {
                 Console.SetCursorPosition(0, cursorInfoPos);
                 if (input != "?")
@@ -473,6 +501,7 @@ namespace STV1
             }
         }
 
+        [ExcludeFromCodeCoverage]
         void SaveGame(string fileName)
         {
             if (fileName == "")
@@ -503,6 +532,7 @@ namespace STV1
             File.WriteAllLines(saveLocation, saveList);
         }
 
+        [ExcludeFromCodeCoverage]
         void LoadGame(string fileName)
         {
             string location = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\GitHub\\ST-V\\STV-1\\STV-1\\" + fileName + ".txt";
@@ -525,6 +555,7 @@ namespace STV1
             }
         }
 
+        [ExcludeFromCodeCoverage]
         bool CheckName(string name)
         {
             string[] illegalChars = { ",", ".", "\\", "/" };

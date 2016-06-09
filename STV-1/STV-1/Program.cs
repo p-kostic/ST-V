@@ -12,7 +12,20 @@ namespace STV1
         [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
-            Game game = new Game();
+            bool gamemode = false;
+            Console.WriteLine("Type 'r' followed by a filename if you want to record a playthrough.");
+            Console.WriteLine("Type 'p' if you want to play an existing one");
+            string input = Console.ReadLine();
+
+            if (input == "r")
+                gamemode = true;
+            else if (input == "p") 
+                gamemode = false;
+
+            Console.WriteLine("Based on your first input, enter the filename you want to create or");
+            Console.WriteLine("the filename you want to be be used for your recording. Note: Don't include the .txt");
+            string input2 = Console.ReadLine();
+            Game game = new Game(gamemode, input2, false);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace STV_1
             bool AllTest = true;
 
             AllTest &= SpecificationTestDungeonMonsters(d);
-            // AllTest &= SpecificationTestLeaveZones(d, p);
+            AllTest &= SpecificationTestLeaveZones(d);
 
             return AllTest;
         }
@@ -48,7 +48,10 @@ namespace STV_1
                 foreach (Pack pack in n.nodePacks)
                     count += pack.monsters.Count;
                 if (n.MaxMonsters < count)
+                {
                     cap = false;
+                    Debug.WriteLine("####### Specification 1's general test failed! A node exceeded its MaxMonster capacity! ########");
+                }
             }
 
             //-----------[A + B] Test Node Level & Occupancy -------------// 
@@ -59,19 +62,38 @@ namespace STV_1
                 foreach (Pack pack in n.nodePacks)
                     count += pack.monsters.Count;
 
-                if (count == 0)
+                if (zero == false && count == 0)
+                {
                     zero = true;
-                if (count > 0 && count < n.MaxMonsters)
-                    partial = true;
-                if (count == n.MaxMonsters)
-                    full = true;
+                    Debug.WriteLine("Specification 1, Characteristic B's bool 'zero' was set to true");
+                }
 
-                if (n.level == 0)
+                if (partial == false && count > 0 && count < n.MaxMonsters)
+                {
+                    partial = true;
+                    Debug.WriteLine("Specification 1, Characteristic B's bool 'partial' was set to true");
+                }
+                if (full == false && count == n.MaxMonsters)
+                {
+                    full = true;
+                    Debug.WriteLine("Specification 1, Characteristic B's bool 'full' was set to true");
+                }
+
+                if (zeroN == false && n.level == 0)
+                {
                     zeroN = true;
-                if (n.level == 1)
+                    Debug.WriteLine("Specification 1, Characteristic A's bool 'zeroN' was set to true");
+                }
+                if (low == false && n.level == 1)
+                {
                     low = true;
-                if (n.level > 1)
+                    Debug.WriteLine("Specification 1, Characteristic A's bool 'low' was set to true");
+                }
+                if (high == false && n.level > 1)
+                {
                     high = true;
+                    Debug.WriteLine("Specification 1, Characteristic A's bool 'high' was set to true");
+                }
             }
 
             //-----------[C] Test Node Movement -------------// 
@@ -118,37 +140,53 @@ namespace STV_1
         public bool SpecificationTestLeaveZones(Dungeon d)
         {
             //-----------[General] Never leaves its own zone -------------// 
-            if (d.level != this.lastDungeonLevel2)
+            if (general && d.level != this.lastDungeonLevel2)
             {
                 foreach (Pack p in d.packs)
                     startingLevels[p] = p.PackLocation.level;
 
                 lastDungeonLevel = d.level;
             }
-            else
+            else if (general)
             {
                 foreach (Pack p in d.packs)
                     if (p.PackLocation.level != startingLevels[p])
+                    {
                         general = false;
+                        Debug.WriteLine("#### Specification 2's general test failed! A pack left its own zone! ######");
+                    }
             }
 
             //-----------[A] The Zone's position n (first, middle, last). -------------// 
             for (int i = 0; i < d.packs.Count; i++)
             {
-                if (d.packs[i].PackLocation.level == 1)
+                if (first == false && d.packs[i].PackLocation.level == 1)
+                {
                     first = true;
-
-                if (d.packs[i].PackLocation.level == 2)
+                    Debug.WriteLine("Specification 2, Characteristic A's bool 'first' was set to true");
+                }
+                if (middle == false && d.packs[i].PackLocation.level == 2)
+                {
                     middle = true;
-
-                if (d.packs[i].PackLocation.level > 2)
+                    Debug.WriteLine("Specification 2, Characteristic A's bool 'middle' was set to true");
+                }
+                if (last == false && d.packs[i].PackLocation.level > 2)
+                {
                     last = true;
+                    Debug.WriteLine("Specification 2, Characteristic A's bool 'last' was set to true");
+                }
 
                 //-----------[C] the monster's location (on a bridge, not on a bridge). -----// 
-                if (d.packs[i].PackLocation.type == "bridge")
+                if (onBridge == false & d.packs[i].PackLocation.type == "bridge")
+                {
                     onBridge = true;
-                else
+                    Debug.WriteLine("Specification 2, Characteristic C's bool 'onBridge' was set to true");
+                }
+                else if (notOnBridge == false)
+                {
                     notOnBridge = true;
+                    Debug.WriteLine("Specification 2, Characteristic C's bool 'notOnBridge' was set to true");
+                }
             }
 
             //-----------[B] The monster's action n (fleeing a combat, just moving). -------------//
