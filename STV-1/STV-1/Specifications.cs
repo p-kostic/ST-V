@@ -219,8 +219,38 @@ namespace STV_1
         // use of a time crystal on a bridge, The sum of:
         // player.KP + total number of monsters in s remains constant.
         // This time, define your own black box coverage criterion.
-        public static bool SpecificationTestTimeCrystalDistance(Dungeon d)
+        int prevTcCount = 0;
+        int k = 0;
+        int prevK = 0;
+        int sum = 0;
+        int prevSum = 0;
+        public bool SpecificationTestTimeCrystalDistance(Dungeon d, Player player)
         {
+            /*int curCount = player.inventory.Count(s => s.ItemType() == "TimeCrystal");
+            if(prevTcCount > curCount){ // Check if a TC was used this turn
+                k++;
+            }
+            prevTcCount = curCount;
+
+            int monsterCount = 0;
+            foreach(Pack p in d.packs){
+                monsterCount += p.monsters.Count;
+            }
+
+            sum = player.kp + monsterCount;
+            if (k > prevK)
+            {
+                prevK = k;
+                prevSum = sum;
+                return true;
+            }
+            else {
+                if (prevSum != sum)
+                {
+                    return false;
+                }
+            }
+            return true;*/
             throw new NotImplementedException();
         }
 
